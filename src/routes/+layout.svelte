@@ -1,57 +1,88 @@
-<script lang="ts">
-	import Header from './Header.svelte';
-	import '../app.css';
+<script>
+  import { onMount } from "svelte";
+  import Header from "./Header.svelte";
+  import "../app.css";
 
-	let { children } = $props();
+  import { App, Button } from "@svelte-fui/core";
+  import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
+  import "@svelte-fui/core/styles/root";
+
+  let { children } = $props();
+
+  let userData = $state({
+    hasAttempted: false,
+    authenticated: false,
+    username: "Guest",
+    userId: -1,
+  });
+
+  onMount(async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth`, {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Not authenticated");
+      let data = await response.json();
+      userData = {
+        hasAttempted: true,
+        authenticated: true,
+        username: data.username,
+        userId: data.userId,
+      };
+    } catch (error) {
+      userData = {
+        hasAttempted: true,
+        authenticated: false,
+        username: "Guest",
+        userId: -1,
+      };
+    }
+  });
 </script>
 
-<div class="app">
-	<Header />
+<svelte:head>
+  <title>BeatMods</title>
+  <meta
+    name="description"
+    content="This is where the description goes for SEO"
+  />
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+</svelte:head>
 
-	<main>
-		{@render children()}
-	</main>
+<App theme={webDarkTheme}>
+  <div class="app">
+    <Header {userData} />
 
-	<footer>
-		<p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
-		</p>
-	</footer>
-</div>
+    <main class="mr-10 ml-10 w-auto">
+      {@render children()}
+    </main>
+  </div>
+</App>
 
 <style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
+  .app {
+    font-family: "Poppins", serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
+  .app::before {
+    width: 100%;
+    content: " ";
+    position: fixed;
+    height: 100%;
+    background-image: url("/images/noise.svg");
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+  }
 
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
-	}
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: 100%;
+    box-sizing: border-box;
+  }
 </style>

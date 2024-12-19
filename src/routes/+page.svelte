@@ -1,59 +1,79 @@
 <script lang="ts">
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+  <div class="welcomer">
+    <div class="logo">
+      <span class="beatmods-txt welcome">Welcome to</span>
+      <span class="beatmods-txt primary">Beat</span>
+      <span class="beatmods-txt secondary">Mods</span>
+      <span class="beatmods-txt exclamation">!</span>
+    </div>
+    <p class="headliner">Make BeatSaber <i>Your Own</i></p>
+  </div>
 </section>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
+  .headliner {
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-	h1 {
-		width: 100%;
-	}
+  .welcome {
+    margin-right: 10px !important;
+  }
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
+  .exclamation {
+    margin-left: 10px !important;
+  }
 
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
+  .logo {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .primary {
+    color: #662d91;
+  }
+
+  .secondary {
+    color: #92278f;
+  }
+
+  .beatmods-txt {
+    margin: 0px;
+    font-size: 40px;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    display: inline;
+    line-height: 100px;
+    font-size-adjust: cap-height 0.73;
+    pointer-events: none;
+    transition-property: text-shadow;
+    transition-duration: 0.2s;
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .welcomer {
+    width: 800px;
+    height: 350px;
+    backdrop-filter: blur(100px);
+    background-image: linear-gradient(135deg, #bbb3, #ffffff05);
+    border-radius: 40px;
+    border: #aaa 1px solid;
+    display: flex;
+    justify-content: top;
+    flex-direction: column;
+  }
 </style>
