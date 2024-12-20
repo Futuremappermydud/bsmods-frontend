@@ -1,9 +1,11 @@
 <script lang="ts">
   import axios from "axios";
-  import FilterView from "../../components/FilterView.svelte";
-  import type { ModData, Mods } from "../../types/Mods";
-  import { searchModsIndex, createModsIndex } from "$lib/search";
-  import ModCardNeo from "../../components/ModCardNeo.svelte";
+  import FilterView from "$lib/components/ui/filtering/FilterView.svelte";
+  import type { ModData, Mods } from "$lib/types/Mods";
+  import { searchModsIndex, createModsIndex } from "$lib/utils/search";
+  import ModCardNeo from "$lib/components/ui/mods/ModCardNeo.svelte";
+  import * as Pagination from "$lib/components/ui/pagination";
+  import { ChevronLeftRegular, ChevronRightRegular } from "@svelte-fui/icons";
 
   //state
   let modSearchError = $state(false);
@@ -70,9 +72,8 @@
   });
 </script>
 
-<div class="flex gap-5 flex-col md:flex-row">
+<div class="flex gap-4 flex-col md:flex-row">
   <FilterView bind:search bind:selectedGame bind:selectedVersion />
-
   <div class="right-side mod-list flex-2">
     {#if modSearchLoading}
       <p>Loading...</p>
@@ -82,6 +83,39 @@
       {#each searchedMods as mod}
         <ModCardNeo {mod} />
       {/each}
+      <Pagination.Root count={100} perPage={10} let:pages let:currentPage>
+        <Pagination.Content>
+          <Pagination.Item>
+            <Pagination.PrevButton>
+              <svg class="h-4 w-4">
+                <ChevronLeftRegular class="h-4 w-4" />
+              </svg>
+              <span class="hidden sm:block">Previous</span>
+            </Pagination.PrevButton>
+          </Pagination.Item>
+          {#each pages as page (page.key)}
+            {#if page.type === "ellipsis"}
+              <Pagination.Item>
+                <Pagination.Ellipsis />
+              </Pagination.Item>
+            {:else}
+              <Pagination.Item>
+                <Pagination.Link {page} isActive={currentPage === page.value}>
+                  {page.value}
+                </Pagination.Link>
+              </Pagination.Item>
+            {/if}
+          {/each}
+          <Pagination.Item>
+            <Pagination.NextButton>
+              <span class="hidden sm:block">Next</span>
+              <svg class="h-4 w-4">
+                <ChevronRightRegular class="h-4 w-4" />
+              </svg>
+            </Pagination.NextButton>
+          </Pagination.Item>
+        </Pagination.Content>
+      </Pagination.Root>
   {/if}
   </div>
 </div>
@@ -94,7 +128,6 @@
   }
 
   .mod-list {
-    margin: 0 10px;
     gap: 10px;
     display: flex;
     flex-direction: column;

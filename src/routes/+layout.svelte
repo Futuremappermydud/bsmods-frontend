@@ -3,7 +3,7 @@
   import Header from "./Header.svelte";
   import "../app.css";
 
-  import { App, Button } from "@svelte-fui/core";
+  import { App } from "@svelte-fui/core";
   import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
   import "@svelte-fui/core/styles/root";
 
@@ -50,7 +50,7 @@
 </svelte:head>
 
 <App theme={webDarkTheme}>
-  <div class="app">
+  <div class="app bg-neutral-background-3">
     <Header {userData} />
 
     <main class="mr-10 ml-10 w-auto">
@@ -61,20 +61,9 @@
 
 <style>
   .app {
-    font-family: "Poppins", serif !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-
-  .app::before {
-    width: 100%;
-    content: " ";
-    position: fixed;
-    height: 100%;
-    background-image: url("/images/noise.svg");
-    opacity: 0.6;
-    mix-blend-mode: overlay;
   }
 
   main {

@@ -1,4 +1,7 @@
 <script>
+    import { Divider } from "@svelte-fui/core";
+    import { page } from '$app/stores';
+
   let props = $props();
 
   function login() {
@@ -6,55 +9,58 @@
   }
 
   function goToProfile() {}
+
+  console.log(page);
 </script>
 
-<header>
-  <div class="left">
-    <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
-    <p class="logo-txt primary">Beat</p>
-    <p class="logo-txt secondary">Mods</p>
+<header class="flex-col">
+  <div class="w-auto h-[50px] flex ml-10 mr-10">
+    <div class="left">
+      <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
+    </div>
+    <ul>
+      <li><a href="/" data-text="Home" data-selected={$page.url.pathname === "/"}>Home</a></li>
+      <li><a href="/mods" data-text="Mods" data-selected={$page.url.pathname === "/mods"}>Mods</a></li>
+      <li>
+        <a href="https://bsmg.wiki" target="_blank" rel="noopener noreferrer" data-text="Wiki"
+          >Wiki</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://discord.gg/beatsabermods"
+          target="_blank"
+          rel="noopener noreferrer" data-text="Discord">Discord</a
+        >
+      </li>
+    </ul>
+    <div class="user">
+      {#if props.userData.hasAttempted}
+        {#if props.userData.authenticated}{/if}
+        <button
+          class="corner-btn"
+          onclick={props.userData.authenticated ? goToProfile : login}
+        >
+          <img
+            class="corner-img"
+            alt={props.userData.authenticated ? "Logged In" : "Not Logged In"}
+            class:logged-in={props.userData.authenticated}
+            src={props.userData.authenticated
+              ? `https://github.com/${props.userData.username}.png`
+              : "images/github-mark-white.svg"}
+          />
+        </button>
+      {/if}
+    </div>
   </div>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/mods">Mods</a></li>
-    <li>
-      <a href="https://bsmg.wiki" target="_blank" rel="noopener noreferrer"
-        >Wiki</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://discord.gg/beatsabermods"
-        target="_blank"
-        rel="noopener noreferrer">Discord</a
-      >
-    </li>
-  </ul>
-  <div class="user">
-    {#if props.userData.hasAttempted}
-      {#if props.userData.authenticated}{/if}
-      <button
-        class="corner-btn"
-        onclick={props.userData.authenticated ? goToProfile : login}
-      >
-        <img
-          class="corner-img"
-          alt={props.userData.authenticated ? "Logged In" : "Not Logged In"}
-          class:logged-in={props.userData.authenticated}
-          src={props.userData.authenticated
-            ? `https://github.com/${props.userData.username}.png`
-            : "images/github-mark-white.svg"}
-        />
-      </button>
-    {/if}
-  </div>
+  <Divider/>
 </header>
 
 <style>
   header {
     display: flex;
     height: 50px;
-    margin: 5px 40px 0px 40px;
+    margin: 5px 0px 0px 0px;
     z-index: 1;
   }
 
@@ -124,22 +130,56 @@
   }
 
   a {
-    color: white;
     text-decoration: none;
     padding: 10px 10px 0px 10px;
     width: 100%;
     height: 100%;
+    transition: transform 0.3s;
+
+    transition: color 0.2s;
   }
 
-  .logo-txt {
-    display: flex;
+  a:hover {
+    transform: translateY(-1px);
   }
 
-  .primary {
-    color: #662d91;
+  a[data-selected="true"] {
+    color: var(--fui-colorBrandForegroundLinkSelected);
   }
 
-  .secondary {
-    color: #92278f;
+  a[data-selected="true"]::after {
+    content: attr(data-text);
+    display: block;
+    font-family: inherit;
+    font-size: inherit;
+    width: fit-content;
+    height: 1px;
+    background: var(--fui-colorBrandForegroundLinkSelected);
+    color: transparent;
+    transition: transform 0.1s;
+  }
+  a[data-selected="true"]:hover::after {
+    transform: scaleX(1.2);
+  }
+
+  a:not([data-selected="true"])::after {
+    content: attr(data-text);
+    display: block;
+    font-family: inherit;
+    font-size: inherit;
+    width: fit-content;
+    height: 1px;
+    background: var(--fui-colorNeutralForeground1);
+    color: transparent;
+    transform: scaleX(0.0);
+    transition: transform 0.1s;
+  }
+  a:not([data-selected="true"]):hover::after {
+    transform: scaleX(0.5);
+    background: var(--fui-colorBrandForegroundLinkHover);
+  }
+
+  a:not([data-selected="true"]):hover {
+    color: var(--fui-colorBrandForegroundLinkHover);
   }
 </style>

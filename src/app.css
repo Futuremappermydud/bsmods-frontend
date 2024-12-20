@@ -1,54 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Playwrite+AU+NSW&family=Poppins&family=Tangerine&family=Teko&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  font-family: "Poppins", serif !important;
-  font-weight: 400;
-  font-style: normal;
-}
-
-body {
-  min-height: 100vh;
-  margin: 0;
-  background: linear-gradient(
-    60deg,
-    color-mix(in srgb, rgba(23, 23, 56, 1), black) 0%,
-    color-mix(in srgb, rgba(46, 23, 96, 1), black) 100%
-  );
-
-  background-attachment: fixed;
-}
-
-p,
-span {
-  color: white;
-}
-
-.bbm-modal {
-  mix-blend-mode: lighten;
-  background-image: linear-gradient(135deg, #bbb3, #ffffff05);
-  border-radius: 10px;
-  border: #aaa 1px solid;
-}
-
-.fui-root {
-  background: none !important;
-}
-
-.bg-blend-blur,
-.fui-input-skin,
-.fui-menu,
-.fui-button {
-  background-color: color-mix(
-    in srgb,
-    color-mix(in srgb, rgba(23, 23, 56, 1) 70%, rgba(46, 23, 96, 1) 30%) 50%,
-    transparent
-  ) !important;
-  backdrop-filter: blur(30px);
-}
 
 .search > .fui-input-skin {
   width: 100% !important;
