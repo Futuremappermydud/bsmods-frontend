@@ -10,9 +10,6 @@ COPY package.json yarn.lock ./
 
 # Build
 COPY . .
-RUN yarn install --immutable && \
-  yarn cache clean && \
-  yarn cache clean --mirror
 
 # Repo Metadata
 ARG GIT_REPO
@@ -21,4 +18,4 @@ LABEL org.opencontainers.image.source=${GIT_REPO}
 ENV GIT_VERSION=${GIT_VERSION}
 
 # Start Website
-CMD ["yarn", "docker"]
+CMD ["yarn", "install --immutable", "cache clean", "cache clean --mirror", "docker"]
