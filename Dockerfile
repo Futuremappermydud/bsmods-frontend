@@ -7,6 +7,7 @@ WORKDIR /usr/app
 
 # Install prod dependencies
 COPY package.json yarn.lock ./
+COPY . .
 RUN yarn install
 
 # Repo Metadata
