@@ -11,7 +11,7 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
-          IMAGE_NAME=yatb
+          IMAGE_NAME=bsmods-frontend
 
           GIT_REPO='https://github.com/${{ github.repository }}'
           DOCKER_USER=`echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]'`
