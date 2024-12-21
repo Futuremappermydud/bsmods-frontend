@@ -9,7 +9,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
-    "docker": "yarn build & node build"
+    "docker": "yarn build && node build"
   },
   "devDependencies": {
     "@fontsource/fira-mono": "^5.0.0",
