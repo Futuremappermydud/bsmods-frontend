@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  website:
+    image: ghcr.io/futuremappermydud/bsmods-frontend
+    restart: unless-stopped
+    networks:
+      - internal
+    env_file:
+      - .env
+
+networks:
+  internal:

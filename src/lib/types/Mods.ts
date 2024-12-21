@@ -61,6 +61,11 @@ export interface ModData {
   latest: ModVersion;
 }
 
+export interface IndividualModData {
+  info: Mod;
+  versions: ModVersion[];
+}
+
 export interface Mods {
   mods: ModData[];
 }

@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+
+# Meta Files
+README.md
+LICENSE
+Dockerfile
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directory
+node_modules
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# TypeScript Output
+build/**/*
+
+# VSCode
+.vscode
+tsconfig.tsbuildinfo
+
+# Environment Variables
+*.env
+
+# Misc
+.npmrc
+.prettierrc
+.eslintrc.cjs
+
+# Svelte
+.svelte-kit

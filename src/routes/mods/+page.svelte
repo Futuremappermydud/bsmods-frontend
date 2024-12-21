@@ -81,7 +81,7 @@
       <p>There was an error loading mods</p>
     {:else}
       {#each searchedMods as mod}
-        <ModCardNeo {mod} />
+        <ModCardNeo mod={mod.mod} author={mod.latest.author} />
       {/each}
       <Pagination.Root count={100} perPage={10} let:pages let:currentPage>
         <Pagination.Content>

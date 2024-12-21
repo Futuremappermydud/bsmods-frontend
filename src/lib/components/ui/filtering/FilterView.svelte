@@ -46,6 +46,10 @@
     );
   });
 
+  $effect(() => {
+    selectedVersion = allGameVersions.toReversed()[0];
+  });
+
   let searchDataPromise = getData();
   async function getData() {
     axios

@@ -40,7 +40,8 @@
     "dotenv": "^16.4.7",
     "flexsearch": "^0.7.43",
     "javascript-time-ago": "^2.5.11",
-    "relative-time-format": "^1.1.6"
+    "relative-time-format": "^1.1.6",
+    "svelte-exmarkdown": "^4.0.2"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }
