@@ -18,9 +18,12 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth`, {
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
+        {
+          credentials: "include",
+        },
+      );
       if (!response.ok) throw new Error("Not authenticated");
       let data = await response.json();
       userData = {

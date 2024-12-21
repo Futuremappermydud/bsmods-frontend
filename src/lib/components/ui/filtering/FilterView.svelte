@@ -53,7 +53,9 @@
   let searchDataPromise = getData();
   async function getData() {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/versions`, { withCredentials: false })
+      .get(`${import.meta.env.VITE_API_BASE_URL}/api/versions`, {
+        withCredentials: false,
+      })
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           searchDataError = false;
@@ -74,7 +76,9 @@
 </script>
 
 <div class="left-side flex flex-row gap-4">
-  <div class="bg-neutral-background-2 rounded-xl shadow-8 justify-start flex flex-col flex-1 p-2 gap-3">
+  <div
+    class="bg-neutral-background-2 rounded-xl shadow-8 justify-start flex flex-col flex-1 p-2 gap-3"
+  >
     <div class="h-8 flex flex-row gap-2">
       <div class="search flex-1">
         <Input size="lg" placeholder="Search mods" bind:value={search} />
@@ -103,7 +107,10 @@
     </div>
     <br />
     <Dropdown.Root bind:value={selectedGame}>
-      <Dropdown.Trigger class="flex justify-center items-center w-full gap-3" let:data>
+      <Dropdown.Trigger
+        class="flex justify-center items-center w-full gap-3"
+        let:data
+      >
         <Label class="h-[20px] flex-2">Game:</Label>
         <InputSkin class="flex-1">
           {#if data}
@@ -118,14 +125,19 @@
 
       <Dropdown.Menu>
         {#each allGames as item (item.id)}
-          <Dropdown.Item value={item.gameName} data={item} class="bg-transparent"
-            >{item.gameName}</Dropdown.Item
+          <Dropdown.Item
+            value={item.gameName}
+            data={item}
+            class="bg-transparent">{item.gameName}</Dropdown.Item
           >
         {/each}
       </Dropdown.Menu>
     </Dropdown.Root>
     <Dropdown.Root bind:value={selectedVersion}>
-      <Dropdown.Trigger class="flex justify-center items-center w-full gap-3" let:data>
+      <Dropdown.Trigger
+        class="flex justify-center items-center w-full gap-3"
+        let:data
+      >
         <Label class="h-[20px] flex-2">Supports:</Label>
         <InputSkin class="flex-1">
           {#if data}
@@ -141,11 +153,13 @@
       <Dropdown.Menu>
         <div class="h-[400px] overflow-scroll flex flex-col rounded">
           {#each allGameVersions.toReversed() as item (item.id)}
-            <Dropdown.Item value={item.version} data={item} class="bg-transparent"
-              >{item.version}</Dropdown.Item
+            <Dropdown.Item
+              value={item.version}
+              data={item}
+              class="bg-transparent">{item.version}</Dropdown.Item
             >
           {/each}
-      </div>
+        </div>
       </Dropdown.Menu>
     </Dropdown.Root>
   </div>

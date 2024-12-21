@@ -1,11 +1,15 @@
 <script>
-    import { Divider } from "@svelte-fui/core";
-    import { page } from '$app/stores';
+  import { Divider } from "@svelte-fui/core";
+  import { page } from "$app/stores";
+  import { ArrowUploadRegular } from "@svelte-fui/icons";
 
   let props = $props();
 
   function login() {
-    window.open(`${import.meta.env.VITE_API_BASE_URL}/api/auth/github`, "_self");
+    window.open(
+      `${import.meta.env.VITE_API_BASE_URL}/api/auth/github`,
+      "_self",
+    );
   }
 
   function goToProfile() {}
@@ -19,24 +23,44 @@
       <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
     </div>
     <ul>
-      <li><a href="/" data-text="Home" data-selected={$page.url.pathname === "/"}>Home</a></li>
-      <li><a href="/mods" data-text="Mods" data-selected={$page.url.pathname === "/mods"}>Mods</a></li>
       <li>
-        <a href="https://bsmg.wiki" target="_blank" rel="noopener noreferrer" data-text="Wiki"
-          >Wiki</a
+        <a href="/" data-text="Home" data-selected={$page.url.pathname === "/"}
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="/mods"
+          data-text="Mods"
+          data-selected={$page.url.pathname === "/mods"}>Mods</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://bsmg.wiki"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-text="Wiki">Wiki</a
         >
       </li>
       <li>
         <a
           href="https://discord.gg/beatsabermods"
           target="_blank"
-          rel="noopener noreferrer" data-text="Discord">Discord</a
+          rel="noopener noreferrer"
+          data-text="Discord">Discord</a
         >
       </li>
     </ul>
-    <div class="user">
+    <div class="user gap-3">
       {#if props.userData.hasAttempted}
-        {#if props.userData.authenticated}{/if}
+        {#if props.userData.authenticated}
+          <a class="contents" href="/upload">
+            <svg class="w-4 h-4 scale-[1.6]">
+              <ArrowUploadRegular />
+            </svg>
+          </a>
+        {/if}
         <button
           class="corner-btn"
           onclick={props.userData.authenticated ? goToProfile : login}
@@ -53,7 +77,7 @@
       {/if}
     </div>
   </div>
-  <Divider/>
+  <Divider />
 </header>
 
 <style>
@@ -171,7 +195,7 @@
     height: 1px;
     background: var(--fui-colorNeutralForeground1);
     color: transparent;
-    transform: scaleX(0.0);
+    transform: scaleX(0);
     transition: transform 0.1s;
   }
   a:not([data-selected="true"]):hover::after {

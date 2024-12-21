@@ -32,6 +32,6 @@ export function searchModsIndex(searchTerm: string) {
 }
 
 function replaceTextWithMarker(text: string, match: string) {
-	const regex = new RegExp(match, 'gi')
-	return text.replaceAll(regex, (match) => `<mark>${match}</mark>`)
+  const regex = new RegExp(match, "gi");
+  return text.replaceAll(regex, (match) => `<mark>${match}</mark>`);
 }
