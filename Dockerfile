@@ -18,4 +18,4 @@ LABEL org.opencontainers.image.source=${GIT_REPO}
 ENV GIT_VERSION=${GIT_VERSION}
 
 # Start Website
-CMD ["yarn", "install --immutable", "cache clean", "cache clean --mirror", "docker"]
+CMD ["yarn install --immutable", "yarn cache clean", "yarn cache clean --mirror", "yarn docker"]
