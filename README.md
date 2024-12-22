@@ -1,38 +1,25 @@
-# sv
+# BadBSMods-Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Frontend for [BadBSMods](https://github.com/Saeraphinx/badbsmods) that is
+- Developed with [svelte](https://svelte.dev)
+- Designed with [Fluent Design](https://fluent2.microsoft.design/)
+ - Fluent components provided by [svelte-fui](https://github.com/ryu-man/svelte-fui)
 
-## Creating a project
+## Dev
+1. Create a .env file based on example.env pointing to your api instance.
+2. Run `yarn`
+3. Run `yarn dev`
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Production setup
+1. Run `docker pull ghcr.io/futuremappermydud/bsmods-frontend:latest` in your terminal
+2. Run a container from the image
+3. Pull whenever updating
 
-```bash
-# create a new project in the current directory
-npx sv create
 
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## TODO:
+- Finish Upload Page
+ - Fix accessibility in upload page
+ - Mod uploading
+ - Existing mod search
+- Add Approval page
+- Finish Mod Page

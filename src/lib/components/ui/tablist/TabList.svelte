@@ -16,6 +16,9 @@
     value$: writable(value),
     name$: writable(name),
     layout$: writable(layout),
+    methods: {
+      select,
+    },
   });
 
   $: disabled$.set(disabled);
@@ -23,15 +26,24 @@
   $: value$.set(value);
   $: name$.set(name);
   $: layout$.set(layout);
+
+  function select(tab_value: string) {
+    value = tab_value;
+  }
 </script>
 
-<div class="fui-tab-list" class:vertical={layout === "vertical"} role="radiogroup" {...$$restProps}>
+<div
+  class="fui-tab-list"
+  class:vertical={layout === "vertical"}
+  role="radiogroup"
+  {...$$restProps}
+>
   <slot />
 </div>
 
 <style lang="postcss">
   .fui-tab-list {
-    @apply flex items-start w-fit;
+    @apply flex items-start w-fit h-fit;
 
     &.vertical {
       @apply flex-col;

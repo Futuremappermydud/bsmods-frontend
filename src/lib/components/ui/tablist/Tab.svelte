@@ -3,32 +3,41 @@
   import { nanoid } from "nanoid";
   import { getTabListContext } from "./context";
 
-  const { disabled$, required$, value$, name$, layout$ } = getTabListContext();
+  const { disabled$, required$, name$, value$, layout$, methods } = getTabListContext();
 
   export let id: string | undefined = nanoid();
   export let name: string | undefined = nanoid();
   export let value: string | undefined = undefined;
+  export let disabled: boolean | undefined = undefined;
 
   $: _name = $name$ || name;
-
-  $: isVertical = $layout$ === 'vertical';
+  $: isVertical = $layout$ === "vertical";
+  $: _disabled = $disabled$ || disabled;
 
   function onclick() {
-    value$.set(value);
-    console.log(value);
+    if (!value) return;
+
+    methods.select(value);
   }
 </script>
 
-<div class="fui-tab" class:horizontal={!isVertical} class:vertical={isVertical} on:click={onclick} on:click>
+<div
+  class="fui-tab"
+  class:horizontal={!isVertical}
+  class:vertical={isVertical}
+  on:click={onclick}
+  on:click
+>
   <input
     type="radio"
     {id}
     name={_name}
-    bind:value
     class="fui-tab-input"
-    disabled={$disabled$}
+    class:enabled={$value$ === value}
+    {value}
+    disabled={_disabled}
     required={$required$}
-    alt="Tab"
+    on:change
   />
   {#if $$slots.default}
     <Label for={id} class="fui-tab-label">
@@ -50,7 +59,7 @@
     @apply opacity-0 absolute top-0 left-0 w-full h-full cursor-pointer;
 
     /* Colors for the unchecked state */
-    &:enabled:not(:checked) {
+    &:enabled:not(.enabled) {
       & ~ :global(.fui-tab-label) {
         @apply text-neutral-foreground-3 font-regular;
       }
@@ -69,7 +78,7 @@
     }
 
     /* Colors for the checked state */
-    &:enabled:checked {
+    &.enabled:enabled {
       & ~ :global(.fui-tab-label) {
         @apply text-neutral-foreground-1 font-semibold;
       }
@@ -77,8 +86,10 @@
 
     /* Colors for the disabled state */
     &:disabled {
+      cursor: not-allowed !important;
+
       & ~ :global(.fui-tab-label) {
-        @apply text-neutral-foreground-disabled cursor-default;
+        @apply text-neutral-foreground-disabled !cursor-not-allowed pointer-events-none;
       }
     }
   }
@@ -88,12 +99,12 @@
   }
 
   /* Tab underline */
-  .fui-tab::after {
+  .fui-tab:not(:has(.fui-tab-input:disabled))::after {
     @apply content-[''] absolute bottom-0 left-0 rounded-circular;
   }
 
   /* Colors for the selected state */
-  .fui-tab:has(.fui-tab-input:checked)::after {
+  .fui-tab:has(.fui-tab-input.enabled)::after {
     @apply bg-brand-stroke-1;
   }
 
@@ -106,7 +117,7 @@
   .fui-tab.vertical::after {
     @apply h-auto w-1 bottom-0 top-0 my-2;
   }
-  
+
   /* Layout for the horizontal state */
   .fui-tab.horizontal::after {
     @apply w-auto h-1 right-0 mx-3;

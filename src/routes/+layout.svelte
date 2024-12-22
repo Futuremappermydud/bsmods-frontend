@@ -1,11 +1,14 @@
 <script>
   import { onMount } from "svelte";
-  import Header from "./Header.svelte";
-  import "../app.css";
 
   import { App } from "@svelte-fui/core";
   import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
   import "@svelte-fui/core/styles/root";
+
+  import "../app.css";
+
+  import ColorSchemeSwapper from "$lib/components/ui/color-scheme/ColorSchemeSwapper.svelte";
+  import Header from "./Header.svelte";
 
   let { children } = $props();
 
@@ -41,6 +44,24 @@
       };
     }
   });
+
+  let theme = $state(webLightTheme);
+
+  onMount(() => {
+    function handler(schemeMedia) {
+      theme = schemeMedia.matches ? webLightTheme : webDarkTheme;
+    }
+
+    const schemeMedia = matchMedia("(prefers-color-scheme: light)");
+
+    schemeMedia.addEventListener("change", handler);
+
+    theme = schemeMedia.matches ? webLightTheme : webDarkTheme;
+
+    return () => {
+      schemeMedia.removeEventListener("change", handler);
+    };
+  });
 </script>
 
 <svelte:head>
@@ -52,13 +73,17 @@
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 </svelte:head>
 
-<App theme={webDarkTheme}>
+<App {theme}>
   <div class="app bg-neutral-background-3">
     <Header {userData} />
 
     <main class="mr-10 ml-10 w-auto">
       {@render children()}
     </main>
+
+    <div class="w-8 h-8 fixed bottom-2 left-2">
+      <ColorSchemeSwapper bind:theme />
+    </div>
   </div>
 </App>
 
