@@ -3,7 +3,7 @@
 Frontend for [BadBSMods](https://github.com/Saeraphinx/badbsmods) that is
 - Developed with [svelte](https://svelte.dev)
 - Designed with [Fluent Design](https://fluent2.microsoft.design/)
- - Fluent components provided by [svelte-fui](https://github.com/ryu-man/svelte-fui)
+    - With Fluent components provided by [svelte-fui](https://github.com/ryu-man/svelte-fui)
 
 ## Dev
 1. Create a .env file based on example.env pointing to your api instance.
