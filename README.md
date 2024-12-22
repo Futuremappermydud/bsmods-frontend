@@ -18,8 +18,9 @@ Frontend for [BadBSMods](https://github.com/Saeraphinx/badbsmods) that is
 
 ## TODO:
 - Finish Upload Page
- - Fix accessibility in upload page
- - Mod uploading
- - Existing mod search
+    - Fix accessibility in upload page
+    - add tab-index=-1 to svelte-fui
+    - Mod uploading
+    - Existing mod search
 - Add Approval page
 - Finish Mod Page
