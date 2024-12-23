@@ -11,6 +11,7 @@
     reader.readAsDataURL(image);
     reader.onload = (e) => {
       avatar = e.target?.result;
+      console.log(avatar);
     };
   };
 

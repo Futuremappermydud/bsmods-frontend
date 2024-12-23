@@ -4,9 +4,9 @@
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import TextArea from "$lib/components/ui/textarea/TextArea.svelte";
   import SummaryPage from "$lib/components/ui/upload/SummaryPage.svelte";
-  import { Button, Divider, Field, Icon, Input } from "@svelte-fui/core";
+  import { Divider, Field, Input } from "@svelte-fui/core";
   import ImagePicker from "$lib/components/ui/image/ImagePicker.svelte";
-  import { WarningFilled } from "@svelte-fui/icons";
+    import type { ModData } from "$lib/types/Mods";
 
   let toUpload = $state("");
 
@@ -14,6 +14,10 @@
 
   let selectedGame = $state(null);
   let selectedVersion = $state(null);
+
+  
+
+  let dependencies: ModData[] = $state([]);
 </script>
 
 <div class="flex gap-4 flex-col text-center items-center">
@@ -90,7 +94,7 @@
                 value="dependencies"
                 disabled={!(selectedGame && selectedVersion)}>Dependencies</Tab
               >
-              <Tab value="checklist">Checklist</Tab>
+              <Tab value="checklist" disabled={true}>Checklist WIP</Tab>
               <Tab value="upload" disabled={!(selectedGame && selectedVersion)}
                 >Upload</Tab
               >
@@ -112,7 +116,7 @@
             {/if}
             {#if dataTab == "upload"}
               <div class="flex flex-col gap-4">
-                <Input size="sm" placeholder="Upload" />
+                <Input size="sm" placeholder="Upload" type="file" />
               </div>
             {/if}
           </div>
