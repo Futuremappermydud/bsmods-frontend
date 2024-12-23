@@ -28,6 +28,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "flexsearch": "^0.7.43",
+    "numify": "^1.0.3",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",

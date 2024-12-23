@@ -4,9 +4,12 @@
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import TextArea from "$lib/components/ui/textarea/TextArea.svelte";
   import SummaryPage from "$lib/components/ui/upload/SummaryPage.svelte";
-  import { Button, Divider, Field, Input } from "@svelte-fui/core";
+  import { Button, Divider, Field, Icon, Input } from "@svelte-fui/core";
+  import ImagePicker from "$lib/components/ui/image/ImagePicker.svelte";
+  import { WarningFilled } from "@svelte-fui/icons";
 
-  let toUpload = $state("new");
+  let toUpload = $state("");
+
   let dataTab = $state("summary");
 
   let selectedGame = $state(null);
@@ -34,9 +37,7 @@
     </p>
     <div class="flex flex-row gap-4 w-full h-[450px] mt-6">
       <div class="relative flex-1 h-auto flex flex-col gap-4">
-        <div
-          class="relative shadow-4 bg-neutral-background-2 rounded-xl"
-        >
+        <div class="relative shadow-4 bg-neutral-background-2 rounded-xl">
           <div
             class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-neutral-background-6 pointer-events-none"
           ></div>
@@ -54,17 +55,17 @@
           ></div>
           <div class="p-4 h-full">
             <div class="flex flex-col gap-4 h-full">
-              <div class="flex flex-row gap-4 h-[96px]">
-                <img
-                  src="/images/default.png"
-                  alt="Placeholder"
-                  class="rounded-lg"
-                />
-                <div class="flex flex-col w-full gap-2 h-min ml-auto">
+              <div class="flex flex-row gap-1 h-[72px]">
+                <ImagePicker classProp="aspect-square" imageProp="rounded-xl" />
+                <div
+                  class="flex flex-col w-full gap-2 h-min ml-auto items-center"
+                >
                   <Field label="Mod Name" orientation="horizontal">
-                    <Input size="sm" placeholder="Mod Name" />
+                    <Input size="sm" />
                   </Field>
-                  <Input size="sm" placeholder="Semver" />
+                  <Field label="SemVer" orientation="horizontal">
+                    <Input size="sm" />
+                  </Field>
                 </div>
               </div>
               <TextArea
@@ -85,14 +86,22 @@
           <div class="ml-4 w-28">
             <TabList disabled={false} layout="vertical" bind:value={dataTab}>
               <Tab value="summary">Summary</Tab>
-              <Tab value="dependencies" disabled={!(selectedGame && selectedVersion)}>Dependencies</Tab>
-              <Tab value="upload" disabled={!(selectedGame && selectedVersion)}>Upload</Tab>
+              <Tab
+                value="dependencies"
+                disabled={!(selectedGame && selectedVersion)}>Dependencies</Tab
+              >
+              <Tab value="checklist">Checklist</Tab>
+              <Tab value="upload" disabled={!(selectedGame && selectedVersion)}
+                >Upload</Tab
+              >
             </TabList>
           </div>
           <div
             class="seperator w-2 float-left h-full border-dashed border-l-2 border-neutral-background-6 my-1"
           ></div>
-          <div class="flex-[5.5] mb-2 mt-2 mr-2 block absolute h-auto bottom-0 top-0 right-0 left-36">
+          <div
+            class="flex-[5.5] mb-2 mt-2 mr-2 block absolute h-auto bottom-0 top-0 right-0 left-36"
+          >
             {#if dataTab == "summary"}
               <SummaryPage />
             {/if}
@@ -111,16 +120,17 @@
       </div>
     </div>
     <div
-      class="mt-4 rounded-xl transition-colors bg-brand-foreground-link hover:bg-brand-foreground-link-hover"
-    >
-      <Button class="!bg-transparent !border-none w-40 h-10">✓ I'm Done!</Button
-      >
-    </div>
+      class="mt-4 h-5 w-5 rounded-xl transition-colors hover:bg-brand-foreground-link-hover shadow-sm shadow-brand-foreground-link"
+    ></div>
   </div>
 </div>
 
 <style>
   .seperator {
     height: calc(100% - 32px);
+  }
+
+  :global(.fui-label) {
+    align-self: center;
   }
 </style>

@@ -17,6 +17,7 @@
     authenticated: false,
     username: "Guest",
     userId: -1,
+    roles: null,
   });
 
   onMount(async () => {
@@ -34,6 +35,7 @@
         authenticated: true,
         username: data.username,
         userId: data.userId,
+        roles: data.roles,
       };
     } catch (error) {
       userData = {
@@ -41,6 +43,7 @@
         authenticated: false,
         username: "Guest",
         userId: -1,
+        roles: null,
       };
     }
   });

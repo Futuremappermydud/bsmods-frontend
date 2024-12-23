@@ -1,7 +1,7 @@
 <script>
   import { Divider } from "@svelte-fui/core";
   import { page } from "$app/stores";
-  import { ArrowUploadRegular } from "@svelte-fui/icons";
+  import { ArrowUploadRegular, ColorLineRegular } from "@svelte-fui/icons";
 
   let props = $props();
 
@@ -55,8 +55,13 @@
     <div class="user gap-3">
       {#if props.userData.hasAttempted}
         {#if props.userData.authenticated}
+          <a class="contents" href="/approval">
+            <svg class="w-6 h-6" viewBox="0 0 20 20">
+              <ColorLineRegular />
+            </svg>
+          </a>
           <a class="contents" href="/upload">
-            <svg class="w-4 h-4 scale-[1.6]">
+            <svg class="w-6 h-6" viewBox="0 0 20 20">
               <ArrowUploadRegular />
             </svg>
           </a>

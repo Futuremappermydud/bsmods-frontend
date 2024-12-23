@@ -1,11 +1,20 @@
 <script lang="ts">
-  import { Link } from "@svelte-fui/core";
-  import { ArrowSyncFilled } from "@svelte-fui/icons";
+  import { Divider, Link } from "@svelte-fui/core";
+  import {
+    ArrowDownloadRegular,
+    ArrowSyncRegular,
+    CheckmarkRegular,
+  } from "@svelte-fui/icons";
   import type { Mod, ModAuthor } from "$lib/types/Mods";
   import ModIcon from "./ModIcon.svelte";
   import { getRelativeTimeString } from "$lib/utils/time";
+  import { numify } from "numify";
 
-  let { mod, author }: { mod: Mod; author: ModAuthor } = $props();
+  let {
+    mod,
+    author,
+    downloads,
+  }: { mod: Mod; author: ModAuthor; downloads: number } = $props();
 
   function searchProfile(author: ModAuthor) {
     console.log(`Search Profile button clicked ${author.username}`);
@@ -32,14 +41,31 @@
     </div>
     <p class="text-neutral-foreground-3">{mod.description}</p>
   </div>
-  <div class="grid h-full gap-2 w-[175px] ml-auto min-w-[175px]">
-    <div class="flex flex-row gap-2 mt-auto ml-auto w-fit">
-      <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
-        <ArrowSyncFilled class="w-6 h-6" />
-      </svg>
-      <span class="text-neutral-foreground-2"
-        >{getRelativeTimeString(new Date(mod.updatedAt))}</span
-      >
+  <div class="flex flex-row h-full w-[115px] gap-2 ml-auto">
+    <Divider vertical={true} />
+    <div class="flex flex-col h-fit mb-auto gap-4 w-[110px] ml-auto">
+      <div class="flex flex-row gap-2 mr-auto w-fit">
+        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+          <ArrowDownloadRegular class="w-6 h-6" />
+        </svg>
+        <span class="text-neutral-foreground-2">{numify(downloads)}</span>
+      </div>
+      <div class="flex flex-row gap-2 mr-auto w-fit">
+        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+          <ArrowSyncRegular class="w-6 h-6" />
+        </svg>
+        <span class="text-neutral-foreground-2"
+          >{getRelativeTimeString(new Date(mod.updatedAt))}</span
+        >
+      </div>
+      <div class="flex flex-row gap-2 mr-auto w-fit">
+        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+          <CheckmarkRegular class="w-6 h-6" />
+        </svg>
+        <span class="text-neutral-foreground-2 silly-capitalize"
+          >{mod.status}</span
+        >
+      </div>
     </div>
   </div>
 </div>

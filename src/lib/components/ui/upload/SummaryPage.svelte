@@ -7,7 +7,7 @@
   import TextArea from "../textarea/TextArea.svelte";
   import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
   import { createHighlighter } from "shiki/bundle/web";
-  import addClasses from 'rehype-class-names';
+  import addClasses from "rehype-class-names";
 
   let { text = $bindable() } = $props();
 
@@ -16,19 +16,20 @@
   const existingPluginArray: Plugin[] = [
     gfmPlugin(),
     {
-        rehypePlugin: [
-            addClasses, { 
-                h1: "fix", 
-                h2: "fix", 
-                a: "fix",
-                p: "fix",
-                li: "fix",
-                ul: "fix",
-                ol: "fix"
-            }
-        ],
-    }
-];
+      rehypePlugin: [
+        addClasses,
+        {
+          h1: "fix",
+          h2: "fix",
+          a: "fix",
+          p: "fix",
+          li: "fix",
+          ul: "fix",
+          ol: "fix",
+        },
+      ],
+    },
+  ];
 
   const shikiPluginPromise = createHighlighter({
     themes: [import("shiki/themes/vitesse-dark.mjs")],
@@ -57,7 +58,9 @@
     />
   {/if}
   {#if summaryTab == "preview"}
-    <div class="md-container w-full flex-1 overflow-scroll text-left border-neutral-foreground-disabled border-solid border-2 p-1 rounded">
+    <div
+      class="md-container w-full flex-1 overflow-scroll text-left border-neutral-foreground-disabled border-solid border-2 p-1 rounded"
+    >
       {#await shikiPluginPromise}
         <Markdown md={text} plugins={existingPluginArray} />
       {:then shikiPlugin}
@@ -70,7 +73,6 @@
 </div>
 
 <style lang="postcss">
-
   :global(.fix) {
     color: revert !important;
     font-size: revert !important;
@@ -91,11 +93,14 @@
     list-style: decimal;
   }
 
-  :global(ul.fix), :global(ol.fix) {
+  :global(ul.fix),
+  :global(ol.fix) {
     @apply mb-4 pl-5;
   }
 
-  :global(h2.fix), :global(h1.fix), :global(h3.fix) {
+  :global(h2.fix),
+  :global(h1.fix),
+  :global(h3.fix) {
     @apply border-b-[1px] border-neutral-foreground-disabled border-solid mb-4 pt-2 pb-1;
   }
 </style>

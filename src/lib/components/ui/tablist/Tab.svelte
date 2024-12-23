@@ -3,7 +3,8 @@
   import { nanoid } from "nanoid";
   import { getTabListContext } from "./context";
 
-  const { disabled$, required$, name$, value$, layout$, methods } = getTabListContext();
+  const { disabled$, required$, name$, value$, layout$, methods } =
+    getTabListContext();
 
   export let id: string | undefined = nanoid();
   export let name: string | undefined = nanoid();

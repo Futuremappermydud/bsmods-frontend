@@ -9,5 +9,5 @@
 </script>
 
 <div class="flex flex-col">
-  <ModCardNeo mod={mod.info} author={mod.versions[0].author} />
+  <ModCardNeo mod={mod.info} author={mod.versions[0].author} downloads={0} />
 </div>

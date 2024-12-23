@@ -5,10 +5,8 @@
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
 
   //props
-  let {
-    selectedVersion = $bindable(null),
-    selectedGame = $bindable(null),
-  } = $props();
+  let { selectedVersion = $bindable(null), selectedGame = $bindable(null) } =
+    $props();
 
   //state
   let searchDataError = $state(false);
@@ -79,10 +77,8 @@
 
   <Dropdown.Menu>
     {#each allGames as item (item.id)}
-      <Dropdown.Item
-        value={item.gameName}
-        data={item}
-        class="bg-transparent">{item.gameName}</Dropdown.Item
+      <Dropdown.Item value={item.gameName} data={item} class="bg-transparent"
+        >{item.gameName}</Dropdown.Item
       >
     {/each}
   </Dropdown.Menu>
@@ -107,10 +103,8 @@
   <Dropdown.Menu>
     <div class="h-[400px] overflow-scroll flex flex-col rounded">
       {#each allGameVersions.toReversed() as item (item.id)}
-        <Dropdown.Item
-          value={item.version}
-          data={item}
-          class="bg-transparent">{item.version}</Dropdown.Item
+        <Dropdown.Item value={item.version} data={item} class="bg-transparent"
+          >{item.version}</Dropdown.Item
         >
       {/each}
     </div>

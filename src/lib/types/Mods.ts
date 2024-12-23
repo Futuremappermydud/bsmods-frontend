@@ -32,9 +32,10 @@ export interface ModVersion {
   modVersion: string;
   platform: string;
   zipHash: string;
-  visibility: string;
+  status: string;
   dependencies: number[];
   contentHashes: ContentHash[];
+  downloadCount: number;
   supportedGameVersions: SupportedGameVersion[];
   createdAt: string;
   updatedAt: string;
@@ -43,6 +44,7 @@ export interface ModVersion {
 export interface Mod {
   id: number;
   name: string;
+  summary: string;
   description: string;
   gameName: string;
   category: string;

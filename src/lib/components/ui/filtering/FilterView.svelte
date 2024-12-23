@@ -51,9 +51,7 @@
       </Button>
     </div>
     <br />
-    <VersionPicker
-      bind:selectedVersion
-      bind:selectedGame />
+    <VersionPicker bind:selectedVersion bind:selectedGame />
   </div>
 
   <Divider class="!flex-none" vertical={true} />
