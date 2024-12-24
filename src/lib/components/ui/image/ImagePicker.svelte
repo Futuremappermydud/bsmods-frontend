@@ -46,7 +46,9 @@
       <div
         class="mod-add-icon duration-200 h-full flex justify-center rounded-xl border-2 border-dashed border-neutral-foreground-disabled"
       >
-        <Icon class="h-8 w-8 self-center duration-200 text-neutral-foreground-disabled">
+        <Icon
+          class="h-8 w-8 self-center duration-200 text-neutral-foreground-disabled"
+        >
           <svg viewBox="0 0 19 19">
             <AddRegular />
           </svg>

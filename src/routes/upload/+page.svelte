@@ -16,7 +16,7 @@
   import type { ModData } from "$lib/types/Mods";
   import CategoryDropdown from "$lib/components/ui/upload/CategoryDropdown.svelte";
   import { z } from "zod";
-    import { isValidSquareImage } from "$lib/utils/image";
+  import { isValidSquareImage } from "$lib/utils/image";
 
   let toUpload = $state("new");
 

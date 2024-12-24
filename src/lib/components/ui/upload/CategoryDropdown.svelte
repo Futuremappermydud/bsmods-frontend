@@ -1,9 +1,12 @@
 <script lang="ts">
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
   import { Categories } from "$lib/types/Categories";
-    import type { z } from "zod";
+  import type { z } from "zod";
 
-  let { category = $bindable(), categoryScheme }: { category: Categories, categoryScheme: z.Schema } = $props();
+  let {
+    category = $bindable(),
+    categoryScheme,
+  }: { category: Categories; categoryScheme: z.Schema } = $props();
 </script>
 
 <Dropdown.Root bind:value={category}>
@@ -12,7 +15,11 @@
     let:data
   >
     <Label class="h-[20px] flex-2">Category:</Label>
-    <InputSkin class="flex-1" ariaInvalid={data === undefined || !categoryScheme.safeParse(data).success}>
+    <InputSkin
+      class="flex-1"
+      ariaInvalid={data === undefined ||
+        !categoryScheme.safeParse(data).success}
+    >
       {#if data}
         <span>{data}</span>
       {:else}
@@ -21,7 +28,6 @@
 
       <Dropdown.Arrow />
     </InputSkin>
-
   </Dropdown.Trigger>
 
   <Dropdown.Menu>
