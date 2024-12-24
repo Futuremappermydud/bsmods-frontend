@@ -30,6 +30,8 @@
 
   export let ariaDescribedby: string | undefined = undefined;
 
+  export let ariaInvalid = false;
+
   /** Specifies a custom class name for the TextBox container. */
   let klass = "";
   export { klass as class };
@@ -64,7 +66,11 @@
 </script>
 
 <InputSkin
-  class={classnames("fui-text-area", { underline, disabled }, componentClass)}
+  class={classnames(
+    "fui-text-area",
+    { underline, disabled, invalid: ariaInvalid && !disabled },
+    componentClass,
+  )}
   {id}
 >
   {#if $$slots.before}
@@ -85,6 +91,7 @@
     {readonly}
     aria-label={ariaLabel}
     aria-describedby={ariaDescribedby}
+    aria-invalid={true}
     bind:value
     on:input={oninput}
     on:input

@@ -27,7 +27,7 @@
       <button
         class="rounded-circular bg-neutral-background-2 absolute top-2 right-2 w-4 h-4 opacity-85 flex items-end justify-center cursor-pointer"
         onclick={() => {
-          avatar = null;
+          avatar = "";
         }}
       >
         x

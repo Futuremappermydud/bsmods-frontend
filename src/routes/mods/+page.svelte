@@ -74,7 +74,9 @@
   let page = $state(1);
   let perPage = $state(20);
 
-  let slicedMods = $derived(searchedMods.slice((page-1) * perPage, (page-1) * perPage + perPage))
+  let slicedMods = $derived(
+    searchedMods.slice((page - 1) * perPage, (page - 1) * perPage + perPage),
+  );
 </script>
 
 <div class="flex gap-4 flex-col md:flex-row">
@@ -92,7 +94,13 @@
           downloads={mod.latest.downloadCount}
         />
       {/each}
-      <Pagination.Root count={searchedMods.length} {perPage} let:pages let:currentPage bind:page>
+      <Pagination.Root
+        count={searchedMods.length}
+        {perPage}
+        let:pages
+        let:currentPage
+        bind:page
+      >
         <Pagination.Content>
           <Pagination.Item>
             <Pagination.PrevButton>
