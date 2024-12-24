@@ -6,7 +6,13 @@
   let {
     category = $bindable(),
     categoryScheme,
-  }: { category: Categories; categoryScheme: z.Schema } = $props();
+  }: { category: Categories | undefined; categoryScheme: z.Schema } = $props();
+
+  function insertSpaces(string: string) {
+      string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
+      string = string.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+      return string;
+  }
 </script>
 
 <Dropdown.Root bind:value={category}>
@@ -21,7 +27,7 @@
         !categoryScheme.safeParse(data).success}
     >
       {#if data}
-        <span>{data}</span>
+        <span>{insertSpaces(data as string)}</span>
       {:else}
         <span>Select a category</span>
       {/if}
@@ -31,10 +37,10 @@
   </Dropdown.Trigger>
 
   <Dropdown.Menu>
-    <div class="h-[200px] overflow-scroll flex flex-col rounded">
+    <div class="h-[300px] overflow-scroll flex flex-col rounded">
       {#each Object.keys(Categories) as item}
         <Dropdown.Item value={item} data={item} class="bg-transparent"
-          >{item}</Dropdown.Item
+          >{insertSpaces(item)}</Dropdown.Item
         >
       {/each}
     </div>

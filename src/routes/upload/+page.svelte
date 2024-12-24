@@ -29,7 +29,7 @@
   // Metadata
   let modName: string = $state("");
   let gitUrl: string = $state("");
-  let category: Categories = $state();
+  let category: Categories | undefined = $state();
   let description: string = $state("");
   let summary: string = $state("");
   let icon: string = $state("");
@@ -41,7 +41,7 @@
   let modNameScheme = z
     .string()
     .min(3, "Name must contain at least 3 character(s)")
-    .max(20);
+    .max(20, "Name must contain at most 20 character(s)");
   let gitUrlScheme = z
     .string()
     .min(8, "URL must contain at least 8 character(s)")
@@ -49,6 +49,14 @@
     .regex(
       /^(https?:\/\/)?(www\.)?(github\.com|gitlab\.com)(\/.*)?$/,
       "Must be Github/Gitlab URL",
+    )
+    .regex(
+      /^(.*com\/[^\/]+\/[^\/]+\/?)/,
+      'Must point to a project on Github/Gitlab',
+    )
+    .regex(
+      /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+      'Must be a valid URL'
     );
   let categoryScheme = z
     .string()
