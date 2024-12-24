@@ -10,7 +10,8 @@
     Icon,
   } from "@svelte-fui/core";
   import { FilterFilled } from "@svelte-fui/icons";
-  import VersionPicker from "../versions/VersionPicker.svelte";
+  import GameVersionPicker from "../versions/GameVersionPicker.svelte";
+  import GamePicker from "../versions/GamePicker.svelte";
 
   //props
   let {
@@ -51,7 +52,8 @@
       </Button>
     </div>
     <br />
-    <VersionPicker bind:selectedVersion bind:selectedGame />
+    <GamePicker bind:selectedGame />
+    <GameVersionPicker bind:selectedVersion bind:selectedGame />
   </div>
 
   <Divider class="!flex-none" vertical={true} />

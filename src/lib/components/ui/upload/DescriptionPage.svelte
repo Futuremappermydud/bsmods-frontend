@@ -5,8 +5,6 @@
   import Tab from "../tablist/Tab.svelte";
   import TabList from "../tablist/TabList.svelte";
   import TextArea from "../textarea/TextArea.svelte";
-  import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
-  import { createHighlighter } from "shiki/bundle/web";
   import addClasses from "rehype-class-names";
 
   let { text = $bindable() } = $props();
@@ -30,19 +28,6 @@
       ],
     },
   ];
-
-  const shikiPluginPromise = createHighlighter({
-    themes: [import("shiki/themes/vitesse-dark.mjs")],
-    langs: ["html", "js", "ts", "json", "xml", "yml"],
-  }).then((highlighter): Plugin => {
-    return {
-      rehypePlugin: [
-        rehypeShikiFromHighlighter,
-        highlighter,
-        { theme: "vitesse-dark" },
-      ],
-    };
-  });
 </script>
 
 <div class="flex flex-col gap-1 items-center flex-[4] h-full">
@@ -61,13 +46,7 @@
     <div
       class="md-container w-full flex-1 overflow-scroll text-left border-neutral-foreground-disabled border-solid border-2 p-1 rounded"
     >
-      {#await shikiPluginPromise}
-        <Markdown md={text} plugins={existingPluginArray} />
-      {:then shikiPlugin}
-        <Markdown md={text} plugins={[shikiPlugin, ...existingPluginArray]} />
-      {:catch}
-        <Markdown md={text} plugins={existingPluginArray} />
-      {/await}
+      <Markdown md={text} plugins={existingPluginArray} />
     </div>
   {/if}
 </div>

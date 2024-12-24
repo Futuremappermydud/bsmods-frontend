@@ -58,31 +58,6 @@
   }
 </script>
 
-<Dropdown.Root bind:value={selectedGame}>
-  <Dropdown.Trigger
-    class="flex justify-center items-center w-full gap-3"
-    let:data
-  >
-    <Label class="h-[20px] flex-2">Game:</Label>
-    <InputSkin class="flex-1">
-      {#if data}
-        <span>{(data as Game).gameName}</span>
-      {:else}
-        <span>Select a game</span>
-      {/if}
-
-      <Dropdown.Arrow />
-    </InputSkin>
-  </Dropdown.Trigger>
-
-  <Dropdown.Menu>
-    {#each allGames as item (item.id)}
-      <Dropdown.Item value={item.gameName} data={item} class="bg-transparent"
-        >{item.gameName}</Dropdown.Item
-      >
-    {/each}
-  </Dropdown.Menu>
-</Dropdown.Root>
 <Dropdown.Root bind:value={selectedVersion}>
   <Dropdown.Trigger
     class="flex justify-center items-center w-full gap-3"

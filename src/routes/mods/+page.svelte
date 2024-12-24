@@ -65,10 +65,12 @@
       });
   }
 
+  let currentPage = $state(1);
+
   //display
   let searchedMods = $derived.by(() => {
     if (search === "") return allGameMods;
-    return searchModsIndex(search);
+    return searchModsIndex(search).splice();
   });
 </script>
 

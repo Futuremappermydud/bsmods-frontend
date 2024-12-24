@@ -101,7 +101,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding-top: 1rem;
     height: 100%;
     box-sizing: border-box;
   }

@@ -41,9 +41,9 @@
     </div>
     <p class="text-neutral-foreground-3">{mod.description}</p>
   </div>
-  <div class="flex flex-row h-full w-[115px] gap-2 ml-auto">
+  <div class="flex flex-row h-full w-[125px] gap-2 ml-auto">
     <Divider vertical={true} />
-    <div class="flex flex-col h-fit mb-auto gap-4 w-[110px] ml-auto">
+    <div class="flex flex-col h-fit mb-auto gap-4 w-[120px] ml-auto">
       <div class="flex flex-row gap-2 mr-auto w-fit">
         <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
           <ArrowDownloadRegular class="w-6 h-6" />
