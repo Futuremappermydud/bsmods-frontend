@@ -52,11 +52,11 @@
     )
     .regex(
       /^(.*com\/[^\/]+\/[^\/]+\/?)/,
-      'Must point to a project on Github/Gitlab',
+      "Must point to a project on Github/Gitlab",
     )
     .regex(
       /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
-      'Must be a valid URL'
+      "Must be a valid URL",
     );
   let categoryScheme = z
     .string()
