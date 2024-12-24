@@ -18,7 +18,7 @@
   import CategoryDropdown from "$lib/components/ui/upload/CategoryDropdown.svelte";
   import { z } from "zod";
   import { isValidSquareImage } from "$lib/utils/image";
-  import { WarningFilled } from "@svelte-fui/icons";
+  import { HistoryDismissFilled, WarningFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
   let toUpload = $state("new");
@@ -94,7 +94,7 @@
     let formData = new FormData();
     formData.append("name", modName);
     formData.append("gameName", selectedGame);
-    formData.append("category", category ?? "");
+    formData.append("category", category?.toString() ?? "");
     formData.append("gitUrl", gitUrl);
     formData.append("description", description);
     formData.append("summary", summary);
@@ -138,6 +138,7 @@
   <div
     class="w-full flex flex-col gap-4 transition-opacity duration-75 ease-in items-center"
     class:opacity-0={toUpload === ""}
+    class:hidden={toUpload === "" || toUpload === "existing"}
   >
     <Divider class="w-72 mt-2" />
     <p class="text-3xl mt-12">
@@ -301,6 +302,16 @@
         >
       </Dialog.Actions>
     </Dialog.Root>
+  </div>
+  <div
+    class="w-full flex flex-col gap-4 transition-opacity duration-75 ease-in items-center"
+    class:opacity-0={toUpload === ""}
+    class:hidden={toUpload === "" || toUpload === "new"}
+  >
+    <Divider class="w-72 mt-2" />
+    <p class="text-3xl mt-12">
+      <span class="text-neutral-foreground-4">2.</span> Pick Your Mod
+    </p>
   </div>
   <div
     class="w-full flex flex-col gap-4 mt-8 transition-opacity duration-75 ease-in items-center"

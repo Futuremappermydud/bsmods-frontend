@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Version, Versions } from "$lib/types/Versions";
-  import type { Game } from "$lib/types/Game";
   import axios from "axios";
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
+  import { EmojiSadRegular } from "@svelte-fui/icons";
 
   //props
   let { selectedVersion = $bindable(null), selectedGame = $bindable(null) } =
@@ -15,16 +15,6 @@
   //data
   let allVersions: Versions = $state({
     versions: [],
-  });
-  let allGames: Game[] = $derived.by(() => {
-    if (allVersions.versions.length === 0) return [];
-    let games = Array.from(
-      new Set(allVersions.versions.map((value) => value.gameName)),
-    );
-    return games.map((gameName, index) => {
-      let game: Game = { id: index, gameName: gameName };
-      return game;
-    });
   });
   let allGameVersions = $derived.by(() => {
     if (allVersions.versions.length === 0) return [];
@@ -65,8 +55,8 @@
   >
     <Label class="h-[20px] flex-2 disabled:text-black">Supports:</Label>
     <InputSkin class="flex-1" disabled={!selectedGame}>
-      {#if data}
-        <span>{(data as Version).version}</span>
+      {#if selectedVersion}
+        <span>{selectedVersion}</span>
       {:else}
         <span>Select a version</span>
       {/if}
@@ -76,12 +66,30 @@
   </Dropdown.Trigger>
 
   <Dropdown.Menu>
-    <div class="h-[400px] overflow-scroll flex flex-col rounded">
+    <div
+      class="max-h-[400px] min-h-[150px] overflow-scroll flex flex-col rounded"
+    >
       {#each allGameVersions.toReversed() as item (item.id)}
         <Dropdown.Item value={item.version} data={item} class="bg-transparent"
           >{item.version}</Dropdown.Item
         >
       {/each}
+
+      {#if searchDataLoading}
+        <p class="bg-transparent">Loading...</p>
+      {/if}
+      {#if searchDataError}
+        <p class="bg-transparent">Error loading data</p>
+      {/if}
+
+      {#if allGameVersions.length === 0 && !searchDataLoading && !searchDataError}
+        <div class="flex flex-col items-center m-auto">
+          <svg class="w-20 h-20" viewBox="0 0 20 20">
+            <EmojiSadRegular />
+          </svg>
+          <p class="bg-transparent">No versions found</p>
+        </div>
+      {/if}
     </div>
   </Dropdown.Menu>
 </Dropdown.Root>

@@ -1,14 +1,5 @@
 <script lang="ts">
-  import {
-    InputSkin,
-    Dropdown,
-    Label,
-    Input,
-    Divider,
-    Menu,
-    Button,
-    Icon,
-  } from "@svelte-fui/core";
+  import { Label, Input, Divider, Menu, Button, Icon } from "@svelte-fui/core";
   import { FilterFilled } from "@svelte-fui/icons";
   import GameVersionPicker from "../versions/GameVersionPicker.svelte";
   import GamePicker from "../versions/GamePicker.svelte";
@@ -52,16 +43,26 @@
       </Button>
     </div>
     <br />
-    <GamePicker bind:selectedGame />
+    <GamePicker
+      bind:selectedGame
+      on:change
+      on:change={() => {
+        selectedVersion = null;
+      }}
+    />
     <GameVersionPicker bind:selectedVersion bind:selectedGame />
   </div>
 
   <Divider class="!flex-none" vertical={true} />
 </div>
 
-<style>
+<style lang="postcss">
   .left-side {
     height: fit-content;
     align-content: center;
+  }
+
+  :global(.search > .fui-input-skin) {
+    @apply w-full;
   }
 </style>
