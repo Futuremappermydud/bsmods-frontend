@@ -11,6 +11,7 @@
     reader.readAsDataURL(image);
     reader.onload = (e) => {
       avatar = e.target?.result;
+      file = fileinput?.files?.item(0);
     };
   };
 
@@ -18,7 +19,13 @@
     classProp,
     imageProp,
     avatar = $bindable(null),
-  }: { classProp: string; imageProp: string; avatar: any } = $props();
+    file = $bindable(),
+  }: {
+    classProp: string;
+    imageProp: string;
+    avatar: any;
+    file: File | null | undefined;
+  } = $props();
 </script>
 
 <div class={classProp}>
@@ -28,6 +35,7 @@
         class="rounded-circular bg-neutral-background-2 absolute top-2 right-2 w-4 h-4 opacity-85 flex items-end justify-center cursor-pointer"
         onclick={() => {
           avatar = "";
+          file = null;
         }}
       >
         x

@@ -5,3 +5,13 @@
 .silly-capitalize::first-letter {
   text-transform: capitalize;
 }
+
+.fui-dialog {
+  position: fixed;
+}
+
+.fui-layout[data-id="backdrop"] {
+  opacity: 50%;
+  position: fixed;
+  pointer-events: none;
+}

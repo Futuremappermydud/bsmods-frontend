@@ -7,6 +7,7 @@
   import DescriptionPage from "$lib/components/ui/upload/DescriptionPage.svelte";
   import {
     Button,
+    Dialog,
     Divider,
     Field,
     FieldMessageError,
@@ -18,24 +19,32 @@
   import { z } from "zod";
   import { isValidSquareImage } from "$lib/utils/image";
   import { WarningFilled } from "@svelte-fui/icons";
+  import axios from "axios";
 
   let toUpload = $state("new");
 
   let dataTab = $state("summary");
 
-  let selectedGame = $state(null);
+  let submitDialog = $state(false);
 
-  let dependencies: ModData[] = $state([]);
+  $effect(() => {
+    if (submitDialog) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  });
 
   // Metadata
+
+  let selectedGame: string = $state("");
+  let category: Categories | undefined = $state();
   let modName: string = $state("");
   let gitUrl: string = $state("");
-  let category: Categories | undefined = $state();
   let description: string = $state("");
   let summary: string = $state("");
   let icon: string = $state("");
-
-  let markedDone = $state(false);
+  let iconFile: File | undefined = $state();
 
   // Metadata Validation
 
@@ -78,6 +87,36 @@
   let gitUrlValidity = $derived(gitUrlScheme.safeParse(gitUrl));
   let summaryValidity = $derived(summaryScheme.safeParse(summary));
   let iconValidity = $derived(iconScheme.safeParse(icon));
+
+  function upload() {
+    console.log("Uploading... Please pray");
+
+    let formData = new FormData();
+    formData.append("name", modName);
+    formData.append("gameName", selectedGame);
+    formData.append("category", category ?? "");
+    formData.append("gitUrl", gitUrl);
+    formData.append("description", description);
+    formData.append("summary", summary);
+    formData.append("icon", iconFile ?? "");
+
+    axios
+      .post(`${import.meta.env.VITE_API_BASE_URL}/api/mods/create`, formData, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+            console.log(response);
+          }
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred, contact a developer!");
+        console.error(error);
+      });
+  }
 
   // First Version Data
 
@@ -134,6 +173,7 @@
                   classProp="aspect-square max-w-[150px] max-h-[150px]"
                   imageProp="rounded-xl"
                   bind:avatar={icon}
+                  bind:file={iconFile}
                 />
                 <div
                   class="flex flex-col w-full gap-2 md:pl-5 h-min items-center"
@@ -214,35 +254,57 @@
     <Button
       class="shadow-8 mb-64"
       onclick={() => {
-        markedDone = true;
+        submitDialog = true;
       }}
     >
       ✔ I'm Done!
     </Button>
-    <div class="relative mr-auto w-full">
-      <div
-        class="h-fit p-4 absolute shadow-4 bg-neutral-background-2 rounded-xl bottom-[-20px]"
-        class:opacity-0={icon !== "" || !markedDone}
-      >
+    <Dialog.Root bind:open={submitDialog} type="modal">
+      <Dialog.Header>Ready to Create?</Dialog.Header>
+
+      <Dialog.Body class="h-40">
         <div
-          class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-palette-yellow-background-3 border-opacity-100 pointer-events-none"
-        ></div>
-        <div class="h-6 flex flex-row gap-2 content-center">
-          <svg class="h-6" viewBox="0 0 20 20">
-            <WarningFilled />
-          </svg>
-          <p class="">Mod Icon</p>
+          class="h-fit p-4 relative shadow-4 bg-neutral-background-2 rounded-xl"
+          class:opacity-0={icon !== "" || !submitDialog}
+        >
+          <div
+            class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-palette-yellow-background-3 border-opacity-100 pointer-events-none"
+          ></div>
+          <div class="h-6 flex flex-row gap-2 content-center">
+            <svg class="h-6" viewBox="0 0 20 20">
+              <WarningFilled />
+            </svg>
+            <p class="">Mod Icon</p>
+          </div>
+          <p class="text-left text-xs">
+            If you do not provide an icon, one will be provided for you based on
+            your game!
+          </p>
         </div>
-        <p class="text-left text-xs">
-          If you do not provide an icon, one will be provided for you based on
-          your game!
+        <p>
+          Clicking submit will create a new mod with the info you provided, you
+          can edit this later by going to your mod page. The following steps
+          will bring you to upload the first binary of your mod!
         </p>
-      </div>
-    </div>
+      </Dialog.Body>
+
+      <Dialog.Actions class="justify-end">
+        <Button
+          onclick={() => {
+            submitDialog = false;
+          }}>Cancel</Button
+        >
+        <Button
+          onclick={() => {
+            upload();
+          }}>Ok</Button
+        >
+      </Dialog.Actions>
+    </Dialog.Root>
   </div>
   <div
     class="w-full flex flex-col gap-4 mt-8 transition-opacity duration-75 ease-in items-center"
-    class:opacity-0={!markedDone}
+    class:opacity-0={!submitDialog}
   >
     <Divider class="w-72 mt-2" />
     <p class="text-3xl mt-12">
