@@ -57,7 +57,7 @@
     let:data
   >
     <Label class="h-[20px] flex-2">Game:</Label>
-    <InputSkin class="flex-1">
+    <InputSkin class="flex-1" ariaInvalid={data === undefined}>
       {#if data}
         <span>{(data as Game).gameName}</span>
       {:else}

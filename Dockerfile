@@ -7,8 +7,12 @@ WORKDIR /usr/app
 
 # Install prod dependencies
 COPY package.json yarn.lock ./
+
+# Build
 COPY . .
-RUN yarn install
+RUN yarn install --immutable && \
+  yarn cache clean && \
+  yarn cache clean --mirror
 
 # Repo Metadata
 ARG GIT_REPO

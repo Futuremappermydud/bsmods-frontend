@@ -16,6 +16,7 @@
   import type { ModData } from "$lib/types/Mods";
   import CategoryDropdown from "$lib/components/ui/upload/CategoryDropdown.svelte";
   import { z } from "zod";
+    import { isValidSquareImage } from "$lib/utils/image";
 
   let toUpload = $state("new");
 
@@ -26,30 +27,37 @@
   let dependencies: ModData[] = $state([]);
 
   // Metadata
-  let modName = $state("");
-  let gitUrl = $state("");
-  let category = $state("");
-  let description = $state("");
-  let summary = $state("");
-  let icon = $state("");
+  let modName: string = $state("");
+  let gitUrl: string = $state("");
+  let category: Categories = $state();
+  let description: string = $state("");
+  let summary: string = $state("");
+  let icon: string = $state("");
 
   let markedDone = $state(false);
 
   // Metadata Validation
 
-  let modNameScheme = z.string().min(3, 'Name must contain at least 3 character(s)').max(20);
-  let gitUrlScheme = z.string().min(8, 'URL must contain at least 8 character(s)').max(100).regex(
-    /^(https?:\/\/)?(www\.)?(github\.com|gitlab\.com)(\/.*)?$/,
-    'Must be Github/Gitlab URL'
-  );
-  let categoryScheme = z.string().refine(
-    (value) => Object.keys(Categories).includes(value),
-  );
+  let modNameScheme = z
+    .string()
+    .min(3, "Name must contain at least 3 character(s)")
+    .max(20);
+  let gitUrlScheme = z
+    .string()
+    .min(8, "URL must contain at least 8 character(s)")
+    .max(100)
+    .regex(
+      /^(https?:\/\/)?(www\.)?(github\.com|gitlab\.com)(\/.*)?$/,
+      "Must be Github/Gitlab URL",
+    );
+  let categoryScheme = z
+    .string()
+    .refine((value) => Object.keys(Categories).includes(value));
   let descriptionScheme = z.string().max(2000);
   let summaryScheme = z.string().min(10).max(100);
-  let iconScheme = z.string().refine((value) => {
+  let iconScheme = z.string().refine(async (value) => {
     //check base64 image to be a square
-    return true;
+    return await isValidSquareImage(value);
   });
 
   let modNameValidity = $derived(modNameScheme.safeParse(modName));
@@ -93,7 +101,7 @@
           <div class="p-4">
             <div class="flex flex-col gap-2 h-min ml-auto">
               <GamePicker bind:selectedGame />
-              <CategoryDropdown bind:category />
+              <CategoryDropdown bind:category {categoryScheme} />
             </div>
           </div>
         </div>
@@ -107,26 +115,35 @@
             <div class="flex flex-col gap-4 h-full">
               <div class="flex flex-row gap-1 h-[150px]">
                 <ImagePicker
-                  classProp="aspect-square"
+                  classProp="aspect-square max-w-[150px] max-h-[150px]"
                   imageProp="rounded-xl"
                   bind:avatar={icon}
                 />
-                <div
-                  class="flex flex-col w-full gap-2 pl-5 h-min items-center"
-                >
+                <div class="flex flex-col w-full gap-2 pl-5 h-min items-center">
                   <Field
                     label="Mod Name"
                     state={modNameValidity.success ? "success" : "error"}
                   >
-                    <Input bind:value={modName} ariaInvalid={!modNameValidity.success} />
+                    <Input
+                      bind:value={modName}
+                      ariaInvalid={!modNameValidity.success}
+                    />
                     <FieldMessageError open={!modNameValidity.success}
-                      >{modNameValidity.error?.format()._errors}</FieldMessageError
+                      >{modNameValidity.error?.format()
+                        ._errors}</FieldMessageError
                     >
                   </Field>
-                  <Field label="Git URL" state={gitUrlValidity.success ? "success" : "error"}>
-                    <Input bind:value={gitUrl} ariaInvalid={!gitUrlValidity.success} />
+                  <Field
+                    label="Git URL"
+                    state={gitUrlValidity.success ? "success" : "error"}
+                  >
+                    <Input
+                      bind:value={gitUrl}
+                      ariaInvalid={!gitUrlValidity.success}
+                    />
                     <FieldMessageError open={!gitUrlValidity.success}
-                      >{gitUrlValidity.error?.format()._errors[0]}</FieldMessageError
+                      >{gitUrlValidity.error?.format()
+                        ._errors[0]}</FieldMessageError
                     >
                   </Field>
                 </div>
