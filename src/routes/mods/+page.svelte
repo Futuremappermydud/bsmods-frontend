@@ -65,13 +65,16 @@
       });
   }
 
-  let currentPage = $state(1);
-
-  //display
-  let searchedMods = $derived.by(() => {
+  // Display
+  let searchedMods: ModData[] = $derived.by(() => {
     if (search === "") return allGameMods;
-    return searchModsIndex(search).splice();
+    return searchModsIndex(search);
   });
+
+  let page = $state(1);
+  let perPage = $state(20);
+
+  let slicedMods = $derived(searchedMods.slice((page-1) * perPage, (page-1) * perPage + perPage))
 </script>
 
 <div class="flex gap-4 flex-col md:flex-row">
@@ -82,14 +85,14 @@
     {:else if modSearchError}
       <p>There was an error loading mods</p>
     {:else}
-      {#each searchedMods as mod}
+      {#each slicedMods as mod}
         <ModCardNeo
           mod={mod.mod}
           author={mod.latest.author}
           downloads={mod.latest.downloadCount}
         />
       {/each}
-      <Pagination.Root count={100} perPage={10} let:pages let:currentPage>
+      <Pagination.Root count={searchedMods.length} {perPage} let:pages let:currentPage bind:page>
         <Pagination.Content>
           <Pagination.Item>
             <Pagination.PrevButton>
