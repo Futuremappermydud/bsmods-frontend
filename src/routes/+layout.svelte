@@ -1,5 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
+  import type { Snippet } from "svelte";
+  import type { LayoutData } from "./$types";
 
   import { App } from "@svelte-fui/core";
   import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
@@ -10,48 +12,12 @@
   import ColorSchemeSwapper from "$lib/components/ui/color-scheme/ColorSchemeSwapper.svelte";
   import Header from "./Header.svelte";
 
-  let { children } = $props();
-
-  let userData = $state({
-    hasAttempted: false,
-    authenticated: false,
-    username: "Guest",
-    userId: -1,
-    roles: null,
-  });
-
-  onMount(async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
-        {
-          credentials: "include",
-        },
-      );
-      if (!response.ok) throw new Error("Not authenticated");
-      let data = await response.json();
-      userData = {
-        hasAttempted: true,
-        authenticated: true,
-        username: data.username,
-        userId: data.userId,
-        roles: data.roles,
-      };
-    } catch (error) {
-      userData = {
-        hasAttempted: true,
-        authenticated: false,
-        username: "Guest",
-        userId: -1,
-        roles: null,
-      };
-    }
-  });
+  let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
   let theme = $state(webLightTheme);
 
   onMount(() => {
-    function handler(schemeMedia) {
+    function handler(schemeMedia: MediaQueryListEvent) {
       theme = schemeMedia.matches ? webLightTheme : webDarkTheme;
     }
 
@@ -78,7 +44,7 @@
 
 <App {theme}>
   <div class="app bg-neutral-background-3">
-    <Header {userData} />
+    <Header userData={data} />
 
     <main class="mr-10 ml-10 w-auto">
       {@render children()}

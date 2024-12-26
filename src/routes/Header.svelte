@@ -12,7 +12,9 @@
     );
   }
 
-  function goToProfile() {}
+  function goToProfile() {
+    window.open(`/user/${props.userData.userId}`, "_self");
+  }
 
   console.log(page);
 </script>

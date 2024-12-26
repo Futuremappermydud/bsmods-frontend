@@ -9,6 +9,7 @@
     selectedVersion = $bindable(),
     selectedGame = $bindable(),
     search = $bindable(),
+    hasDivider = true,
   } = $props();
 </script>
 
@@ -20,7 +21,7 @@
       <div class="search flex-1" role="searchbox">
         <Input size="lg" placeholder="Search mods" bind:value={search} />
       </div>
-      <Button class="p-0 aspect-square">
+      <!-- <Button class="p-0 aspect-square">
         <Icon>
           <svg viewBox="0 0 20 20">
             <FilterFilled />
@@ -40,7 +41,7 @@
             </Menu.Group>
           {/each}
         </Menu.Root>
-      </Button>
+      </Button> -->
     </div>
     <br />
     <GamePicker
@@ -52,8 +53,9 @@
     />
     <GameVersionPicker bind:selectedVersion bind:selectedGame />
   </div>
-
-  <Divider class="!flex-none" vertical={true} />
+  {#if hasDivider}
+    <Divider class="!flex-none" vertical={true} />
+  {/if}
 </div>
 
 <style lang="postcss">

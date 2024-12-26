@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      width: {
+        stretch: ["-webkit-fill-available", "-moz-available"],
+      },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",

@@ -54,7 +54,7 @@
     let:data
   >
     <Label class="h-[20px] flex-2 disabled:text-black">Supports:</Label>
-    <InputSkin class="flex-1" disabled={!selectedGame}>
+    <InputSkin class="flex-1" disabled={!selectedGame || selectedGame === ""}>
       {#if selectedVersion}
         <span>{selectedVersion}</span>
       {:else}

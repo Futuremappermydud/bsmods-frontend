@@ -112,6 +112,7 @@
             mod={mod.mod}
             author={mod.latest.author}
             downloads={mod.latest.downloadCount}
+            hasVersion={true}
           />
         {/each}
         {#if searchedMods.length > perPage}

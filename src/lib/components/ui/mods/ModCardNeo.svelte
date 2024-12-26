@@ -14,7 +14,13 @@
     mod,
     author,
     downloads,
-  }: { mod: Mod; author: ModAuthor; downloads: number } = $props();
+    hasVersion,
+  }: {
+    mod: Mod;
+    author: ModAuthor | undefined;
+    downloads: number;
+    hasVersion: boolean | undefined;
+  } = $props();
 
   function searchProfile(author: ModAuthor) {
     console.log(`Search Profile button clicked ${author.username}`);
@@ -31,43 +37,47 @@
   <div class="grid h-fit gap-2">
     <div class="flex flex-row flex-1 gap-1 h-fit w-fit mt-1">
       <span class="text-2xl leading-5">{mod.name}</span>
-      <span class="text-md text-neutral-foreground-2"
-        >By <Link
-          as="button"
-          on:click={() => searchProfile(author)}
-          inline={true}>{author.username}</Link
-        ></span
-      >
-    </div>
-    <p class="text-neutral-foreground-3">{mod.description}</p>
-  </div>
-  <div class="flex flex-row h-full w-[125px] gap-2 ml-auto">
-    <Divider vertical={true} />
-    <div class="flex flex-col h-fit mb-auto gap-4 w-[120px] ml-auto">
-      <div class="flex flex-row gap-2 mr-auto w-fit">
-        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
-          <ArrowDownloadRegular class="w-6 h-6" />
-        </svg>
-        <span class="text-neutral-foreground-2">{numify(downloads)}</span>
-      </div>
-      <div class="flex flex-row gap-2 mr-auto w-fit">
-        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
-          <ArrowSyncRegular class="w-6 h-6" />
-        </svg>
-        <span class="text-neutral-foreground-2"
-          >{getRelativeTimeString(new Date(mod.updatedAt))}</span
+      {#if author}
+        <span class="text-md text-neutral-foreground-2"
+          >By <Link
+            as="button"
+            on:click={() => searchProfile(author)}
+            inline={true}>{author.username}</Link
+          ></span
         >
-      </div>
-      <div class="flex flex-row gap-2 mr-auto w-fit">
-        <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
-          <CheckmarkRegular class="w-6 h-6" />
-        </svg>
-        <span class="text-neutral-foreground-2 silly-capitalize"
-          >{mod.status}</span
-        >
+      {/if}
+    </div>
+    <p class="text-neutral-foreground-3">{mod.summary}</p>
+  </div>
+  {#if hasVersion}
+    <div class="flex flex-row h-full w-[125px] gap-2 ml-auto">
+      <Divider vertical={true} />
+      <div class="flex flex-col h-fit mb-auto gap-4 w-[120px] ml-auto">
+        <div class="flex flex-row gap-2 mr-auto w-fit">
+          <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+            <ArrowDownloadRegular class="w-6 h-6" />
+          </svg>
+          <span class="text-neutral-foreground-2">{numify(downloads)}</span>
+        </div>
+        <div class="flex flex-row gap-2 mr-auto w-fit">
+          <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+            <ArrowSyncRegular class="w-6 h-6" />
+          </svg>
+          <span class="text-neutral-foreground-2"
+            >{getRelativeTimeString(new Date(mod.updatedAt))}</span
+          >
+        </div>
+        <div class="flex flex-row gap-2 mr-auto w-fit">
+          <svg viewBox="0 0 20 20" class="w-6 h-6 text-neutral-foreground-2">
+            <CheckmarkRegular class="w-6 h-6" />
+          </svg>
+          <span class="text-neutral-foreground-2 silly-capitalize"
+            >{mod.status}</span
+          >
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style>
