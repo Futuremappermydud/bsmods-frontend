@@ -41,6 +41,25 @@
       .catch((error) => {});
 
     mods = [...privateMods.mods];
+
+    let publicMods = await axios
+      .get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/user/${data.info.user.id}/mods`,
+        {
+          withCredentials: false,
+        },
+      )
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+            return response.data;
+          }
+        } else {
+        }
+      })
+      .catch((error) => {});
+
+    mods = [...mods, ...publicMods.mods];
   });
 
   let allGameMods = $derived.by(() => {

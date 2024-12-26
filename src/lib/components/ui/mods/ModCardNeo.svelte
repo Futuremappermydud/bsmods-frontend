@@ -28,7 +28,7 @@
 </script>
 
 <div
-  class="shadow-4 flex bg-neutral-background-1 flex-2 h-[120px] p-[7.5px] rounded-[17.5px] gap-2"
+  class="shadow-4 flex bg-neutral-background-2 flex-2 h-[120px] p-[7.5px] rounded-[17.5px] gap-2"
 >
   <ModIcon
     src="{import.meta.env.VITE_API_BASE_URL}/cdn/icon/default.png"
