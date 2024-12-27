@@ -11,6 +11,7 @@
 
   import ColorSchemeSwapper from "$lib/components/ui/color-scheme/ColorSchemeSwapper.svelte";
   import Header from "./Header.svelte";
+  import Footer from "./Footer.svelte";
 
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -43,14 +44,18 @@
 </svelte:head>
 
 <App {theme}>
-  <div class="app bg-neutral-background-3">
+  <div class="app bg-neutral-background-3 overflow-y-clip">
     <Header userData={data} />
 
-    <main class="mr-10 ml-10 w-auto">
+    <main
+      class="mr-4 ml-4 md:mr-10 md:ml-10 w-auto overflow-y-scroll overflow-x-visible"
+    >
       {@render children()}
     </main>
 
-    <div class="w-8 h-8 fixed bottom-2 left-2">
+    <Footer userData={data} />
+
+    <div class="w-[32px] aspect-square fixed bottom-[16px] left-[16px]">
       <ColorSchemeSwapper bind:theme />
     </div>
   </div>

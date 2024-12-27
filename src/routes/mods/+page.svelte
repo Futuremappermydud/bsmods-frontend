@@ -10,6 +10,7 @@
     ChevronRightRegular,
     EmojiSadRegular,
   } from "@svelte-fui/icons";
+  import { MediaQuery } from "svelte/reactivity";
 
   //state
   let modSearchError = $state(false);
@@ -81,13 +82,19 @@
   let slicedMods = $derived(
     searchedMods.slice((page - 1) * perPage, (page - 1) * perPage + perPage),
   );
+
+  // Media Queries
+
+  let isDesktop = new MediaQuery("min-width: 900px");
+  let isNotInsanelyStupidTiny = new MediaQuery("min-width: 450px");
 </script>
 
-<div class="flex gap-4 flex-col md:flex-row">
+<div class="flex gap-4 flex-col" class:!flex-row={isDesktop.current}>
   <FilterView
     bind:search
     bind:selectedGame
     bind:selectedVersion
+    hasDivider={isDesktop.current}
     on:change={() => {
       selectedVersion = null;
       modSearchError = false;
@@ -95,6 +102,20 @@
     }}
   />
   <div class="right-side mod-list flex-2">
+    {#if !isNotInsanelyStupidTiny.current}
+      <div
+        class="shadow-4 bg-neutral-background-2 flex-2 h-fit p-[7.5px] rounded-xl gap-2 inline"
+      >
+        <span>
+          Your device is too small to effectively display mod icons, update
+          times, and other decorative info. Visit their respective mod pages to
+          see these.
+          <svg class="w-[1.5em] inline" viewBox="0 0 20 20">
+            <EmojiSadRegular />
+          </svg>
+        </span>
+      </div>
+    {/if}
     {#if searchedMods.length === 0 || !selectedVersion}
       <svg class="w-20 h-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
