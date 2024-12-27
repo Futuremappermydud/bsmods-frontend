@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Categories } from "$lib/types/Categories";
-  import GamePicker from "$lib/components/ui/versions/GamePicker.svelte";
+  import GamePicker from "$lib/components/ui/filtering/GamePicker.svelte";
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import TextArea from "$lib/components/ui/textarea/TextArea.svelte";
@@ -8,7 +8,6 @@
   import {
     Button,
     Dialog,
-    Divider,
     Field,
     FieldMessageError,
     Input,

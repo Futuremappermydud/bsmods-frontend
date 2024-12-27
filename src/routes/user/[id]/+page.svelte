@@ -83,10 +83,10 @@
   );
 </script>
 
-<div class="flex flex-row gap-4">
+<div class="flex flex-col md:flex-row gap-4">
   <div class="flex flex-col gap-4">
     <div
-      class="flex flex-col items-center shadow-4 bg-neutral-background-2 rounded-xl p-4"
+      class="flex flex-col items-center shadow-16 bg-neutral-background-2 rounded-xl p-4"
     >
       <img
         class="rounded-circular mx-12 my-3 max-w-32 w-stretch"

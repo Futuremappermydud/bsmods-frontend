@@ -7,7 +7,7 @@
 
   function login() {
     window.open(
-      `${import.meta.env.VITE_API_BASE_URL}/api/auth/github`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/auth/github?redirect=`,
       "_self",
     );
   }
@@ -19,19 +19,23 @@
   console.log(page);
 </script>
 
-<header class="flex-col">
+<header class="flex flex-col h-12 mt-1 z-10">
   <div class="w-auto h-[50px] flex ml-10 mr-10">
-    <div class="left">
+    <a class="left" href="/">
       <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
-    </div>
+    </a>
     <ul>
       <li>
-        <a href="/" data-text="Home" data-selected={$page.url.pathname === "/"}
-          >Home</a
+        <a
+          class="nav"
+          href="/"
+          data-text="Home"
+          data-selected={$page.url.pathname === "/"}>Home</a
         >
       </li>
       <li>
         <a
+          class="nav"
           href="/mods"
           data-text="Mods"
           data-selected={$page.url.pathname === "/mods"}>Mods</a
@@ -39,6 +43,7 @@
       </li>
       <li>
         <a
+          class="nav"
           href="https://bsmg.wiki"
           target="_blank"
           rel="noopener noreferrer"
@@ -47,6 +52,7 @@
       </li>
       <li>
         <a
+          class="nav"
           href="https://discord.gg/beatsabermods"
           target="_blank"
           rel="noopener noreferrer"
@@ -54,7 +60,7 @@
         >
       </li>
     </ul>
-    <div class="user gap-3">
+    <div class="flex flex-1 items-center m-1 justify-end gap-3">
       {#if props.userData.hasAttempted}
         {#if props.userData.authenticated && import.meta.env.DEV}
           <a class="contents" href="/approval">
@@ -69,13 +75,13 @@
           </a>
         {/if}
         <button
-          class="corner-btn"
+          class="flex aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
           onclick={props.userData.authenticated ? goToProfile : login}
         >
           <img
-            class="corner-img"
+            class="flex h-full aspect-square"
             alt={props.userData.authenticated ? "Logged In" : "Not Logged In"}
-            class:logged-in={props.userData.authenticated}
+            class:rounded-circular={props.userData.authenticated}
             src={props.userData.authenticated
               ? `https://github.com/${props.userData.username}.png`
               : "images/github-mark-white.svg"}
@@ -88,46 +94,6 @@
 </header>
 
 <style>
-  header {
-    display: flex;
-    height: 50px;
-    margin: 5px 0px 0px 0px;
-    z-index: 1;
-  }
-
-  .corner-img {
-    display: flex;
-    height: 100%;
-    aspect-ratio: 1;
-  }
-
-  .corner-btn {
-    display: flex;
-    aspect-ratio: 1;
-    height: 100%;
-    background: none;
-    border: none;
-    justify-content: center;
-    transition: transform 0.1s;
-  }
-
-  .logged-in {
-    border-radius: 50%;
-  }
-
-  .corner-btn:hover {
-    transform: scale(1.1);
-    cursor: pointer;
-  }
-
-  .user {
-    display: flex;
-    align-items: center;
-    margin: 5px;
-    flex: 1;
-    justify-content: right;
-  }
-
   li {
     display: flex;
     flex: 1;
@@ -160,7 +126,7 @@
     aspect-ratio: 1;
   }
 
-  a {
+  a.nav {
     text-decoration: none;
     padding: 10px 10px 0px 10px;
     width: 100%;

@@ -14,7 +14,7 @@
 
 <div class="left-side flex flex-row gap-4">
   <div
-    class="bg-neutral-background-2 rounded-xl shadow-8 justify-start flex flex-col flex-1 p-2 gap-3"
+    class="bg-neutral-background-2 rounded-xl shadow-4 justify-start flex flex-col flex-1 p-2 gap-3"
   >
     <div class="h-8 flex flex-row gap-2">
       <div class="search flex-1" role="searchbox">
