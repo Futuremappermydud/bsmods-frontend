@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN yarn install --immutable --immutable-cache --check-cache
 COPY . .
+COPY ./prod.env ./.env
 RUN yarn build
 
 FROM node:22-alpine
