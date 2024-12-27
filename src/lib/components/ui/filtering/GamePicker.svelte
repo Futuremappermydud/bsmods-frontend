@@ -26,7 +26,7 @@
 
   <Dropdown.Menu>
     {#each Object.values(SupportedGames) as item (item)}
-      <Dropdown.Item value={item} data={item} class="bg-transparent"
+      <Dropdown.Item value={item} data={item} class="bg-transparent min-w-max"
         >{insertSpaces(item)}</Dropdown.Item
       >
     {/each}

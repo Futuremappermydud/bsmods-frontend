@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { Label, Input, Divider, Menu, Button, Icon } from "@svelte-fui/core";
-  import { FilterFilled } from "@svelte-fui/icons";
-  import GameVersionPicker from "../versions/GameVersionPicker.svelte";
-  import GamePicker from "../versions/GamePicker.svelte";
+  import { Input, Divider } from "@svelte-fui/core";
+  import GameVersionPicker from "./GameVersionPicker.svelte";
+  import GamePicker from "./GamePicker.svelte";
 
   //props
   let {

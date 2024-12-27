@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Version, Versions } from "$lib/types/Versions";
+  import type { Versions } from "$lib/types/Versions";
   import axios from "axios";
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
   import { EmojiSadRegular } from "@svelte-fui/icons";

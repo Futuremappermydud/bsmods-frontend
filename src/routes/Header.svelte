@@ -56,7 +56,7 @@
     </ul>
     <div class="user gap-3">
       {#if props.userData.hasAttempted}
-        {#if props.userData.authenticated}
+        {#if props.userData.authenticated && import.meta.env.DEV}
           <a class="contents" href="/approval">
             <svg class="w-6 h-6" viewBox="0 0 20 20">
               <ColorLineRegular />

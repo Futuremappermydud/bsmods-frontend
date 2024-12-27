@@ -15,24 +15,28 @@
     author,
     downloads,
     hasVersion,
+    smallCorners = false,
   }: {
     mod: Mod;
     author: ModAuthor | undefined;
     downloads: number;
     hasVersion: boolean | undefined;
+    smallCorners?: boolean;
   } = $props();
 
   function searchProfile(author: ModAuthor) {
-    console.log(`Search Profile button clicked ${author.username}`);
+    window.open(`/user/${author.id}`, "_self");
   }
 </script>
 
 <div
   class="shadow-4 flex bg-neutral-background-2 flex-2 h-[120px] p-[7.5px] rounded-[17.5px] gap-2"
+  class:!rounded-xl={smallCorners}
 >
   <ModIcon
     src="{import.meta.env.VITE_API_BASE_URL}/cdn/icon/default.png"
     modUrl="/mods/{mod.id}"
+    {smallCorners}
   />
   <div class="grid h-fit gap-2">
     <div class="flex flex-row flex-1 gap-1 h-fit w-fit mt-1">
