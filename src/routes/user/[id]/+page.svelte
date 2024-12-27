@@ -60,6 +60,8 @@
       .catch((error) => {});
 
     mods = [...mods, ...publicMods.mods];
+
+    createModsIndex(mods);
   });
 
   let allGameMods = $derived.by(() => {
@@ -108,22 +110,22 @@
     />
   </div>
   <div class="flex-1 flex flex-col gap-4">
-    {#if allGameMods.length === 0}
+    {#if slicedMods.length === 0}
       <svg class="w-20 h-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
       </svg>
       <p>No mods found</p>
     {/if}
-    {#if allGameMods}
-      {#each allGameMods as mod}
+    {#if slicedMods}
+      {#each slicedMods as mod}
         <ModCardNeo
           mod={mod.mod}
           author={undefined}
           downloads={0}
-          hasVersion={!!mod.latest}
+          hasVersion={false}
         />
       {/each}
-      {#if allGameMods.length > perPage}
+      {#if slicedMods.length > perPage}
         <Pagination.Root
           count={searchedMods.length}
           {perPage}

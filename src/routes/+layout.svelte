@@ -53,7 +53,7 @@
       {@render children()}
     </main>
 
-    <Footer userData={data} />
+    <Footer />
 
     <div class="w-[32px] aspect-square fixed bottom-[16px] left-[16px]">
       <ColorSchemeSwapper bind:theme />

@@ -28,8 +28,8 @@
     hasVersion={false}
     smallCorners={true}
   />
-  <div class="flex flex-row gap-4">
-    <div class="flex flex-col flex-1">
+  <div class="flex flex-col lg:flex-row gap-4">
+    <div class="flex flex-col flex-1 order-2">
       <div class="flex flex-col gap-4">
         <div class="bg-neutral-background-2 shadow-4 rounded-xl p-4">
           <GameVersionPicker
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div
-      class="flex flex-[2.5] bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit"
+      class="flex flex-[2.5] bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit lg:order-3 order-1"
     >
       <MarkdownViewer text={mod.info.description} />
     </div>
