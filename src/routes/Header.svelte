@@ -19,46 +19,50 @@
   console.log(page);
 </script>
 
+{#snippet navItems()}
+  <li>
+    <a
+      class="nav"
+      href="/"
+      data-text="Home"
+      data-selected={$page.url.pathname === "/"}>Home</a
+    >
+  </li>
+  <li>
+    <a
+      class="nav"
+      href="/mods"
+      data-text="Mods"
+      data-selected={$page.url.pathname === "/mods"}>Mods</a
+    >
+  </li>
+  <li>
+    <a
+      class="nav"
+      href="https://bsmg.wiki"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-text="Wiki">Wiki</a
+    >
+  </li>
+  <li>
+    <a
+      class="nav"
+      href="https://discord.gg/beatsabermods"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-text="Discord">Discord</a
+    >
+  </li>
+{/snippet}
+
 <header class="flex flex-col h-12 mt-1 z-10">
   <div class="w-auto h-[50px] flex ml-10 mr-10">
     <a class="left" href="/">
       <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
     </a>
     <ul>
-      <li>
-        <a
-          class="nav"
-          href="/"
-          data-text="Home"
-          data-selected={$page.url.pathname === "/"}>Home</a
-        >
-      </li>
-      <li>
-        <a
-          class="nav"
-          href="/mods"
-          data-text="Mods"
-          data-selected={$page.url.pathname === "/mods"}>Mods</a
-        >
-      </li>
-      <li>
-        <a
-          class="nav"
-          href="https://bsmg.wiki"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-text="Wiki">Wiki</a
-        >
-      </li>
-      <li>
-        <a
-          class="nav"
-          href="https://discord.gg/beatsabermods"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-text="Discord">Discord</a
-        >
-      </li>
+      {@render navItems()}
     </ul>
     <div class="flex flex-1 items-center m-1 justify-end gap-3">
       {#if props.userData.hasAttempted}
@@ -75,7 +79,7 @@
           </a>
         {/if}
         <button
-          class="flex aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+          class=" flex aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
           onclick={props.userData.authenticated ? goToProfile : login}
         >
           <img
@@ -150,13 +154,14 @@
     font-family: inherit;
     font-size: inherit;
     width: fit-content;
-    height: 1px;
+    height: 3px;
+    border-radius: 1000px;
     background: var(--fui-colorBrandForegroundLinkSelected);
     color: transparent;
     transition: transform 0.1s;
   }
   a[data-selected="true"]:hover::after {
-    transform: scaleX(1.2);
+    transform: scaleX(1.2) scaleY(0.5);
   }
 
   a:not([data-selected="true"])::after {

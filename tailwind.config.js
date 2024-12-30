@@ -19,10 +19,17 @@ const config = {
       },
     },
     extend: {
+      height: {
+        stretch: ["-webkit-fill-available", "-moz-available"],
+      },
       width: {
         stretch: ["-webkit-fill-available", "-moz-available"],
       },
       colors: {
+        beatmods: {
+          pink: "#ec008c",
+          purple: "#662d91",
+        },
         border: "hsl(var(--border) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",

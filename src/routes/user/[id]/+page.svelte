@@ -38,7 +38,7 @@
         } else {
         }
       })
-      .catch((error) => {});
+      .catch(() => {});
 
     mods = [...privateMods.mods];
 
@@ -57,7 +57,7 @@
         } else {
         }
       })
-      .catch((error) => {});
+      .catch(() => {});
 
     mods = [...mods, ...publicMods.mods];
 
@@ -69,8 +69,6 @@
     if (mods.length === 0) return [];
     return mods.filter((mod: ModData) => mod.mod.gameName === selectedGame);
   });
-
-  $inspect("hi", allGameMods);
 
   let searchedMods: ModData[] = $derived.by(() => {
     if (search === "") return allGameMods;
