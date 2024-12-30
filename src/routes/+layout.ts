@@ -1,7 +1,8 @@
+import type { AuthedUser } from "$lib/types/AuthedUser";
 import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async () => {
-  let userData = {
+  let userData: AuthedUser = {
     hasAttempted: false,
     authenticated: false,
     username: "Guest",

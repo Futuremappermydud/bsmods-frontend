@@ -26,6 +26,10 @@ const config = {
         stretch: ["-webkit-fill-available", "-moz-available"],
       },
       colors: {
+        moddingpink: {
+          signaturePink: "#ff69b4",
+          hover: "color-mix(in srgb, #ff69b4, white 10%)",
+        },
         beatmods: {
           pink: "#ec008c",
           purple: "#662d91",

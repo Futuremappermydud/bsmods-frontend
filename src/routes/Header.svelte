@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
   import { Divider } from "@svelte-fui/core";
   import { page } from "$app/stores";
   import { ArrowUploadRegular, ColorLineRegular } from "@svelte-fui/icons";
-  import { checkUser, UserRoles } from "$lib/types/UserRoles";
+  import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+  import type { AuthedUser } from "$lib/types/AuthedUser";
 
-  let props = $props();
+  let { userData, isLight }: { userData: AuthedUser; isLight: Boolean } =
+    $props();
 
   function login() {
     window.open(
@@ -14,7 +16,7 @@
   }
 
   function goToProfile() {
-    window.open(`/user/${props.userData.userId}`, "_self");
+    window.open(`/user/${userData.userId}`, "_self");
   }
 
   console.log(page);
@@ -68,14 +70,14 @@
       {@render navItems()}
     </ul>
     <div class="flex-1 items-center m-1 justify-end gap-3">
-      {#if props.userData.hasAttempted}
-        {#if props.userData.authenticated && import.meta.env.DEV}
+      {#if userData.hasAttempted}
+        {#if userData.authenticated && import.meta.env.DEV}
           <a class="contents" href="/approval">
             <svg class="w-6 h-6" viewBox="0 0 20 20">
               <ColorLineRegular />
             </svg>
           </a>
-          {#if checkUser(props.userData.roles, UserRoles.Approver, "BeatSaber")}
+          {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
             <a class="contents" href="/upload">
               <svg class="w-6 h-6" viewBox="0 0 20 20">
                 <ArrowUploadRegular />
@@ -85,15 +87,17 @@
         {/if}
         <button
           class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
-          onclick={props.userData.authenticated ? goToProfile : login}
+          onclick={userData.authenticated ? goToProfile : login}
         >
           <img
             class="flex h-full aspect-square"
-            alt={props.userData.authenticated ? "Logged In" : "Not Logged In"}
-            class:rounded-circular={props.userData.authenticated}
-            src={props.userData.authenticated
-              ? `https://github.com/${props.userData.username}.png`
-              : "images/github-mark-white.svg"}
+            alt={userData.authenticated ? "Logged In" : "Not Logged In"}
+            class:rounded-circular={userData.authenticated}
+            src={userData.authenticated
+              ? `https://github.com/${userData.username}.png`
+              : isLight
+                ? "/images/github-mark.svg"
+                : "/images/github-mark-white.svg"}
           />
         </button>
       {/if}

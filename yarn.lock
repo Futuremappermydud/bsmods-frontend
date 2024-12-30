@@ -160,11 +160,6 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
-"@fontsource/fira-mono@^5.0.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-5.1.0.tgz#2ac0c8f7bf917fbbcae6b1e80242315ab1e7e054"
-  integrity sha512-6+nftSKApXyN0I9FC5GJuG5TUCh+in5OehtrXRIsHJvq38Pm//oA1kZZYNdXv99JYzLzJ3lzsTAavmS+xGLGDw==
-
 "@internationalized/date@^3.5.0", "@internationalized/date@^3.5.1":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@internationalized/date/-/date-3.6.0.tgz#b30d43030bfed1855f20c9503606926d75bfdf64"
@@ -227,11 +222,6 @@
     dequal "^2.0.3"
     focus-trap "^7.5.2"
     nanoid "^5.0.4"
-
-"@neoconfetti/svelte@^2.0.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@neoconfetti/svelte/-/svelte-2.2.1.tgz#ac4c322ad0d7d89041a5fabf434f150d81b65653"
-  integrity sha512-2Ts0Rxaf6clW2qG+AKhTwpl01AAyZEAe03XeuQ7Vp+qYIaM3ycuI94j546fmEkUxwACwGI3Zl2cZ/pncTuNcJg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -587,6 +577,11 @@
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.20.2.tgz#97d26e00cd4a0423b4af620abecf3e6f442b7975"
   integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
+
+"@types/semver@^7.5.8":
+  version "7.5.8"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.8.tgz#8268a8c57a3e4abd25c165ecd36237db7948a55e"
+  integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==
 
 "@types/unist@*", "@types/unist@^3.0.0":
   version "3.0.3"
@@ -2182,6 +2177,16 @@ sade@^1.7.4, sade@^1.8.1:
   integrity sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==
   dependencies:
     mri "^1.1.0"
+
+semver-parser@^4.1.7:
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/semver-parser/-/semver-parser-4.1.7.tgz#42bad5b70aa67f78909ee399769f5e7852efbbcc"
+  integrity sha512-RNNvmr1JKZ4Eia7Cyfxtr6aR7eiQs1bPGBv4EC3OJ5pTKEoHjLsT+dY1SSny2tq/uqx9bzNR4lL8tzaB70TN9A==
+
+semver@^7.6.3:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
+  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
 set-cookie-parser@^2.6.0:
   version "2.7.1"

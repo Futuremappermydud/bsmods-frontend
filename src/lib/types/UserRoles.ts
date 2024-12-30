@@ -31,3 +31,20 @@ export function checkUser(
     );
   return hasCheckingRole || hasAllPermissions;
 }
+
+function getAllPerGameRoles(userRolesObject: UserRolesObject): UserRoles[] {
+  return Object.values(userRolesObject.perGame).flat().filter(Boolean); // Filter out undefined or null values, just in case
+}
+
+export function checkUserAnyGame(
+  roles: UserRolesObject,
+  checkingRole: UserRoles,
+) {
+  let hasCheckingRole =
+    roles.sitewide.includes(checkingRole) ||
+    (getAllPerGameRoles(roles) || []).includes(checkingRole);
+  let hasAllPermissions =
+    roles.sitewide.includes(UserRoles.AllPermissions) ||
+    (getAllPerGameRoles(roles) || []).includes(UserRoles.AllPermissions);
+  return hasCheckingRole || hasAllPermissions;
+}

@@ -108,7 +108,11 @@
 >
   <App {theme}>
     <div class="app bg-neutral-background-3 overflow-y-clip">
-      <Header userData={data} />
+      <Header
+        userData={data}
+        isLight={theme.colorBackgroundOverlay !==
+          webDarkTheme.colorBackgroundOverlay}
+      />
 
       <main
         class="mr-4 ml-4 md:mr-10 md:ml-10 w-auto overflow-y-scroll overflow-x-visible"
