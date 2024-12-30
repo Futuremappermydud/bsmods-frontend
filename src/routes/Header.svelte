@@ -2,6 +2,7 @@
   import { Divider } from "@svelte-fui/core";
   import { page } from "$app/stores";
   import { ArrowUploadRegular, ColorLineRegular } from "@svelte-fui/icons";
+  import { checkUser, UserRoles } from "$lib/types/UserRoles";
 
   let props = $props();
 
@@ -58,13 +59,15 @@
 
 <header class="flex flex-col h-12 mt-1 z-10">
   <div class="w-auto h-[50px] flex ml-10 mr-10">
-    <a class="left" href="/">
-      <img class="logo-img" src="/images/Beatmods.svg" alt="BeatMods Logo" />
-    </a>
+    <div class="flex h-auto flex-1 left">
+      <a class="h-full aspect-square" href="/">
+        <img class="h-auto" src="/images/Beatmods.svg" alt="BeatMods Logo" />
+      </a>
+    </div>
     <ul>
       {@render navItems()}
     </ul>
-    <div class="flex flex-1 items-center m-1 justify-end gap-3">
+    <div class="flex-1 items-center m-1 justify-end gap-3">
       {#if props.userData.hasAttempted}
         {#if props.userData.authenticated && import.meta.env.DEV}
           <a class="contents" href="/approval">
@@ -72,14 +75,16 @@
               <ColorLineRegular />
             </svg>
           </a>
-          <a class="contents" href="/upload">
-            <svg class="w-6 h-6" viewBox="0 0 20 20">
-              <ArrowUploadRegular />
-            </svg>
-          </a>
+          {#if checkUser(props.userData.roles, UserRoles.Approver, "BeatSaber")}
+            <a class="contents" href="/upload">
+              <svg class="w-6 h-6" viewBox="0 0 20 20">
+                <ArrowUploadRegular />
+              </svg>
+            </a>
+          {/if}
         {/if}
         <button
-          class=" flex aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+          class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
           onclick={props.userData.authenticated ? goToProfile : login}
         >
           <img
@@ -122,12 +127,6 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-  }
-
-  .logo-img {
-    display: flex;
-    height: 100%;
-    aspect-ratio: 1;
   }
 
   a.nav {
