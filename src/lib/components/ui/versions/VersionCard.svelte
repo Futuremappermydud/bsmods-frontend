@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="flex flex-col gap-8 items-stretch bg-neutral-background-2 shadow-4 rounded-xl p-4"
+  class="relative flex flex-col gap-8 items-stretch bg-neutral-background-2 shadow-4 rounded-xl p-4"
 >
   <div class="flex flex-col flex-1 gap-2">
     <p class="flex-1 text-lg font-semibold">{version.modVersion}</p>

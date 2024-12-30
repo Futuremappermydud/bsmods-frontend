@@ -4,6 +4,7 @@
   import ModCardNeo from "$lib/components/ui/mods/ModCardNeo.svelte";
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
   import type { IndividualModData } from "$lib/types/Mods";
+  import { Link } from "@svelte-fui/core";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
@@ -42,10 +43,20 @@
         {/each}
       </div>
     </div>
-    <div
-      class="flex flex-[2.5] bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit lg:order-3 order-1"
-    >
-      <MarkdownViewer text={mod.info.description} />
+    <div class="flex-[2.5] flex flex-col gap-4 lg:order-3 order-1">
+      <div
+        class="flex flex-col bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit"
+      >
+        <h2 class="text-lg font-semibold">
+          More Info <Link href={mod.info.gitUrl}>Here!</Link>
+        </h2>
+      </div>
+      <div
+        class="flex flex-col bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit"
+      >
+        <h1 class="text-xl font-semibold">Description:</h1>
+        <MarkdownViewer text={mod.info.description} />
+      </div>
     </div>
   </div>
 </div>
