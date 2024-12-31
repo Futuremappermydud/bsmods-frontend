@@ -98,7 +98,7 @@
     formData.append("icon", iconFile ?? "");
 
     axios
-      .post(appendURL(`/api/mods/create`), formData, {
+      .post(appendURL(`api/mods/create`), formData, {
         withCredentials: true,
       })
       .then((response) => {

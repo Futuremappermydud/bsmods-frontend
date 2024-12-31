@@ -4,7 +4,7 @@ import { appendURL } from "$lib/utils/url";
 
 export const load: PageLoad = async ({ params }) => {
   let data = await axios
-    .get(appendURL(`/api/mods/${params.id}`), {
+    .get(appendURL(`api/mods/${params.id}`), {
       withCredentials: false,
     })
     .then((response) => {

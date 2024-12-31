@@ -15,7 +15,7 @@ export const load: LayoutLoad = async () => {
 
   try {
     let response = await axios
-      .get(appendURL("/api/auth"), {
+      .get(appendURL("api/auth"), {
         withCredentials: true,
       })
       .then((response) => {

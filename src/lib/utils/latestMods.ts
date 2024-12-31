@@ -6,7 +6,7 @@ import { appendURL } from "./url";
 
 export async function getLatestVersionMods(): Promise<ModData[]> {
   let versions = await axios
-    .get(appendURL("/api/versions?gameName=BeatSaber"), {
+    .get(appendURL("api/versions?gameName=BeatSaber"), {
       withCredentials: false,
     })
     .then((response) => {

@@ -4,7 +4,7 @@ import { appendURL } from "$lib/utils/url";
 
 export const load: PageLoad = async ({ params }) => {
   let info = await axios
-    .get(appendURL(`/api/user/${params.id}`), {
+    .get(appendURL(`api/user/${params.id}`), {
       withCredentials: false,
     })
     .then((response) => {

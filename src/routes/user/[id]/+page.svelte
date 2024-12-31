@@ -25,7 +25,7 @@
 
   onMount(async () => {
     let privateMods = await axios
-      .get(appendURL(`/api/user/${data.info.user.id}/mods?status=private`), {
+      .get(appendURL(`api/user/${data.info.user.id}/mods?status=private`), {
         withCredentials: false,
       })
       .then((response) => {
@@ -41,7 +41,7 @@
     mods = [...privateMods.mods];
 
     let publicMods = await axios
-      .get(appendURL(`/api/user/${data.info.user.id}/mods`), {
+      .get(appendURL(`api/user/${data.info.user.id}/mods`), {
         withCredentials: false,
       })
       .then((response) => {

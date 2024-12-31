@@ -43,7 +43,7 @@
 >
   {#if isNotInsanelyStupidTiny.current}
     <ModIcon
-      src={appendURL("/cdn/icon/default.png")}
+      src={appendURL("cdn/icon/default.png")}
       modUrl="/mods/{mod.id}"
       {smallCorners}
     />

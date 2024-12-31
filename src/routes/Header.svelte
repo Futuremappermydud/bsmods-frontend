@@ -11,7 +11,7 @@
     $props();
 
   function login() {
-    window.open(appendURL("/api/auth/github?redirect="), "_self");
+    window.open(appendURL("api/auth/github?redirect="), "_self");
   }
 
   function goToProfile() {

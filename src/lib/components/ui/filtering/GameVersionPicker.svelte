@@ -28,7 +28,7 @@
   let searchDataPromise = getData();
   async function getData() {
     axios
-      .get(appendURL("/api/versions"), {
+      .get(appendURL("api/versions"), {
         withCredentials: false,
       })
       .then((response) => {
