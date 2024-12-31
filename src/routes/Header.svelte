@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Divider, Menu } from "@svelte-fui/core";
+  import { Button, Divider, Menu } from "@svelte-fui/core";
   import { page } from "$app/stores";
   import {
     ArrowUploadRegular,
@@ -15,7 +15,12 @@
     $props();
 
   function login() {
-    window.open(appendURL("api/auth/github?redirect="), "_self");
+    window.open(
+      appendURL(
+        `api/auth/github?redirect=${encodeURIComponent(window.location.origin)}`,
+      ),
+      "_self",
+    );
   }
 
   function goToProfile() {
@@ -78,21 +83,20 @@
         </a>
       {/if}
     {/if}
-    <button
-      class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
-      onclick={userData.authenticated ? goToProfile : login}
-    >
-      <img
-        class="flex h-full aspect-square"
-        alt={userData.authenticated ? "Logged In" : "Not Logged In"}
-        class:rounded-circular={userData.authenticated}
-        src={userData.authenticated
-          ? `https://github.com/${userData.username}.png`
-          : isLight
-            ? "/images/github-mark.svg"
-            : "/images/github-mark-white.svg"}
-      />
-    </button>
+    {#if userData.authenticated}
+      <button
+        class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+        onclick={goToProfile}
+      >
+        <img
+          class="flex h-full aspect-square rounded-circular"
+          alt="Logged In"
+          src="https://github.com/{userData.username}.png"
+        />
+      </button>
+    {:else}
+      <Button onclick={login}>Sign in</Button>
+    {/if}
   {/if}
 {/snippet}
 

@@ -40,7 +40,7 @@ export const load: LayoutLoad = async () => {
       };
       return userData;
     }
-    let data = await response.data.json();
+    let data = response.data;
     userData = {
       hasAttempted: true,
       authenticated: true,
@@ -58,5 +58,6 @@ export const load: LayoutLoad = async () => {
     };
   }
 
+  console.log(userData);
   return userData;
 };
