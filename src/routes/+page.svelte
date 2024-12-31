@@ -32,7 +32,7 @@
         <h3 class="text-sm text-neutral-foreground-2 text-center">
           Upload and create your own mods for the community.
         </h3>
-        <div class="flex-1 flex flex-col gap-2 w-stretch mt-8">
+        <div class="flex-1 flex flex-col gap-4 w-stretch mt-8">
           <a
             href="https://bsmg.wiki/modding/"
             target="=_blank"
@@ -57,7 +57,7 @@
         <h3 class="text-sm text-neutral-foreground-2 text-center">
           Use a Beatmods-compatible mod manager to seamlessly manage your mods.
         </h3>
-        <div class="flex-1 flex flex-col gap-2 w-stretch mt-8">
+        <div class="flex-1 flex flex-col gap-4 w-stretch mt-8">
           <a
             href="https://www.bsmanager.io/"
             target="=_blank"
