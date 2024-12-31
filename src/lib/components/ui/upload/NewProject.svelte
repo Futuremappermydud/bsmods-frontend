@@ -18,6 +18,7 @@
   import { isValidSquareImage } from "$lib/utils/image";
   import { WarningFilled } from "@svelte-fui/icons";
   import axios from "axios";
+  import { appendURL } from "$lib/utils/url";
 
   let dataTab = $state("summary");
 
@@ -97,7 +98,7 @@
     formData.append("icon", iconFile ?? "");
 
     axios
-      .post(`${import.meta.env.VITE_API_BASE_URL}/api/mods/create`, formData, {
+      .post(appendURL(`/api/mods/create`), formData, {
         withCredentials: true,
       })
       .then((response) => {

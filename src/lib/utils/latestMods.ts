@@ -2,15 +2,13 @@
 
 import type { ModData } from "$lib/types/Mods";
 import axios from "axios";
+import { appendURL } from "./url";
 
 export async function getLatestVersionMods(): Promise<ModData[]> {
   let versions = await axios
-    .get(
-      `${import.meta.env.VITE_API_BASE_URL}/api/versions?gameName=BeatSaber`,
-      {
-        withCredentials: false,
-      },
-    )
+    .get(appendURL("/api/versions?gameName=BeatSaber"), {
+      withCredentials: false,
+    })
     .then((response) => {
       if (response.status === 302 || response.status === 200) {
         if (response.data !== null) {
@@ -23,5 +21,8 @@ export async function getLatestVersionMods(): Promise<ModData[]> {
       error(404, "Not found");
     });
 
+  if (!versions) return [];
+
+  //let latestVersion =
   return [];
 }

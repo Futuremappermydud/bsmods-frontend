@@ -4,15 +4,14 @@
   import { ArrowUploadRegular, ColorLineRegular } from "@svelte-fui/icons";
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
   import type { AuthedUser } from "$lib/types/AuthedUser";
+  import { env } from "$env/dynamic/public";
+  import { appendURL } from "$lib/utils/url";
 
   let { userData, isLight }: { userData: AuthedUser; isLight: Boolean } =
     $props();
 
   function login() {
-    window.open(
-      `${import.meta.env.VITE_API_BASE_URL}/api/auth/github?redirect=`,
-      "_self",
-    );
+    window.open(appendURL("/api/auth/github?redirect="), "_self");
   }
 
   function goToProfile() {

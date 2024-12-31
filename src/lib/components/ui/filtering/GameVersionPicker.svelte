@@ -3,6 +3,8 @@
   import axios from "axios";
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
   import { EmojiSadRegular } from "@svelte-fui/icons";
+  import { env } from "$env/dynamic/public";
+  import { appendURL } from "$lib/utils/url";
 
   //props
   let { selectedVersion = $bindable(null), selectedGame = $bindable(null) } =
@@ -26,7 +28,7 @@
   let searchDataPromise = getData();
   async function getData() {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/versions`, {
+      .get(appendURL("/api/versions"), {
         withCredentials: false,
       })
       .then((response) => {

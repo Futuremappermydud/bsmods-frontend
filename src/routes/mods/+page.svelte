@@ -11,6 +11,8 @@
     EmojiSadRegular,
   } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
+  import { env } from "$env/dynamic/public";
+  import { appendURL } from "$lib/utils/url";
 
   //state
   let modSearchError = $state(false);
@@ -46,7 +48,9 @@
 
     axios
       .get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/mods?gameName=${selectedGame}&gameVersion=${selectedVersion}&visibility=verified&platform=universalpc`,
+        appendURL(
+          `/api/mods?gameName=${selectedGame}&gameVersion=${selectedVersion}&visibility=verified&platform=universalpc`,
+        ),
         { withCredentials: false },
       )
       .then((response) => {

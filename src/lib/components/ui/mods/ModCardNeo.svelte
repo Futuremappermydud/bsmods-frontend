@@ -10,6 +10,8 @@
   import { getRelativeTimeString } from "$lib/utils/time";
   import { numify } from "numify";
   import { MediaQuery } from "svelte/reactivity";
+  import { env } from "$env/dynamic/public";
+  import { appendURL } from "$lib/utils/url";
 
   let {
     mod,
@@ -41,7 +43,7 @@
 >
   {#if isNotInsanelyStupidTiny.current}
     <ModIcon
-      src="{import.meta.env.VITE_API_BASE_URL}/cdn/icon/default.png"
+      src={appendURL("/cdn/icon/default.png")}
       modUrl="/mods/{mod.id}"
       {smallCorners}
     />

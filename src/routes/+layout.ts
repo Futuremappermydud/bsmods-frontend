@@ -1,6 +1,8 @@
 import type { AuthedUser } from "$lib/types/AuthedUser";
 import axios from "axios";
 import type { LayoutLoad } from "./$types";
+import { env } from "$env/dynamic/public";
+import { appendURL } from "$lib/utils/url";
 
 export const load: LayoutLoad = async () => {
   let userData: AuthedUser = {
@@ -13,7 +15,7 @@ export const load: LayoutLoad = async () => {
 
   try {
     let response = await axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/api/auth`, {
+      .get(appendURL("/api/auth"), {
         withCredentials: true,
       })
       .then((response) => {
@@ -26,8 +28,7 @@ export const load: LayoutLoad = async () => {
         }
       })
       .catch((error) => {
-        console.error("An error occurred, contact a developer!");
-        console.error(error);
+        return null;
       });
     if (!response) return userData;
     let data = await response.data.json();

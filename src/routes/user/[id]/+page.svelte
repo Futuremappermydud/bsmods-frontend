@@ -12,6 +12,7 @@
   import { onMount } from "svelte";
   import axios from "axios";
   import * as Pagination from "$lib/components/ui/pagination";
+  import { appendURL } from "$lib/utils/url";
 
   //user-input
   let selectedGame = $state("BeatSaber");
@@ -24,12 +25,9 @@
 
   onMount(async () => {
     let privateMods = await axios
-      .get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/user/${data.info.user.id}/mods?status=private`,
-        {
-          withCredentials: false,
-        },
-      )
+      .get(appendURL(`/api/user/${data.info.user.id}/mods?status=private`), {
+        withCredentials: false,
+      })
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
@@ -43,12 +41,9 @@
     mods = [...privateMods.mods];
 
     let publicMods = await axios
-      .get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/user/${data.info.user.id}/mods`,
-        {
-          withCredentials: false,
-        },
-      )
+      .get(appendURL(`/api/user/${data.info.user.id}/mods`), {
+        withCredentials: false,
+      })
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {

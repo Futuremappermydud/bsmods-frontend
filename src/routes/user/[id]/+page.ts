@@ -1,10 +1,10 @@
-import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 import axios from "axios";
+import { appendURL } from "$lib/utils/url";
 
 export const load: PageLoad = async ({ params }) => {
   let info = await axios
-    .get(`${import.meta.env.VITE_API_BASE_URL}/api/user/${params.id}`, {
+    .get(appendURL(`/api/user/${params.id}`), {
       withCredentials: false,
     })
     .then((response) => {
