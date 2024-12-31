@@ -11,7 +11,6 @@
     EmojiSadRegular,
   } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
-  import { env } from "$env/dynamic/public";
   import { appendURL } from "$lib/utils/url";
 
   //state

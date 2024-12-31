@@ -17,8 +17,8 @@ RUN \
   adduser --system --uid 1001 nodejs
 
 COPY --chown=1001:1001 package.json ./
-COPY --chown=1001:1001 --from=builder /app/build ./build
 COPY --chown=1001:1001 --from=builder /app/node_modules ./node_modules
+COPY --chown=1001:1001 --from=builder /app/build ./build
 
 USER nodejs
 EXPOSE 3000

@@ -30,7 +30,16 @@ export const load: LayoutLoad = async () => {
       .catch((error) => {
         return null;
       });
-    if (!response) return userData;
+    if (!response) {
+      userData = {
+        hasAttempted: true,
+        authenticated: false,
+        username: "Guest",
+        userId: -1,
+        roles: null,
+      };
+      return userData;
+    }
     let data = await response.data.json();
     userData = {
       hasAttempted: true,

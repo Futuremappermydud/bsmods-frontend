@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { Divider } from "@svelte-fui/core";
+  import { Divider, Menu } from "@svelte-fui/core";
   import { page } from "$app/stores";
-  import { ArrowUploadRegular, ColorLineRegular } from "@svelte-fui/icons";
+  import {
+    ArrowUploadRegular,
+    ColorLineRegular,
+    NavigationRegular,
+  } from "@svelte-fui/icons";
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
   import type { AuthedUser } from "$lib/types/AuthedUser";
-  import { env } from "$env/dynamic/public";
   import { appendURL } from "$lib/utils/url";
+  import { MediaQuery } from "svelte/reactivity";
 
   let { userData, isLight }: { userData: AuthedUser; isLight: Boolean } =
     $props();
@@ -18,7 +22,7 @@
     window.open(`/user/${userData.userId}`, "_self");
   }
 
-  console.log(page);
+  let isDesktop = new MediaQuery("min-width: 700px");
 </script>
 
 {#snippet navItems()}
@@ -58,49 +62,80 @@
   </li>
 {/snippet}
 
-<header class="flex flex-col h-12 mt-1 z-10">
-  <div class="w-auto h-[50px] flex ml-10 mr-10">
+{#snippet rightItems()}
+  {#if userData.hasAttempted}
+    {#if userData.authenticated && import.meta.env.DEV}
+      <a class="contents" href="/approval">
+        <svg class="w-6 h-6" viewBox="0 0 20 20">
+          <ColorLineRegular />
+        </svg>
+      </a>
+      {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
+        <a class="contents" href="/upload">
+          <svg class="w-6 h-6" viewBox="0 0 20 20">
+            <ArrowUploadRegular />
+          </svg>
+        </a>
+      {/if}
+    {/if}
+    <button
+      class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+      onclick={userData.authenticated ? goToProfile : login}
+    >
+      <img
+        class="flex h-full aspect-square"
+        alt={userData.authenticated ? "Logged In" : "Not Logged In"}
+        class:rounded-circular={userData.authenticated}
+        src={userData.authenticated
+          ? `https://github.com/${userData.username}.png`
+          : isLight
+            ? "/images/github-mark.svg"
+            : "/images/github-mark-white.svg"}
+      />
+    </button>
+  {/if}
+{/snippet}
+
+<header class="flex flex-col h-[50px] mt-1 z-10 gap-1">
+  <div class="w-auto flex h-full ml-10 mr-10">
     <div class="flex h-auto flex-1 left">
       <a class="h-full aspect-square" href="/">
         <img class="h-auto" src="/images/Beatmods.svg" alt="BeatMods Logo" />
       </a>
     </div>
-    <ul>
-      {@render navItems()}
-    </ul>
-    <div class="flex-1 items-center m-1 justify-end gap-3">
-      {#if userData.hasAttempted}
-        {#if userData.authenticated && import.meta.env.DEV}
-          <a class="contents" href="/approval">
-            <svg class="w-6 h-6" viewBox="0 0 20 20">
-              <ColorLineRegular />
-            </svg>
-          </a>
-          {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
-            <a class="contents" href="/upload">
-              <svg class="w-6 h-6" viewBox="0 0 20 20">
-                <ArrowUploadRegular />
-              </svg>
-            </a>
-          {/if}
-        {/if}
+    {#if isDesktop.current}
+      <ul>
+        {@render navItems()}
+      </ul>
+      <div class="flex flex-1 justify-end py-1">
+        {@render rightItems()}
+      </div>
+    {:else}
+      <div class="flex flex-1">
         <button
-          class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
-          onclick={userData.authenticated ? goToProfile : login}
+          class="ml-auto shadow-2 bg-neutral-background-1 text-neutral-foreground-1 flex aspect-square h-10 items-center justify-center rounded-xl"
         >
-          <img
-            class="flex h-full aspect-square"
-            alt={userData.authenticated ? "Logged In" : "Not Logged In"}
-            class:rounded-circular={userData.authenticated}
-            src={userData.authenticated
-              ? `https://github.com/${userData.username}.png`
-              : isLight
-                ? "/images/github-mark.svg"
-                : "/images/github-mark-white.svg"}
-          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <NavigationRegular />
+          </svg>
+
+          <Menu.Root class="flex flex-col px-4 py-2 my-1">
+            <ul class="flex flex-col !gap-0">
+              {@render navItems()}
+            </ul>
+            <div class="w-10 mx-auto my-2">
+              {@render rightItems()}
+            </div>
+          </Menu.Root>
         </button>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </div>
   <Divider />
 </header>

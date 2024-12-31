@@ -37,7 +37,7 @@
   let coords = new Spring(
     { x: 500, y: 500 },
     {
-      stiffness: 0.6,
+      stiffness: 0.2,
       damping: 0.7,
     },
   );
@@ -130,7 +130,8 @@
 </div>
 
 <svg
-  class:dim={distance < 20}
+  class="invisible md:visible"
+  class:dim={distance < 15}
   class:dimmer={coords.current.y < 50}
   xmlns="http://www.w3.org/2000/svg"
   role="presentation"
