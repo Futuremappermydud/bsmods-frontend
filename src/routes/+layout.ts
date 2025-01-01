@@ -44,9 +44,9 @@ export const load: LayoutLoad = async () => {
     userData = {
       hasAttempted: true,
       authenticated: true,
-      username: data.username,
-      userId: data.userId,
-      roles: data.roles,
+      username: data.user.username,
+      userId: data.user.id,
+      roles: data.user.roles,
     };
   } catch (error) {
     userData = {
