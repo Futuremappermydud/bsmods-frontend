@@ -95,7 +95,7 @@
         />
       </button>
     {:else}
-      <Button onclick={login}>Sign in</Button>
+      <Button onclick={login}>Sign in with GitHub</Button>
     {/if}
   {/if}
 {/snippet}
