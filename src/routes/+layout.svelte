@@ -114,9 +114,7 @@
           webDarkTheme.colorBackgroundOverlay}
       />
 
-      <main
-        class="mr-4 ml-4 md:mr-10 md:ml-10 w-auto overflow-y-scroll overflow-x-visible"
-      >
+      <main class="mr-4 ml-4 md:mr-10 md:ml-10 w-auto overflow-x-visible">
         {@render children()}
       </main>
 
