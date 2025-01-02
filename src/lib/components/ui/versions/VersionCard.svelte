@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ModVersion } from "$lib/types/Mods";
+  import { appendURL } from "$lib/utils/url";
   import { Button } from "@svelte-fui/core";
 
   let { version }: { version: ModVersion } = $props();
@@ -20,7 +21,7 @@
   <Button
     class="flex-1"
     onclick={() => {
-      window.open(`https://bbm.saera.gay/cdn/mod/${version.zipHash}.zip`);
+      window.open(appendURL(`cdn/mod/${version.zipHash}.zip`));
     }}>Download</Button
   >
   <div class=""></div>
