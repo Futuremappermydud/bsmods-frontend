@@ -58,6 +58,5 @@ export const load: LayoutLoad = async () => {
     };
   }
 
-  console.log(userData);
   return userData;
 };

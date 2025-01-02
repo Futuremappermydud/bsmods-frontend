@@ -5,7 +5,6 @@
   let fileinput: HTMLInputElement | null = $state(null);
 
   const onFileSelected = (e) => {
-    console.log("hsd");
     let image = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(image);

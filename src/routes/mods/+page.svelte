@@ -25,7 +25,6 @@
   let allGameMods = $derived.by(() => {
     if (!allMods) return [];
     if (allMods.mods.length === 0) return [];
-    console.log(allMods);
     return allMods.mods.filter(
       (mod: ModData) => mod.mod.gameName === selectedGame,
     );

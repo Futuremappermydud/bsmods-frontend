@@ -11,7 +11,6 @@ export const load: PageLoad = async ({ params }) => {
       if (response.status === 302 || response.status === 200) {
         if (response.data !== null) {
           const mod = response.data;
-          console.log(mod);
           return {
             mod: mod,
           };
