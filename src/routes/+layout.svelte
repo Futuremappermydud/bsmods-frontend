@@ -110,7 +110,7 @@
 </svelte:head>
 
 <div
-  class="contents"
+  class="contents h-full"
   class:dark={theme.colorBackgroundOverlay ==
     webDarkTheme.colorBackgroundOverlay}
   class:light={theme.colorBackgroundOverlay !==

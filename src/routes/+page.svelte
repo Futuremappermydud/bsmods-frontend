@@ -3,7 +3,7 @@
 </script>
 
 <section
-  class="flex flex-col gap-32 items-center w-stretch mx-10 md:mx-14 mt-10"
+  class="flex flex-col gap-28 items-center w-stretch mx-10 md:mx-14 mt-10"
 >
   <div class="flex flex-col items-center">
     <h1 class="text-6xl font-bold font-nunito">
