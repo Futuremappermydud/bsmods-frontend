@@ -3,12 +3,18 @@
   import axios from "axios";
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
   import { EmojiSadRegular } from "@svelte-fui/icons";
-  import { env } from "$env/dynamic/public";
   import { appendURL } from "$lib/utils/url";
 
   //props
-  let { selectedVersion = $bindable(null), selectedGame = $bindable(null) } =
-    $props();
+  let {
+    selectedVersion = $bindable(null),
+    selectedGame = $bindable(null),
+    required = false,
+  }: {
+    selectedVersion?: string | null;
+    selectedGame?: string | null;
+    required?: boolean;
+  } = $props();
 
   //state
   let searchDataError = $state(false);
@@ -52,11 +58,17 @@
 
 <Dropdown.Root bind:value={selectedVersion}>
   <Dropdown.Trigger
-    class="flex justify-center items-center w-full gap-3"
+    class="flex justify-center items-center w-full gap-2"
     let:data
   >
-    <Label class="h-[20px] flex-2 disabled:text-black">Supports:</Label>
-    <InputSkin class="flex-1" disabled={!selectedGame || selectedGame === ""}>
+    <Label class="h-[20px] flex-2 disabled:text-black" {required}
+      >Supports:</Label
+    >
+    <InputSkin
+      class="flex-1"
+      disabled={!selectedGame || selectedGame === ""}
+      ariaInvalid={!selectedVersion && required}
+    >
       {#if selectedVersion}
         <span>{selectedVersion}</span>
       {:else}

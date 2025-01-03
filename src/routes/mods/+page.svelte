@@ -15,7 +15,7 @@
 
   //state
   let modSearchError = $state(false);
-  let modSearchLoading = $state(true);
+  let modSearchLoading = $state(false);
 
   //data
 
@@ -69,6 +69,7 @@
         console.error("An error occurred, contact a developer!");
         console.error(error);
         modSearchError = true;
+        modSearchLoading = false;
       });
   }
 
@@ -122,7 +123,13 @@
       <svg class="w-20 h-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
       </svg>
-      <p>No mods found</p>
+      {#if !modSearchLoading}
+        {#if selectedVersion}
+          <p>No mods found</p>
+        {:else}
+          <p>Select a version to see mods</p>
+        {/if}
+      {/if}
     {/if}
     {#if selectedVersion}
       {#if modSearchLoading}

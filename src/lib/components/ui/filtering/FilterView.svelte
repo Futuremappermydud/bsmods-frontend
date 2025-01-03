@@ -50,7 +50,7 @@
         selectedVersion = null;
       }}
     />
-    <GameVersionPicker bind:selectedVersion bind:selectedGame />
+    <GameVersionPicker bind:selectedVersion bind:selectedGame required={true} />
   </div>
   {#if hasDivider}
     <Divider class="!flex-none" vertical={true} />

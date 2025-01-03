@@ -442,10 +442,10 @@
   resolved "https://registry.yarnpkg.com/@shikijs/vscode-textmate/-/vscode-textmate-9.3.1.tgz#afda31f8f42cab70a26f3603f52eae3f1c35d2f7"
   integrity sha512-79QfK1393x9Ho60QFyLti+QfdJzRQCVLFb97kOIV7Eo9vQU/roINgk7m24uv0a7AUvN//RDH36FLjjK48v0s9g==
 
-"@svelte-fui/core@^1.0.0-alpha.18":
-  version "1.0.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@svelte-fui/core/-/core-1.0.0-alpha.18.tgz#0371a2725f04e19878e1dbe1c5945f9d5e4ad866"
-  integrity sha512-H30pxz9GgO/5cYHmyO1jK/eN9tD2WcRUWQPCpVapb7OqQZliUvpYZGvOazj6qPLj81QEwXEcI5TZcux0PeXylA==
+"@svelte-fui/core@^1.0.0-alpha.19":
+  version "1.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@svelte-fui/core/-/core-1.0.0-alpha.19.tgz#1138a9bfd10534614672ca855fd2c37ba2b6b941"
+  integrity sha512-BRkVS9STJxiesfq3f1nsPxDxb99S6noB7VQNNnlZEfoo8XszI/Q2UxCFTLkVsbVRb/py3uuiyhHd9aNHss4ucw==
   dependencies:
     "@floating-ui/dom" "^1.4.3"
     "@svelte-fui/tailwindcss" "^0.1.7"
