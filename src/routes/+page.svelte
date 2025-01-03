@@ -6,10 +6,9 @@
   class="flex flex-col gap-32 items-center w-stretch mx-10 md:mx-14 mt-10"
 >
   <div class="flex flex-col items-center">
-    <h1 class="text-5xl font-semibold">
-      <span class="text-beatmods-pink">Beat</span><span
-        class="text-beatmods-purple">Mods</span
-      >
+    <h1 class="text-5xl font-semibold font-rubik">
+      <span class="text-beatmods-pink">Beat</span>
+      <span class="text-beatmods-purple">Mods</span>
     </h1>
     <p class="mt-2 text-center">
       A Beat Saber mod repository maintained by the Beat Saber Modding Group

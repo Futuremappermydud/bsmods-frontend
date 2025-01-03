@@ -103,11 +103,10 @@
   />
   <meta
     property="og:image"
-    content={new URL("images/favicon.ico", window.origin).toString()}
+    content={new URL("https://beatmods.com/images/favicon.ico").toString()}
   />
   <meta property="og:image:width" content="128" />
   <meta property="og:image:height" content="128" />
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 </svelte:head>
 
 <div
