@@ -43,7 +43,7 @@
 
 <style lang="postcss">
   .fui-tab-list {
-    @apply flex items-start w-fit h-fit;
+    @apply flex h-fit w-fit items-start;
 
     &.vertical {
       @apply flex-col;

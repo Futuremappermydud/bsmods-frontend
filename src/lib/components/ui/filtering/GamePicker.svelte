@@ -9,10 +9,10 @@
 
 <Dropdown.Root bind:value={selectedGame} bind:data={selectedGame} on:change>
   <Dropdown.Trigger
-    class="flex justify-center items-center w-full gap-3"
+    class="flex w-full items-center justify-center gap-3"
     let:data
   >
-    <Label class="h-[20px] flex-2">Game:</Label>
+    <Label class="flex-2 h-[20px]">Game:</Label>
     <InputSkin class="flex-1" ariaInvalid={data === undefined}>
       {#if data}
         <span>{insertSpaces(data as string)}</span>
@@ -26,7 +26,7 @@
 
   <Dropdown.Menu>
     {#each Object.values(SupportedGames) as item (item)}
-      <Dropdown.Item value={item} data={item} class="bg-transparent min-w-max"
+      <Dropdown.Item value={item} data={item} class="min-w-max bg-transparent"
         >{insertSpaces(item)}</Dropdown.Item
       >
     {/each}

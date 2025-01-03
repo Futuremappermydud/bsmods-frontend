@@ -31,7 +31,7 @@
   {#if avatar}
     <div class="relative">
       <button
-        class="rounded-circular bg-neutral-background-2 absolute top-2 right-2 w-4 h-4 opacity-85 flex items-end justify-center cursor-pointer"
+        class="absolute right-2 top-2 flex h-4 w-4 cursor-pointer items-end justify-center rounded-circular bg-neutral-background-2 opacity-85"
         onclick={() => {
           avatar = "";
           file = null;
@@ -42,7 +42,7 @@
     </div>
   {/if}
   <button
-    class="w-full h-full"
+    class="h-full w-full"
     onclick={() => {
       fileinput?.click();
     }}
@@ -51,10 +51,10 @@
       <img class="cursor-pointer {imageProp}" src={avatar} alt="Mod Icon" />
     {:else}
       <div
-        class="mod-add-icon duration-200 h-full flex justify-center rounded-xl border-2 border-dashed border-neutral-foreground-disabled"
+        class="mod-add-icon flex h-full justify-center rounded-xl border-2 border-dashed border-neutral-foreground-disabled duration-200"
       >
         <Icon
-          class="h-8 w-8 self-center duration-200 text-neutral-foreground-disabled"
+          class="h-8 w-8 self-center text-neutral-foreground-disabled duration-200"
         >
           <svg viewBox="0 0 19 19">
             <AddRegular />

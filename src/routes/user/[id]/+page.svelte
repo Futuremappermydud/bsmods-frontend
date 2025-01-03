@@ -78,17 +78,17 @@
   );
 </script>
 
-<div class="flex flex-col md:flex-row gap-4">
+<div class="flex flex-col gap-4 md:flex-row">
   <div class="flex flex-col gap-4">
     <div
-      class="flex flex-col items-center shadow-16 bg-neutral-background-2 rounded-xl p-4"
+      class="flex flex-col items-center rounded-xl bg-neutral-background-2 p-4 shadow-16"
     >
       <img
-        class="rounded-circular mx-12 my-3 max-w-32 w-stretch"
+        class="mx-12 my-3 w-stretch max-w-32 rounded-circular"
         src="https://github.com/{data.info.user.username}.png"
         alt="User Avatar"
       />
-      <h1 class="text-xl font-semibold text-center">
+      <h1 class="text-center text-xl font-semibold">
         {data.info.user.username}
       </h1>
     </div>
@@ -102,9 +102,9 @@
       }}
     />
   </div>
-  <div class="flex-1 flex flex-col gap-4">
+  <div class="flex flex-1 flex-col gap-4">
     {#if slicedMods.length === 0}
-      <svg class="w-20 h-20" viewBox="0 0 20 20">
+      <svg class="h-20 w-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
       </svg>
       <p>No mods found</p>

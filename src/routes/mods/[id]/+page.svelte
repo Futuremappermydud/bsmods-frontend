@@ -29,10 +29,10 @@
     hasVersion={false}
     smallCorners={true}
   />
-  <div class="flex flex-col lg:flex-row gap-4">
-    <div class="flex flex-col flex-1 order-2">
+  <div class="flex flex-col gap-4 lg:flex-row">
+    <div class="order-2 flex flex-1 flex-col">
       <div class="flex flex-col gap-4">
-        <div class="bg-neutral-background-2 shadow-4 rounded-xl p-4">
+        <div class="rounded-xl bg-neutral-background-2 p-4 shadow-4">
           <GameVersionPicker
             selectedGame={mod.info.gameName}
             bind:selectedVersion={version}
@@ -43,16 +43,16 @@
         {/each}
       </div>
     </div>
-    <div class="flex-[2.5] flex flex-col gap-4 lg:order-3 order-1">
+    <div class="order-1 flex flex-[2.5] flex-col gap-4 lg:order-3">
       <div
-        class="flex flex-col bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit"
+        class="flex h-fit flex-col rounded-xl bg-neutral-background-2 p-4 shadow-4"
       >
         <h2 class="text-lg font-semibold">
           More Info <Link href={mod.info.gitUrl}>Here!</Link>
         </h2>
       </div>
       <div
-        class="flex flex-col bg-neutral-background-2 shadow-4 rounded-xl p-4 h-fit"
+        class="flex h-fit flex-col rounded-xl bg-neutral-background-2 p-4 shadow-4"
       >
         <h1 class="text-xl font-semibold">Description:</h1>
         <MarkdownViewer text={mod.info.description} />

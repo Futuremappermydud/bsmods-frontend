@@ -26,10 +26,10 @@
 
 <Dropdown.Root bind:value={category}>
   <Dropdown.Trigger
-    class="flex justify-center items-center w-full gap-3"
+    class="flex w-full items-center justify-center gap-3"
     let:data
   >
-    <Label class="h-[20px] flex-2">Category:</Label>
+    <Label class="flex-2 h-[20px]">Category:</Label>
     <InputSkin
       class="flex-1"
       ariaInvalid={data === undefined ||
@@ -46,7 +46,7 @@
   </Dropdown.Trigger>
 
   <Dropdown.Menu>
-    <div class="h-[300px] overflow-scroll flex flex-col rounded">
+    <div class="flex h-[300px] flex-col overflow-scroll rounded">
       {#each zip(Object.keys(Categories), Object.values(Categories)) as item}
         <Dropdown.Item value={item.value} data={item} class="bg-transparent"
           >{insertSpaces(item.label)}</Dropdown.Item

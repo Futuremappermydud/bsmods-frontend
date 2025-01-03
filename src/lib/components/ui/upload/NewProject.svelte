@@ -117,32 +117,32 @@
 </script>
 
 <div
-  class="w-full flex flex-col gap-4 mt-8 transition-opacity duration-75 ease-in items-center"
+  class="mt-8 flex w-full flex-col items-center gap-4 transition-opacity duration-75 ease-in"
 >
   <div
-    class="flex flex-col lg:flex-row gap-4 w-full h-[1000px] md:h-[500px] mt-6"
+    class="mt-6 flex h-[1000px] w-full flex-col gap-4 md:h-[500px] lg:flex-row"
   >
-    <div class="relative flex-[1.4] h-auto flex flex-col gap-4">
-      <div class="relative shadow-4 bg-neutral-background-2 rounded-xl">
+    <div class="relative flex h-auto flex-[1.4] flex-col gap-4">
+      <div class="relative rounded-xl bg-neutral-background-2 shadow-4">
         <div
-          class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-neutral-background-6 pointer-events-none"
+          class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 rounded-md border-2 border-dashed border-neutral-background-6"
         ></div>
         <div class="p-4">
-          <div class="flex flex-col gap-2 h-min ml-auto">
+          <div class="ml-auto flex h-min flex-col gap-2">
             <GamePicker bind:selectedGame />
             <CategoryDropdown bind:category {categoryScheme} />
           </div>
         </div>
       </div>
       <div
-        class="flex-[2.5] relative shadow-4 bg-neutral-background-2 rounded-xl"
+        class="relative flex-[2.5] rounded-xl bg-neutral-background-2 shadow-4"
       >
         <div
-          class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-neutral-background-6 pointer-events-none"
+          class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 rounded-md border-2 border-dashed border-neutral-background-6"
         ></div>
-        <div class="p-4 h-full">
-          <div class="flex flex-col gap-4 h-full">
-            <div class="flex flex-col md:flex-row gap-1 h-[350px] md:h-[150px]">
+        <div class="h-full p-4">
+          <div class="flex h-full flex-col gap-4">
+            <div class="flex h-[350px] flex-col gap-1 md:h-[150px] md:flex-row">
               <ImagePicker
                 classProp="aspect-square max-w-[150px] max-h-[150px]"
                 imageProp="rounded-xl"
@@ -150,7 +150,7 @@
                 bind:file={iconFile}
               />
               <div
-                class="flex flex-col w-full gap-2 md:pl-5 h-min items-center"
+                class="flex h-min w-full flex-col items-center gap-2 md:pl-5"
               >
                 <Field
                   label="Mod Name"
@@ -199,12 +199,12 @@
       </div>
     </div>
     <div
-      class="relative h-full flex-[1.75] shadow-4 bg-neutral-background-2 rounded-xl"
+      class="relative h-full flex-[1.75] rounded-xl bg-neutral-background-2 shadow-4"
     >
       <div
-        class="absolute float-left left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-neutral-background-6 pointer-events-none"
+        class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 float-left rounded-md border-2 border-dashed border-neutral-background-6"
       ></div>
-      <div class="flex flex-row h-full pt-4 pb-4 items-center">
+      <div class="flex h-full flex-row items-center pb-4 pt-4">
         <div class="ml-4 w-28">
           <TabList disabled={false} layout="vertical" bind:value={dataTab}>
             <Tab value="summary">Summary</Tab>
@@ -212,10 +212,10 @@
           </TabList>
         </div>
         <div
-          class="seperator w-2 float-left h-full border-dashed border-l-2 border-neutral-background-6 my-1"
+          class="seperator float-left my-1 h-full w-2 border-l-2 border-dashed border-neutral-background-6"
         ></div>
         <div
-          class="flex-[5.5] mb-2 mt-2 mr-2 block absolute h-auto bottom-0 top-0 right-0 left-36"
+          class="absolute bottom-0 left-36 right-0 top-0 mb-2 mr-2 mt-2 block h-auto flex-[5.5]"
         >
           {#if dataTab == "summary"}
             <DescriptionPage bind:text={description} {descriptionScheme} />
@@ -225,7 +225,7 @@
     </div>
   </div>
   <Button
-    class="shadow-8 mb-64"
+    class="mb-64 shadow-8"
     onclick={() => {
       submitDialog = true;
     }}
@@ -237,13 +237,13 @@
 
     <Dialog.Body class="h-40">
       <div
-        class="h-fit p-4 relative shadow-4 bg-neutral-background-2 rounded-xl"
+        class="relative h-fit rounded-xl bg-neutral-background-2 p-4 shadow-4"
         class:opacity-0={icon !== "" || !submitDialog}
       >
         <div
-          class="absolute left-1 right-1 top-1 bottom-1 rounded-md border-dashed border-2 border-palette-yellow-background-3 border-opacity-100 pointer-events-none"
+          class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 rounded-md border-2 border-dashed border-palette-yellow-background-3 border-opacity-100"
         ></div>
-        <div class="h-6 flex flex-row gap-2 content-center">
+        <div class="flex h-6 flex-row content-center gap-2">
           <svg class="h-6" viewBox="0 0 20 20">
             <WarningFilled />
           </svg>

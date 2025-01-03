@@ -5,12 +5,12 @@
 </script>
 
 <div
-  class="w-full flex flex-col gap-4 transition-opacity duration-75 ease-in items-center"
+  class="flex w-full flex-col items-center gap-4 transition-opacity duration-75 ease-in"
   class:opacity-0={tab === ""}
   class:hidden={tab === "" || tab === "new"}
 >
-  <Divider class="w-72 mt-2" />
-  <p class="text-3xl mt-12">
+  <Divider class="mt-2 w-72" />
+  <p class="mt-12 text-3xl">
     <span class="text-neutral-foreground-4">2.</span> Pick Your Mod
   </p>
 </div>

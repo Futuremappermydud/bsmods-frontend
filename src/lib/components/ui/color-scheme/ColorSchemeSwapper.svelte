@@ -7,7 +7,7 @@
   let { theme = $bindable(webLightTheme) } = $props();
 </script>
 
-<Button class="p-0 aspect-square w-full h-full rounded-xl">
+<Button class="aspect-square h-full w-full rounded-xl p-0">
   <Icon>
     <svg viewBox="0 0 20 20">
       {#if theme.colorBackgroundOverlay == webDarkTheme.colorBackgroundOverlay}

@@ -15,7 +15,7 @@
   let descriptionValidity = $derived(descriptionScheme.safeParse(text));
 </script>
 
-<div class="flex flex-col gap-1 items-center flex-[4] h-full pr-2 pb-2">
+<div class="flex h-full flex-[4] flex-col items-center gap-1 pb-2 pr-2">
   <TabList disabled={false} layout="horizontal" bind:value={descriptionTab}>
     <Tab value="write">Write</Tab>
     <Tab value="preview">Markdown Preview</Tab>
@@ -38,7 +38,7 @@
   {/if}
   {#if descriptionTab == "preview"}
     <div
-      class="md-container w-full flex-1 overflow-scroll text-left border-neutral-foreground-disabled border-solid border-2 p-1 rounded"
+      class="md-container w-full flex-1 overflow-scroll rounded border-2 border-solid border-neutral-foreground-disabled p-1 text-left"
     >
       <MarkdownViewer {text} />
     </div>

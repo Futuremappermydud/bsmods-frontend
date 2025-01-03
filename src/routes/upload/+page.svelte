@@ -2,9 +2,9 @@
   import NewProject from "$lib/components/ui/upload/NewProject.svelte";
 </script>
 
-<div class="flex gap-4 flex-col text-center items-center">
+<div class="flex flex-col items-center gap-4 text-center">
   <p
-    class="text-lg font-semibold text-neutral-foreground-4 absolute top-16 left-4"
+    class="absolute left-4 top-16 text-lg font-semibold text-neutral-foreground-4"
   >
     Upload Mod
   </p>

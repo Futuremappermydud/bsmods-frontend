@@ -56,6 +56,6 @@
   :global(h2.fix),
   :global(h1.fix),
   :global(h3.fix) {
-    @apply border-b-[1px] border-neutral-foreground-disabled border-solid mb-4 pt-2 pb-1;
+    @apply mb-4 border-b-[1px] border-solid border-neutral-foreground-disabled pb-1 pt-2;
   }
 </style>

@@ -5,9 +5,9 @@
   let page = $state("new");
 </script>
 
-<div class="flex gap-4 flex-col text-center items-center">
+<div class="flex flex-col items-center gap-4 text-center">
   <p
-    class="text-lg font-semibold text-neutral-foreground-4 absolute top-16 left-4"
+    class="absolute left-4 top-16 text-lg font-semibold text-neutral-foreground-4"
   >
     Approval
   </p>
@@ -17,8 +17,8 @@
   </TabList>
 
   {#if page == "edit"}
-    <p class="text-3xl mt-16">Edits</p>
+    <p class="mt-16 text-3xl">Edits</p>
   {:else}
-    <p class="text-3xl mt-16">New Mods</p>
+    <p class="mt-16 text-3xl">New Mods</p>
   {/if}
 </div>

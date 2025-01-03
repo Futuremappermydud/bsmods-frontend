@@ -49,7 +49,7 @@
 
 <style lang="postcss">
   .fui-tab {
-    @apply relative inline-flex items-center w-fit py-m px-[10px];
+    @apply relative inline-flex w-fit items-center px-[10px] py-m;
 
     &.vertical {
       @apply flex-col items-center py-sNudge;
@@ -57,12 +57,12 @@
   }
 
   .fui-tab-input {
-    @apply opacity-0 absolute top-0 left-0 w-full h-full cursor-pointer;
+    @apply absolute left-0 top-0 h-full w-full cursor-pointer opacity-0;
 
     /* Colors for the unchecked state */
     &:enabled:not(.enabled) {
       & ~ :global(.fui-tab-label) {
-        @apply text-neutral-foreground-3 font-regular;
+        @apply font-regular text-neutral-foreground-3;
       }
 
       &:hover {
@@ -81,7 +81,7 @@
     /* Colors for the checked state */
     &.enabled:enabled {
       & ~ :global(.fui-tab-label) {
-        @apply text-neutral-foreground-1 font-semibold;
+        @apply font-semibold text-neutral-foreground-1;
       }
     }
 
@@ -90,18 +90,18 @@
       cursor: not-allowed !important;
 
       & ~ :global(.fui-tab-label) {
-        @apply text-neutral-foreground-disabled !cursor-not-allowed pointer-events-none;
+        @apply pointer-events-none !cursor-not-allowed text-neutral-foreground-disabled;
       }
     }
   }
 
   .fui-tab > :global(.fui-tab-label) {
-    @apply px-0.5 cursor-pointer self-center;
+    @apply cursor-pointer self-center px-0.5;
   }
 
   /* Tab underline */
   .fui-tab:not(:has(.fui-tab-input:disabled))::after {
-    @apply content-[''] absolute bottom-0 left-0 rounded-circular;
+    @apply absolute bottom-0 left-0 rounded-circular content-[''];
   }
 
   /* Colors for the selected state */
@@ -116,11 +116,11 @@
 
   /* Layout for the vertical state */
   .fui-tab.vertical::after {
-    @apply h-auto w-1 bottom-0 top-0 my-2;
+    @apply bottom-0 top-0 my-2 h-auto w-1;
   }
 
   /* Layout for the horizontal state */
   .fui-tab.horizontal::after {
-    @apply w-auto h-1 right-0 mx-3;
+    @apply right-0 mx-3 h-1 w-auto;
   }
 </style>

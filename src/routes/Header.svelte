@@ -72,24 +72,24 @@
     {#if userData.authenticated && import.meta.env.DEV}
       {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
         <a class="contents" href="/approval">
-          <svg class="w-6 h-6" viewBox="0 0 20 20">
+          <svg class="h-6 w-6" viewBox="0 0 20 20">
             <ColorLineRegular />
           </svg>
         </a>
       {/if}
       <a class="contents" href="/upload">
-        <svg class="w-6 h-6" viewBox="0 0 20 20">
+        <svg class="h-6 w-6" viewBox="0 0 20 20">
           <ArrowUploadRegular />
         </svg>
       </a>
     {/if}
     {#if userData.authenticated}
       <button
-        class="flex float-right aspect-square h-full bg-none border-non justify-center transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+        class="border-non float-right flex aspect-square h-full justify-center bg-none transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
         onclick={goToProfile}
       >
         <img
-          class="flex h-full aspect-square rounded-circular"
+          class="flex aspect-square h-full rounded-circular"
           alt="Logged In"
           src="https://github.com/{userData.username}.png"
         />
@@ -100,10 +100,10 @@
   {/if}
 {/snippet}
 
-<header class="flex flex-col h-[50px] mt-1 z-10 gap-1">
-  <div class="w-auto flex h-full ml-10 mr-10">
-    <div class="flex h-auto flex-1 left">
-      <a class="h-full aspect-square" href="/">
+<header class="z-10 mt-1 flex h-[50px] flex-col gap-1">
+  <div class="ml-10 mr-10 flex h-full w-auto">
+    <div class="left flex h-auto flex-1">
+      <a class="aspect-square h-full" href="/">
         <img class="h-auto" src="/images/Beatmods.svg" alt="BeatMods Logo" />
       </a>
     </div>
@@ -111,13 +111,13 @@
       <ul>
         {@render navItems()}
       </ul>
-      <div class="flex flex-1 justify-end py-1 gap-2 items-center">
+      <div class="flex flex-1 items-center justify-end gap-2 py-1">
         {@render rightItems()}
       </div>
     {:else}
       <div class="flex flex-1">
         <button
-          class="ml-auto shadow-2 bg-neutral-background-1 text-neutral-foreground-1 flex aspect-square h-10 items-center justify-center rounded-xl"
+          class="ml-auto flex aspect-square h-10 items-center justify-center rounded-xl bg-neutral-background-1 text-neutral-foreground-1 shadow-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -129,11 +129,11 @@
             <NavigationRegular />
           </svg>
 
-          <Menu.Root class="flex flex-col px-4 py-2 my-1">
+          <Menu.Root class="my-1 flex flex-col px-4 py-2">
             <ul class="flex flex-col !gap-0">
               {@render navItems()}
             </ul>
-            <div class="w-10 mx-auto my-2">
+            <div class="mx-auto my-2 w-10">
               {@render rightItems()}
             </div>
           </Menu.Root>

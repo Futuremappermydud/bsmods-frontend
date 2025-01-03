@@ -1,13 +1,13 @@
-<footer class="flex w-fit flex-col mt-10 h-[51px]">
-  <div class="h-[50px] flex ml-10 mr-10 w-full">
-    <div class="flex flex-row ml-5 gap-4">
+<footer class="mt-10 flex h-[51px] w-fit flex-col">
+  <div class="ml-10 mr-10 flex h-[50px] w-full">
+    <div class="ml-5 flex flex-row gap-4">
       <p class="my-auto w-max">BeatMods is Open Source! -></p>
       <a
-        class="!w-fit !h-fit my-auto hover:text-brand-foreground-link-hover duration-150"
+        class="my-auto !h-fit !w-fit duration-150 hover:text-brand-foreground-link-hover"
         href="https://github.com/Futuremappermydud/bsmods-frontend">Frontend</a
       >
       <a
-        class="!w-fit !h-fit my-auto hover:text-brand-foreground-link-hover duration-150"
+        class="my-auto !h-fit !w-fit duration-150 hover:text-brand-foreground-link-hover"
         href="https://github.com/Saeraphinx/badbsmods">Backend</a
       >
     </div>

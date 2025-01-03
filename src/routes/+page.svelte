@@ -3,10 +3,10 @@
 </script>
 
 <section
-  class="flex flex-col gap-28 items-center w-stretch mx-10 md:mx-14 mt-10"
+  class="mx-10 mt-10 flex w-stretch flex-col items-center gap-28 md:mx-14"
 >
   <div class="flex flex-col items-center">
-    <h1 class="text-6xl font-bold font-nunito">
+    <h1 class="font-nunito text-6xl font-bold">
       <span class="text-beatmods-pink">Beat</span>
       <span class="text-beatmods-purple">Mods</span>
     </h1>
@@ -15,27 +15,27 @@
     </p>
   </div>
   <div class="flex flex-col gap-8 pb-4">
-    <div class="flex flex-col lg:flex-row gap-8 w-full">
+    <div class="flex w-full flex-col gap-8 lg:flex-row">
       <div
-        class="flex-1 w-full aspect-square flex flex-col items-center shadow-16 bg-neutral-background-2 rounded-xl p-4"
+        class="flex aspect-square w-full flex-1 flex-col items-center rounded-xl bg-neutral-background-2 p-4 shadow-16"
       >
-        <h2 class="font-semibold text-xl">Discover</h2>
-        <h3 class="text-sm text-neutral-foreground-2 text-center">
+        <h2 class="text-xl font-semibold">Discover</h2>
+        <h3 class="text-center text-sm text-neutral-foreground-2">
           Find mods that suit you best.
         </h3>
       </div>
       <div
-        class="flex-1 w-full aspect-square flex flex-col items-center shadow-16 bg-neutral-background-2 rounded-xl p-4"
+        class="flex aspect-square w-full flex-1 flex-col items-center rounded-xl bg-neutral-background-2 p-4 shadow-16"
       >
-        <h2 class="font-semibold text-xl">Create</h2>
-        <h3 class="text-sm text-neutral-foreground-2 text-center">
+        <h2 class="text-xl font-semibold">Create</h2>
+        <h3 class="text-center text-sm text-neutral-foreground-2">
           Upload and create your own mods for the community.
         </h3>
-        <div class="flex-1 flex flex-col gap-4 w-stretch mt-8">
+        <div class="mt-8 flex w-stretch flex-1 flex-col gap-4">
           <a
             href="https://bsmg.wiki/modding/"
             target="=_blank"
-            class="flex-1 flex justify-center items-center bg-green-400 hover:bg-green-500 dark:bg-green-800 hover:dark:bg-green-700 transition-colors duration-100 p-2 rounded-lg shadow-4"
+            class="flex flex-1 items-center justify-center rounded-lg bg-green-400 p-2 shadow-4 transition-colors duration-100 hover:bg-green-500 dark:bg-green-800 hover:dark:bg-green-700"
           >
             <p class="font-semibold">Mod Creation Guide</p>
           </a>
@@ -43,24 +43,24 @@
             class:opacity-40={true}
             class:pointer-events-none={true}
             href="/upload"
-            class="flex-1 flex justify-center items-center bg-brand-teams-80 hover:bg-brand-teams-90 transition-colors duration-100 p-2 rounded-lg shadow-4"
+            class="flex flex-1 items-center justify-center rounded-lg bg-brand-teams-80 p-2 shadow-4 transition-colors duration-100 hover:bg-brand-teams-90"
           >
             <p class="font-semibold">Upload a Mod (Coming Soon)</p>
           </a>
         </div>
       </div>
       <div
-        class="flex-1 w-full aspect-square flex flex-col items-center shadow-16 bg-neutral-background-2 rounded-xl p-4"
+        class="flex aspect-square w-full flex-1 flex-col items-center rounded-xl bg-neutral-background-2 p-4 shadow-16"
       >
-        <h2 class="font-semibold text-xl">Manage</h2>
-        <h3 class="text-sm text-neutral-foreground-2 text-center">
+        <h2 class="text-xl font-semibold">Manage</h2>
+        <h3 class="text-center text-sm text-neutral-foreground-2">
           Use a Beatmods-compatible mod manager to seamlessly manage your mods.
         </h3>
-        <div class="flex-1 flex flex-col gap-4 w-stretch mt-8">
+        <div class="mt-8 flex w-stretch flex-1 flex-col gap-4">
           <a
             href="https://www.bsmanager.io/"
             target="=_blank"
-            class="flex-1 flex justify-center items-center bg-brand-web-80 hover:bg-brand-web-90 transition-colors duration-100 p-2 rounded-lg shadow-4"
+            class="flex flex-1 items-center justify-center rounded-lg bg-brand-web-80 p-2 shadow-4 transition-colors duration-100 hover:bg-brand-web-90"
           >
             <p class="font-semibold">
               BSManager <span class="text-sm text-yellow-200"
@@ -71,7 +71,7 @@
           <a
             href="https://github.com/Assistant/ModAssistant/releases/latest"
             target="=_blank"
-            class="flex-1 flex justify-center items-center bg-red-600 hover:bg-red-500 transition-colors duration-100 p-2 rounded-lg shadow-4"
+            class="flex flex-1 items-center justify-center rounded-lg bg-red-600 p-2 shadow-4 transition-colors duration-100 hover:bg-red-500"
           >
             <p class="font-semibold">Mod Assistant (Legacy)</p>
           </a>
@@ -79,7 +79,7 @@
             href="https://example.com"
             target="=_blank"
             aria-disabled={true}
-            class="flex-1 flex justify-center items-center bg-moddingpink-signaturePink p-2 rounded-lg shadow-4 opacity-40 pointer-events-none"
+            class="pointer-events-none flex flex-1 items-center justify-center rounded-lg bg-moddingpink-signaturePink p-2 opacity-40 shadow-4"
           >
             <p class="font-semibold">PinkModManager (WIP)</p>
           </a>
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div
-      class="flex-1 flex flex-row gap-2 w-full h-fit shadow-16 bg-neutral-background-2 rounded-xl p-4"
+      class="flex h-fit w-full flex-1 flex-row gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-16"
     >
       <p class="text-lg font-semibold">Need Help?</p>
       <Link href="https://bsmg.wiki" class="sigma !text-lg !font-semibold"

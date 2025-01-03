@@ -117,20 +117,20 @@
     webDarkTheme.colorBackgroundOverlay}
 >
   <App {theme}>
-    <div class="app bg-neutral-background-3 overflow-y-clip">
+    <div class="app overflow-y-clip bg-neutral-background-3">
       <Header
         userData={data}
         isLight={theme.colorBackgroundOverlay !==
           webDarkTheme.colorBackgroundOverlay}
       />
 
-      <main class="mr-4 ml-4 md:mr-10 md:ml-10 w-auto overflow-x-visible">
+      <main class="ml-4 mr-4 w-auto overflow-x-visible md:ml-10 md:mr-10">
         {@render children()}
       </main>
 
       <Footer />
 
-      <div class="w-[32px] aspect-square fixed bottom-[16px] left-[16px]">
+      <div class="fixed bottom-[16px] left-[16px] aspect-square w-[32px]">
         <ColorSchemeSwapper bind:theme />
       </div>
     </div>

@@ -58,10 +58,10 @@
 
 <Dropdown.Root bind:value={selectedVersion}>
   <Dropdown.Trigger
-    class="flex justify-center items-center w-full gap-2"
+    class="flex w-full items-center justify-center gap-2"
     let:data
   >
-    <Label class="h-[20px] flex-2 disabled:text-black" {required}
+    <Label class="flex-2 h-[20px] disabled:text-black" {required}
       >Supports:</Label
     >
     <InputSkin
@@ -81,7 +81,7 @@
 
   <Dropdown.Menu>
     <div
-      class="max-h-[400px] min-h-[150px] overflow-scroll flex flex-col rounded"
+      class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded"
     >
       {#each allGameVersions.toReversed() as item (item.id)}
         <Dropdown.Item value={item.version} data={item} class="bg-transparent"
@@ -97,8 +97,8 @@
       {/if}
 
       {#if allGameVersions.length === 0 && !searchDataLoading && !searchDataError}
-        <div class="flex flex-col items-center m-auto">
-          <svg class="w-20 h-20" viewBox="0 0 20 20">
+        <div class="m-auto flex flex-col items-center">
+          <svg class="h-20 w-20" viewBox="0 0 20 20">
             <EmojiSadRegular />
           </svg>
           <p class="bg-transparent">No versions found</p>

@@ -81,7 +81,7 @@
 
   <textarea
     class={classnames(
-      "px-xxs text-neutral-foreground-1 leading-inherit flex-1 border-none bg-transparent h-full",
+      "leading-inherit h-full flex-1 border-none bg-transparent px-xxs text-neutral-foreground-1",
       klass,
     )}
     {id}
@@ -115,6 +115,6 @@
   }
 
   textarea {
-    @apply outline-none resize-none;
+    @apply resize-none outline-none;
   }
 </style>
