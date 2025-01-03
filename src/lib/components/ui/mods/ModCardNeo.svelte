@@ -33,8 +33,6 @@
 
   let isNotInsanelyStupidTiny = new MediaQuery("min-width: 450px");
   let isNotStupidTiny = new MediaQuery("min-width: 525px");
-
-  $inspect("bro", isNotStupidTiny.current);
 </script>
 
 <div
