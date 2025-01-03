@@ -8,15 +8,22 @@
     selectedVersion = $bindable(),
     selectedGame = $bindable(),
     search = $bindable(),
+    required = false,
     hasDivider = true,
+  }: {
+    selectedVersion?: string | null;
+    selectedGame?: string | null;
+    search?: string;
+    required?: boolean;
+    hasDivider?: boolean;
   } = $props();
 </script>
 
 <div class="left-side flex flex-row gap-4">
   <div
-    class="bg-neutral-background-2 rounded-xl shadow-4 justify-start flex flex-col flex-1 p-2 gap-3"
+    class="flex flex-1 flex-col justify-start gap-3 rounded-xl bg-neutral-background-2 p-2 shadow-4"
   >
-    <div class="h-8 flex flex-row gap-2">
+    <div class="flex h-8 flex-row gap-2">
       <div class="search flex-1" role="searchbox">
         <Input size="lg" placeholder="Search mods" bind:value={search} />
       </div>
@@ -50,7 +57,7 @@
         selectedVersion = null;
       }}
     />
-    <GameVersionPicker bind:selectedVersion bind:selectedGame required={true} />
+    <GameVersionPicker bind:selectedVersion bind:selectedGame {required} />
   </div>
   {#if hasDivider}
     <Divider class="!flex-none" vertical={true} />

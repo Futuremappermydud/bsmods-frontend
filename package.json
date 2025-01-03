@@ -31,6 +31,7 @@
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "rehype-class-names": "^2.0.0",
     "semver": "^7.6.3",
     "semver-parser": "^4.1.7",

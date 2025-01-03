@@ -92,11 +92,12 @@
   let isNotInsanelyStupidTiny = new MediaQuery("min-width: 450px");
 </script>
 
-<div class="flex gap-4 flex-col" class:!flex-row={isDesktop.current}>
+<div class="flex flex-col gap-4" class:!flex-row={isDesktop.current}>
   <FilterView
     bind:search
     bind:selectedGame
     bind:selectedVersion
+    required={true}
     hasDivider={isDesktop.current}
     on:change={() => {
       selectedVersion = null;
@@ -107,20 +108,20 @@
   <div class="right-side mod-list flex-2">
     {#if !isNotInsanelyStupidTiny.current}
       <div
-        class="shadow-4 bg-neutral-background-2 flex-2 h-fit p-[7.5px] rounded-xl gap-2 inline"
+        class="flex-2 inline h-fit gap-2 rounded-xl bg-neutral-background-2 p-[7.5px] shadow-4"
       >
         <span>
           Your device is too small to effectively display mod icons, update
           times, and other decorative info. Visit their respective mod pages to
           see these.
-          <svg class="w-[1.5em] inline" viewBox="0 0 20 20">
+          <svg class="inline w-[1.5em]" viewBox="0 0 20 20">
             <EmojiSadRegular />
           </svg>
         </span>
       </div>
     {/if}
     {#if searchedMods.length === 0 || !selectedVersion}
-      <svg class="w-20 h-20" viewBox="0 0 20 20">
+      <svg class="h-20 w-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
       </svg>
       {#if !modSearchLoading}

@@ -36,7 +36,7 @@
 </script>
 
 <div
-  class="shadow-4 flex bg-neutral-background-2 flex-2 h-28 md:h-[120px] p-[7.5px] rounded-[17.5px] gap-2"
+  class="flex-2 pointer-events-auto flex h-28 cursor-pointer gap-2 rounded-[17.5px] bg-neutral-background-2 p-[7.5px] shadow-4 md:h-[120px] md:cursor-default"
   class:!rounded-xl={smallCorners || !isNotInsanelyStupidTiny.current}
 >
   {#if isNotInsanelyStupidTiny.current}
@@ -47,10 +47,10 @@
     />
   {/if}
   <div class="grid h-fit gap-2">
-    <div class="flex flex-row flex-1 gap-1 h-fit w-fit md:mt-1">
-      <span class="text-lg md:text-2xl leading-5">{mod.name}</span>
+    <div class="flex h-fit w-fit flex-1 flex-row gap-1 md:mt-1">
+      <span class="text-lg leading-5 md:text-2xl">{mod.name}</span>
       {#if author}
-        <span class="text-md text-neutral-foreground-2 h-fit mt-auto mb-0.5"
+        <span class="text-md mb-0.5 mt-auto h-fit text-neutral-foreground-2"
           >By <Link
             as="button"
             on:click={() => searchProfile(author)}
@@ -59,34 +59,34 @@
         >
       {/if}
     </div>
-    <p class="text-xs md:text-sm text-neutral-foreground-3">{mod.summary}</p>
+    <p class="text-xs text-neutral-foreground-3 md:text-sm">{mod.summary}</p>
   </div>
   {#if hasVersion && isNotInsanelyStupidTiny.current && isNotStupidTiny.current}
-    <div class="flex flex-row h-full w-fit gap-2 ml-auto">
+    <div class="ml-auto flex h-full w-fit flex-row gap-2">
       <Divider vertical={true} />
-      <div class="flex flex-col h-fit mb-auto gap-4 w-max ml-auto">
-        <div class="flex flex-row gap-2 w-fit">
-          <svg viewBox="0 0 20 20" class="w-4 md:w-6 text-neutral-foreground-2">
+      <div class="mb-auto ml-auto flex h-fit w-max flex-col gap-4">
+        <div class="flex w-fit flex-row gap-2">
+          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-6">
             <ArrowDownloadRegular class="w-4 md:w-6" />
           </svg>
-          <span class="text-neutral-foreground-2 text-sm md:text-base"
+          <span class="text-sm text-neutral-foreground-2 md:text-base"
             >{numify(downloads)}</span
           >
         </div>
-        <div class="flex flex-row gap-2 w-fit">
-          <svg viewBox="0 0 20 20" class="w-4 md:w-6 text-neutral-foreground-2">
+        <div class="flex w-fit flex-row gap-2">
+          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-6">
             <ArrowSyncRegular class="w-4 md:w-6" />
           </svg>
-          <span class="text-neutral-foreground-2 text-xs md:text-base"
+          <span class="text-xs text-neutral-foreground-2 md:text-base"
             >{getRelativeTimeString(new Date(mod.updatedAt))}</span
           >
         </div>
-        <div class="flex flex-row gap-2 w-fit">
-          <svg viewBox="0 0 20 20" class="w-4 md:w-6 text-neutral-foreground-2">
+        <div class="flex w-fit flex-row gap-2">
+          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-6">
             <CheckmarkRegular class="w-4 md:w-6" />
           </svg>
           <span
-            class="text-neutral-foreground-2 silly-capitalize text-sm md:text-base"
+            class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
             >{mod.status}</span
           >
         </div>
