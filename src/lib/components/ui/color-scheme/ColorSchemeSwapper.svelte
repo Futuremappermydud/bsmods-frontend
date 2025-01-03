@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import { Button, Icon, Menu } from "@svelte-fui/core";
   import { WeatherSunnyRegular, WeatherMoonRegular } from "@svelte-fui/icons";
   import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
 
   //props
-  let { theme = $bindable(webLightTheme) } = $props();
+  let { theme = $bindable(webLightTheme), showCursor = $bindable(true) } =
+    $props();
 </script>
 
 <Button class="aspect-square h-full w-full rounded-xl p-0">
@@ -32,6 +33,13 @@
         }}
       >
         <div>Dark</div>
+      </Menu.Item>
+      <Menu.Item
+        on:click={() => {
+          showCursor = !showCursor;
+        }}
+      >
+        <div>Toggle Block Cursor</div>
       </Menu.Item>
     </Menu.Group>
   </Menu.Root>

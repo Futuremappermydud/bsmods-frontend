@@ -13,10 +13,12 @@
   import ColorSchemeSwapper from "$lib/components/ui/color-scheme/ColorSchemeSwapper.svelte";
   import Header from "$lib/components/ui/layout/Header.svelte";
   import Footer from "$lib/components/ui/layout/Footer.svelte";
+  import { MediaQuery } from "svelte/reactivity";
 
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
   let theme = $state(webLightTheme);
+  let showCursor = $state(true);
 
   onMount(() => {
     function handler(schemeMedia: MediaQueryListEvent) {
@@ -88,6 +90,8 @@
     document.addEventListener("mousemove", animate, false);
     document.addEventListener("mouseenter", animate, false);
   });
+
+  let isTouch = new MediaQuery("(pointer: coarse)");
 </script>
 
 <svelte:head>
@@ -131,14 +135,15 @@
       <Footer />
 
       <div class="fixed bottom-[16px] left-[16px] aspect-square w-[32px]">
-        <ColorSchemeSwapper bind:theme />
+        <ColorSchemeSwapper bind:theme bind:showCursor />
       </div>
     </div>
   </App>
 </div>
 
 <svg
-  class="invisible md:visible"
+  class="invisible"
+  class:!visible={!isTouch.current && showCursor}
   class:dim={distance < 15}
   class:dimmer={coords.current.y < 50}
   xmlns="http://www.w3.org/2000/svg"
