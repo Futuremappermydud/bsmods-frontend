@@ -2,10 +2,11 @@
   import { Divider, Link } from "@svelte-fui/core";
   import {
     ArrowDownloadRegular,
+    ArrowResetRegular,
     ArrowSyncRegular,
     CheckmarkRegular,
   } from "@svelte-fui/icons";
-  import type { Mod, ModAuthor } from "$lib/types/Mods";
+  import type { Mod, ModAuthor, ModVersion } from "$lib/types/Mods";
   import ModIcon from "./ModIcon.svelte";
   import { getRelativeTimeString } from "$lib/utils/time";
   import { numify } from "numify";
@@ -15,12 +16,14 @@
   let {
     mod,
     author,
+    latestVersion,
     downloads,
     hasVersion,
     smallCorners = false,
   }: {
     mod: Mod;
     author: ModAuthor | undefined;
+    latestVersion: ModVersion | undefined;
     downloads: number;
     hasVersion: boolean | undefined;
     smallCorners?: boolean;
@@ -66,15 +69,26 @@
       </p>
     </div>
     {#if hasVersion && isNotInsanelyStupidTiny.current && isNotStupidTiny.current}
-      <div class="ml-auto flex h-full w-fit flex-row gap-2">
+      <div class="ml-auto flex h-full w-fit flex-row gap-2 pr-2">
         <Divider vertical={true} />
-        <div class="mb-auto ml-auto flex h-fit w-max flex-col gap-4">
+        <div class="mb-auto ml-auto flex h-fit w-max flex-col gap-1">
           <div class="flex w-fit flex-row gap-2">
             <svg
               viewBox="0 0 20 20"
-              class="w-4 text-neutral-foreground-2 md:w-6"
+              class="w-4 text-neutral-foreground-2 md:w-4"
             >
-              <ArrowDownloadRegular class="w-4 md:w-6" />
+              <ArrowResetRegular />
+            </svg>
+            <span class="text-sm text-neutral-foreground-2 md:text-base"
+              >{latestVersion?.modVersion}</span
+            >
+          </div>
+          <div class="flex w-fit flex-row gap-2">
+            <svg
+              viewBox="0 0 20 20"
+              class="w-4 text-neutral-foreground-2 md:w-4"
+            >
+              <ArrowDownloadRegular />
             </svg>
             <span class="text-sm text-neutral-foreground-2 md:text-base"
               >{numify(downloads)}</span
@@ -83,9 +97,9 @@
           <div class="flex w-fit flex-row gap-2">
             <svg
               viewBox="0 0 20 20"
-              class="w-4 text-neutral-foreground-2 md:w-6"
+              class="w-4 text-neutral-foreground-2 md:w-4"
             >
-              <ArrowSyncRegular class="w-4 md:w-6" />
+              <ArrowSyncRegular />
             </svg>
             <span class="text-xs text-neutral-foreground-2 md:text-base"
               >{getRelativeTimeString(new Date(mod.updatedAt))}</span
@@ -94,9 +108,9 @@
           <div class="flex w-fit flex-row gap-2">
             <svg
               viewBox="0 0 20 20"
-              class="w-4 text-neutral-foreground-2 md:w-6"
+              class="w-4 text-neutral-foreground-2 md:w-4"
             >
-              <CheckmarkRegular class="w-4 md:w-6" />
+              <CheckmarkRegular />
             </svg>
             <span
               class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"

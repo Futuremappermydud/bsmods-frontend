@@ -48,21 +48,18 @@
     >
   </li>
   <li>
-    <a
+    <button
       class="nav"
-      href="https://bsmg.wiki"
-      target="_blank"
-      rel="noopener noreferrer"
-      data-text="Wiki">Wiki</a
+      data-text="Wiki"
+      onclick={() => window.open("https://bsmg.wiki")}>Wiki</button
     >
   </li>
   <li>
-    <a
+    <button
       class="nav"
-      href="https://discord.gg/beatsabermods"
-      target="_blank"
-      rel="noopener noreferrer"
-      data-text="Discord">Discord</a
+      data-text="Discord"
+      onclick={() => window.open("https://discord.gg/beatsabermods")}
+      >Discord</button
     >
   </li>
 {/snippet}
@@ -129,7 +126,7 @@
             <NavigationRegular />
           </svg>
 
-          <Menu.Root class="my-1 flex flex-col px-4 py-2">
+          <Menu.Root class="my-1 flex w-max flex-col px-4 py-2">
             <ul class="flex flex-col !gap-0">
               {@render navItems()}
             </ul>
@@ -171,7 +168,8 @@
     margin: 0;
   }
 
-  a.nav {
+  a.nav,
+  button.nav {
     text-decoration: none;
     padding: 10px 10px 0px 10px;
     width: 100%;
@@ -181,15 +179,25 @@
     transition: color 0.2s;
   }
 
-  a:hover {
+  button.nav {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  a:hover,
+  button:hover {
     transform: translateY(-1px);
   }
 
-  a[data-selected="true"] {
+  a[data-selected="true"],
+  button[data-selected="true"] {
     color: var(--fui-colorBrandForegroundLinkSelected);
   }
 
-  a[data-selected="true"]::after {
+  a[data-selected="true"]::after,
+  button[data-selected="true"]::after {
     content: attr(data-text);
     display: block;
     font-family: inherit;
@@ -201,11 +209,13 @@
     color: transparent;
     transition: transform 0.1s;
   }
-  a[data-selected="true"]:hover::after {
+  a[data-selected="true"]:hover::after,
+  button[data-selected="true"]:hover::after {
     transform: scaleX(1.2) scaleY(0.5);
   }
 
-  a:not([data-selected="true"])::after {
+  a:not([data-selected="true"])::after,
+  button:not([data-selected="true"])::after {
     content: attr(data-text);
     display: block;
     font-family: inherit;
@@ -217,12 +227,14 @@
     transform: scaleX(0);
     transition: transform 0.1s;
   }
-  a:not([data-selected="true"]):hover::after {
+  a:not([data-selected="true"]):hover::after,
+  button:not([data-selected="true"]):hover::after {
     transform: scaleX(0.5);
     background: var(--fui-colorBrandForegroundLinkHover);
   }
 
-  a:not([data-selected="true"]):hover {
+  a:not([data-selected="true"]):hover,
+  button:not([data-selected="true"]):hover {
     color: var(--fui-colorBrandForegroundLinkHover);
   }
 </style>

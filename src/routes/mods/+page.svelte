@@ -142,6 +142,7 @@
           <ModCardNeo
             mod={mod.mod}
             author={mod.latest.author}
+            latestVersion={mod.latest}
             downloads={mod.latest.downloadCount}
             hasVersion={true}
           />
