@@ -13,11 +13,6 @@
         {
           "name": "Synapse",
           "id": 355,
-          "available": true
-        },
-        {
-          "name": "Vivify",
-          "id": 356,
           "available": false
         }
       ]

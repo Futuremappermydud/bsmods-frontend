@@ -49,7 +49,7 @@
 
 <style lang="postcss">
   .fui-tab {
-    @apply relative inline-flex w-fit items-center px-[10px] py-m;
+    @apply relative inline-flex w-fit min-w-10 items-center justify-center px-[10px] py-m;
 
     &.vertical {
       @apply flex-col items-center py-sNudge;
@@ -116,11 +116,11 @@
 
   /* Layout for the vertical state */
   .fui-tab.vertical::after {
-    @apply bottom-0 top-0 my-2 h-auto min-h-4 w-1;
+    @apply bottom-0 top-0 my-2 h-auto w-1;
   }
 
   /* Layout for the horizontal state */
   .fui-tab.horizontal::after {
-    @apply right-0 mx-auto h-1 w-fit min-w-4;
+    @apply right-0 mx-3 h-1 w-auto;
   }
 </style>

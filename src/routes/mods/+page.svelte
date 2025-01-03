@@ -141,13 +141,7 @@
         <p>There was an error loading mods</p>
       {:else}
         {#each slicedMods as mod}
-          <ModCardList
-            mod={mod.mod}
-            author={mod.latest.author}
-            latestVersion={mod.latest}
-            downloads={mod.latest.downloadCount}
-            hasVersion={true}
-          />
+          <ModCardList {mod} />
         {/each}
         {#if searchedMods.length > perPage}
           <Pagination

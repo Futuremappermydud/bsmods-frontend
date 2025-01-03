@@ -2,14 +2,9 @@
   import FilterView from "$lib/components/ui/filtering/FilterView.svelte";
   import type { ModData } from "$lib/types/Mods";
   import { createModsIndex, searchModsIndex } from "$lib/utils/search";
-  import {
-    ChevronLeftRegular,
-    ChevronRightRegular,
-    EmojiSadRegular,
-  } from "@svelte-fui/icons";
+  import { EmojiSadRegular } from "@svelte-fui/icons";
   import type { PageData } from "./$types";
   import axios from "axios";
-  import * as Pagination from "$lib/components/ui/pagination";
   import { appendURL } from "$lib/utils/url";
   import ModCardProfile from "$lib/components/ui/mods/ModCardProfile.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
@@ -17,6 +12,7 @@
   import { Status } from "$lib/types/Status";
   import { zip } from "$lib/utils/enum";
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+  import Pagination from "$lib/components/ui/pagination/Pagination.svelte";
 
   let { data }: { data: PageData } = $props();
   let isUser = data.userId === data.info.user.id;
