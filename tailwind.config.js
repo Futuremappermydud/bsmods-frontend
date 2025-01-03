@@ -70,7 +70,7 @@ const config = {
       },
       fontFamily: {
         sans: [...fontFamily.sans],
-        rubik: ["Rubik", "serif"],
+        nunito: ["Nunito", "serif"],
       },
     },
   },
