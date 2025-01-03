@@ -9,7 +9,10 @@
   let {
     text = $bindable(),
     descriptionScheme,
-  }: { text: string; descriptionScheme: z.Schema } = $props();
+  }: {
+    text: string;
+    descriptionScheme: z.Schema;
+  } = $props();
 
   let descriptionTab = $state("write");
   let descriptionValidity = $derived(descriptionScheme.safeParse(text));

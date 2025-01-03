@@ -8,11 +8,11 @@ export type TabListContext = {
   disabled$: Writable<boolean>;
   required$: Writable<boolean>;
   value$: Writable<unknown>;
-  name$: Writable<string | undefined>;
+  name$: Writable<string | number | undefined>;
   layout$: Writable<Layout>;
 
   methods: {
-    select: (value: string) => void;
+    select: (value: string | number) => void;
   };
 };
 

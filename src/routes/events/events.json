@@ -1,0 +1,26 @@
+{
+  "events": [
+    {
+      "name": "Extra Sensory II",
+      "organizer": "TotalBS",
+      "color": "",
+      "time": 1737237600000,
+      "url": "https://exsii.totalbs.dev/",
+      "bannerType": "video",
+      "videoMp4": "exsii/background.mp4",
+      "videoWebm": "exsii/background.webm",
+      "linkedMods": [
+        {
+          "name": "Synapse",
+          "id": 355,
+          "available": true
+        },
+        {
+          "name": "Vivify",
+          "id": 356,
+          "available": false
+        }
+      ]
+    }
+  ]
+}

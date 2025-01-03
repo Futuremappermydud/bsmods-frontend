@@ -3,15 +3,11 @@
   import FilterView from "$lib/components/ui/filtering/FilterView.svelte";
   import type { ModData, Mods } from "$lib/types/Mods";
   import { searchModsIndex, createModsIndex } from "$lib/utils/search";
-  import ModCardNeo from "$lib/components/ui/mods/ModCardNeo.svelte";
-  import * as Pagination from "$lib/components/ui/pagination";
-  import {
-    ChevronLeftRegular,
-    ChevronRightRegular,
-    EmojiSadRegular,
-  } from "@svelte-fui/icons";
+  import ModCardList from "$lib/components/ui/mods/ModCardList.svelte";
+  import { EmojiSadRegular } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
+  import Pagination from "$lib/components/ui/pagination/Pagination.svelte";
 
   //state
   let modSearchError = $state(false);
@@ -42,12 +38,16 @@
 
   let modsPromise = $state(getMods());
   async function getMods() {
+    if (!selectedGame || !selectedVersion) {
+      modSearchLoading = false;
+      return;
+    }
     modSearchLoading = true;
 
     axios
       .get(
         appendURL(
-          `/api/mods?gameName=${selectedGame}&gameVersion=${selectedVersion}&visibility=verified&platform=universalpc`,
+          `api/mods?gameName=${selectedGame}&gameVersion=${selectedVersion}&visibility=verified&platform=universalpc`,
         ),
         { withCredentials: false },
       )
@@ -78,6 +78,8 @@
     if (search === "") return allGameMods;
     return searchModsIndex(search);
   });
+
+  $inspect(searchedMods.length);
 
   let page = $state(1);
   let perPage = $state(20);
@@ -139,7 +141,7 @@
         <p>There was an error loading mods</p>
       {:else}
         {#each slicedMods as mod}
-          <ModCardNeo
+          <ModCardList
             mod={mod.mod}
             author={mod.latest.author}
             latestVersion={mod.latest}
@@ -148,48 +150,13 @@
           />
         {/each}
         {#if searchedMods.length > perPage}
-          <Pagination.Root
-            count={searchedMods.length}
-            {perPage}
-            let:pages
-            let:currentPage
-            bind:page
-          >
-            <Pagination.Content>
-              <Pagination.Item>
-                <Pagination.PrevButton>
-                  <svg class="h-4 w-4">
-                    <ChevronLeftRegular class="h-4 w-4" />
-                  </svg>
-                  <span class="hidden sm:block">Previous</span>
-                </Pagination.PrevButton>
-              </Pagination.Item>
-              {#each pages as page (page.key)}
-                {#if page.type === "ellipsis"}
-                  <Pagination.Item>
-                    <Pagination.Ellipsis />
-                  </Pagination.Item>
-                {:else}
-                  <Pagination.Item>
-                    <Pagination.Link
-                      {page}
-                      isActive={currentPage === page.value}
-                    >
-                      {page.value}
-                    </Pagination.Link>
-                  </Pagination.Item>
-                {/if}
-              {/each}
-              <Pagination.Item>
-                <Pagination.NextButton>
-                  <span class="hidden sm:block">Next</span>
-                  <svg class="h-4 w-4">
-                    <ChevronRightRegular class="h-4 w-4" />
-                  </svg>
-                </Pagination.NextButton>
-              </Pagination.Item>
-            </Pagination.Content>
-          </Pagination.Root>
+          <Pagination
+            totalItems={searchedMods.length}
+            pageSize={perPage}
+            bind:currentPage={page}
+            limit={1}
+            onSetPage={(e: number) => (page = e)}
+          />
         {/if}
       {/if}
     {/if}

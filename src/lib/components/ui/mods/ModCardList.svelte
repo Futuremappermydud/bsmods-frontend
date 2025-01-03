@@ -16,16 +16,16 @@
   let {
     mod,
     author,
-    latestVersion,
-    downloads,
-    hasVersion,
+    latestVersion = undefined,
+    downloads = 0,
+    hasVersion = false,
     smallCorners = false,
   }: {
     mod: Mod;
     author: ModAuthor | undefined;
-    latestVersion: ModVersion | undefined;
-    downloads: number;
-    hasVersion: boolean | undefined;
+    latestVersion?: ModVersion | undefined;
+    downloads?: number;
+    hasVersion?: boolean | undefined;
     smallCorners?: boolean;
   } = $props();
 
@@ -52,7 +52,9 @@
     {/if}
     <div class="grid h-fit gap-2">
       <div class="flex h-fit w-fit flex-1 flex-row gap-1 md:mt-1">
-        <span class="text-lg leading-5 md:text-2xl">{mod.name}</span>
+        <a class="text-lg leading-5 md:text-2xl" href="/mods/{mod.id}"
+          >{mod.name}</a
+        >
         {#if author}
           <span class="text-md mb-0.5 mt-auto h-fit text-neutral-foreground-2"
             >By <Link

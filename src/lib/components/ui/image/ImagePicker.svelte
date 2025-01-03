@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Icon } from "@svelte-fui/core";
-  import { AddRegular, PulseRegular } from "@svelte-fui/icons";
+  import { FieldMessage, Icon } from "@svelte-fui/core";
+  import { AddRegular, ErrorCircleFilled } from "@svelte-fui/icons";
+  import { z } from "zod";
 
   let fileinput: HTMLInputElement | null = $state(null);
 
@@ -19,12 +20,18 @@
     imageProp,
     avatar = $bindable(null),
     file = $bindable(),
+    iconScheme,
+    required = false,
   }: {
     classProp: string;
     imageProp: string;
     avatar: any;
     file: File | null | undefined;
+    iconScheme: z.Schema;
+    required: boolean;
   } = $props();
+
+  let iconValidity = $derived(iconScheme.safeParseAsync(avatar));
 </script>
 
 <div class={classProp}>
@@ -48,10 +55,15 @@
     }}
   >
     {#if avatar}
-      <img class="cursor-pointer {imageProp}" src={avatar} alt="Mod Icon" />
+      <img
+        class="h-full w-full cursor-pointer {imageProp}"
+        src={avatar}
+        alt="Mod Icon"
+      />
     {:else}
       <div
         class="mod-add-icon flex h-full justify-center rounded-xl border-2 border-dashed border-neutral-foreground-disabled duration-200"
+        class:!border-palette-red-border-2={required && !avatar}
       >
         <Icon
           class="h-8 w-8 self-center text-neutral-foreground-disabled duration-200"
@@ -71,6 +83,20 @@
     onclick={(e) => e.stopPropagation()}
     bind:this={fileinput}
   />
+  {#await iconValidity then validity}
+    {#if required && !validity.success}
+      <div
+        class="mt-1 flex items-center gap-1 text-left text-xs leading-4 text-palette-red-foreground-1"
+      >
+        <Icon class="h-4 w-4">
+          <svg viewBox="0 0 20 20">
+            <ErrorCircleFilled />
+          </svg>
+        </Icon>
+        {validity.error?.format()._errors[0]}
+      </div>
+    {/if}
+  {/await}
 </div>
 
 <style lang="postcss">

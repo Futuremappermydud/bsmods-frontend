@@ -1,3 +1,5 @@
+import type { Status } from "./Status";
+
 export interface ModAuthor {
   id: number;
   username: string;
@@ -32,7 +34,7 @@ export interface ModVersion {
   modVersion: string;
   platform: string;
   zipHash: string;
-  status: string;
+  status: Status;
   dependencies: number[];
   contentHashes: ContentHash[];
   downloadCount: number;
@@ -49,7 +51,7 @@ export interface Mod {
   gameName: string;
   category: string;
   authors: ModAuthor[];
-  status: string;
+  status: Status;
   iconFileName: string;
   gitUrl: string;
   lastApprovedById: number;

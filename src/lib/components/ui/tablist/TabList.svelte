@@ -5,7 +5,7 @@
   import type { Layout } from "./types";
 
   export let name: string = nanoid();
-  export let value: string | undefined = undefined;
+  export let value: string | number | undefined = undefined;
   export let layout: Layout = "vertical";
   export let disabled = false;
   export let required = false;

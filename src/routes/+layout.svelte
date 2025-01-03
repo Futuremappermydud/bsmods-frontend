@@ -11,8 +11,8 @@
   import "../app.css";
 
   import ColorSchemeSwapper from "$lib/components/ui/color-scheme/ColorSchemeSwapper.svelte";
-  import Header from "./Header.svelte";
-  import Footer from "./Footer.svelte";
+  import Header from "$lib/components/ui/layout/Header.svelte";
+  import Footer from "$lib/components/ui/layout/Footer.svelte";
 
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 

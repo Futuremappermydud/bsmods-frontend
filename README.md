@@ -17,13 +17,3 @@ Frontend for [BadBSMods](https://github.com/Saeraphinx/badbsmods) that is
 1. Run `docker pull ghcr.io/futuremappermydud/bsmods-frontend:latest` in your terminal
 2. Run a container from the image
 3. Pull whenever updating
-
-## TODO:
-
-- Finish Upload Page
-  - Fix accessibility in upload page
-  - add tab-index=-1 to svelte-fui
-  - Mod uploading
-  - Existing mod search
-- Add Approval page
-- Finish Mod Page

@@ -4,7 +4,13 @@
   import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
 
   //props
-  let { selectedGame = $bindable(null) } = $props();
+  let {
+    selectedGame = $bindable(null),
+    required = false,
+  }: {
+    selectedGame: string | null;
+    required: boolean;
+  } = $props();
 </script>
 
 <Dropdown.Root bind:value={selectedGame} bind:data={selectedGame} on:change>
@@ -13,7 +19,7 @@
     let:data
   >
     <Label class="flex-2 h-[20px]">Game:</Label>
-    <InputSkin class="flex-1" ariaInvalid={data === undefined}>
+    <InputSkin class="flex-1" ariaInvalid={!selectedGame && required}>
       {#if data}
         <span>{insertSpaces(data as string)}</span>
       {:else}

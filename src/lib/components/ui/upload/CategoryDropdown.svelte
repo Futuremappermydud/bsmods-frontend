@@ -3,20 +3,15 @@
   import { Categories } from "$lib/types/Categories";
   import type { z } from "zod";
   import { insertSpaces } from "$lib/utils/string";
+  import { zip } from "$lib/utils/enum";
 
   let {
     category = $bindable(),
     categoryScheme,
-  }: { category: Categories | undefined; categoryScheme: z.Schema } = $props();
-
-  function zip(a: string[], b: string[]) {
-    return a.map((k, i) => {
-      return {
-        label: k,
-        value: b[i],
-      };
-    });
-  }
+  }: {
+    category: Categories | undefined;
+    categoryScheme: z.Schema;
+  } = $props();
 
   interface ZippedValue {
     label: string;

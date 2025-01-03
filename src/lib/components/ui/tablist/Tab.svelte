@@ -8,7 +8,7 @@
 
   export let id: string | undefined = nanoid();
   export let name: string | undefined = nanoid();
-  export let value: string | undefined = undefined;
+  export let value: string | number | undefined = undefined;
   export let disabled: boolean | undefined = undefined;
 
   $: _name = $name$ || name;
@@ -116,11 +116,11 @@
 
   /* Layout for the vertical state */
   .fui-tab.vertical::after {
-    @apply bottom-0 top-0 my-2 h-auto w-1;
+    @apply bottom-0 top-0 my-2 h-auto min-h-4 w-1;
   }
 
   /* Layout for the horizontal state */
   .fui-tab.horizontal::after {
-    @apply right-0 mx-3 h-1 w-auto;
+    @apply right-0 mx-auto h-1 w-fit min-w-4;
   }
 </style>

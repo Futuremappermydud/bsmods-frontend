@@ -75,15 +75,17 @@
     .string()
     .min(10, "Summary must contain at least 10 character(s)")
     .max(200, "Summary must contain at most 200 character(s)");
-  let iconScheme = z.string().refine(async (value) => {
-    //check base64 image to be a square
-    return await isValidSquareImage(value);
-  });
+  let iconScheme = z
+    .string()
+    .nonempty("Icon must be provided")
+    .refine(async (value) => {
+      //check base64 image to be a square
+      return await isValidSquareImage(value);
+    }, "Icon must be square");
 
   let modNameValidity = $derived(modNameScheme.safeParse(modName));
   let gitUrlValidity = $derived(gitUrlScheme.safeParse(gitUrl));
   let summaryValidity = $derived(summaryScheme.safeParse(summary));
-  let iconValidity = $derived(iconScheme.safeParse(icon));
 
   function upload() {
     console.log("Uploading... Please pray");
@@ -129,25 +131,27 @@
         ></div>
         <div class="p-4">
           <div class="ml-auto flex h-min flex-col gap-2">
-            <GamePicker bind:selectedGame />
+            <GamePicker bind:selectedGame required={true} />
             <CategoryDropdown bind:category {categoryScheme} />
           </div>
         </div>
       </div>
       <div
-        class="relative flex-[2.5] rounded-xl bg-neutral-background-2 shadow-4"
+        class="relative flex flex-[2.5] flex-col gap-4 rounded-xl bg-neutral-background-2 shadow-4"
       >
         <div
           class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 rounded-md border-2 border-dashed border-neutral-background-6"
         ></div>
         <div class="h-full p-4">
           <div class="flex h-full flex-col gap-4">
-            <div class="flex h-[350px] flex-col gap-1 md:h-[150px] md:flex-row">
+            <div class="flex h-[350px] flex-col gap-1 md:h-[160px] md:flex-row">
               <ImagePicker
-                classProp="aspect-square max-w-[150px] max-h-[150px]"
+                classProp="aspect-square max-w-[160px] max-h-[160px]"
                 imageProp="rounded-xl"
+                required={true}
                 bind:avatar={icon}
                 bind:file={iconFile}
+                {iconScheme}
               />
               <div
                 class="flex h-min w-full flex-col items-center gap-2 md:pl-5"

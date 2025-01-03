@@ -5,5 +5,5 @@ export interface AuthedUser {
   authenticated: boolean;
   username: string;
   userId: number;
-  roles: UserRolesObject | null;
+  roles: UserRolesObject;
 }

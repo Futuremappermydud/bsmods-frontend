@@ -8,55 +8,48 @@
     EmojiSadRegular,
   } from "@svelte-fui/icons";
   import type { PageData } from "./$types";
-  import ModCardNeo from "$lib/components/ui/mods/ModCardNeo.svelte";
-  import { onMount } from "svelte";
   import axios from "axios";
   import * as Pagination from "$lib/components/ui/pagination";
   import { appendURL } from "$lib/utils/url";
+  import ModCardProfile from "$lib/components/ui/mods/ModCardProfile.svelte";
+  import TabList from "$lib/components/ui/tablist/TabList.svelte";
+  import Tab from "$lib/components/ui/tablist/Tab.svelte";
+  import { Status } from "$lib/types/Status";
+  import { zip } from "$lib/utils/enum";
+  import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+
+  let { data }: { data: PageData } = $props();
+  let isUser = data.userId === data.info.user.id;
+  let userIsApprover = checkUserAnyGame(data.roles, UserRoles.Approver);
 
   //user-input
   let selectedGame = $state("BeatSaber");
   let selectedVersion = $state(null);
   let search = $state("");
-
-  let { data }: { data: PageData } = $props();
+  let modTab = $state("verified");
 
   let mods: ModData[] = $state([]);
 
-  onMount(async () => {
-    let privateMods = await axios
-      .get(appendURL(`api/user/${data.info.user.id}/mods?status=private`), {
-        withCredentials: false,
-      })
+  $effect(() => {
+    axios
+      .get(
+        appendURL(
+          `api/user/${data.info.user.id}/mods${isUser ? `?status=${modTab}` : ""}`,
+        ),
+        {
+          withCredentials: true,
+        },
+      )
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
-            return response.data;
+            createModsIndex(response.data.mods);
+
+            mods = response.data.mods;
           }
-        } else {
         }
       })
       .catch(() => {});
-
-    mods = [...privateMods.mods];
-
-    let publicMods = await axios
-      .get(appendURL(`api/user/${data.info.user.id}/mods`), {
-        withCredentials: false,
-      })
-      .then((response) => {
-        if (response.status === 302 || response.status === 200) {
-          if (response.data !== null) {
-            return response.data;
-          }
-        } else {
-        }
-      })
-      .catch(() => {});
-
-    mods = [...mods, ...publicMods.mods];
-
-    createModsIndex(mods);
   });
 
   let allGameMods = $derived.by(() => {
@@ -103,6 +96,13 @@
     />
   </div>
   <div class="flex flex-1 flex-col gap-4">
+    {#if isUser || userIsApprover}
+      <TabList disabled={false} layout="horizontal" bind:value={modTab}>
+        {#each zip(Object.keys(Status), Object.values(Status)).toReversed() as status}
+          <Tab value={status.value}>{status.label}</Tab>
+        {/each}
+      </TabList>
+    {/if}
     {#if slicedMods.length === 0}
       <svg class="h-20 w-20" viewBox="0 0 20 20">
         <EmojiSadRegular />
@@ -111,53 +111,16 @@
     {/if}
     {#if slicedMods}
       {#each slicedMods as mod}
-        <ModCardNeo
-          mod={mod.mod}
-          author={undefined}
-          downloads={0}
-          hasVersion={false}
-        />
+        <ModCardProfile mod={mod.mod} />
       {/each}
-      {#if slicedMods.length > perPage}
-        <Pagination.Root
-          count={searchedMods.length}
-          {perPage}
-          let:pages
-          let:currentPage
-          bind:page
-        >
-          <Pagination.Content>
-            <Pagination.Item>
-              <Pagination.PrevButton>
-                <svg class="h-4 w-4">
-                  <ChevronLeftRegular class="h-4 w-4" />
-                </svg>
-                <span class="hidden sm:block">Previous</span>
-              </Pagination.PrevButton>
-            </Pagination.Item>
-            {#each pages as page (page.key)}
-              {#if page.type === "ellipsis"}
-                <Pagination.Item>
-                  <Pagination.Ellipsis />
-                </Pagination.Item>
-              {:else}
-                <Pagination.Item>
-                  <Pagination.Link {page} isActive={currentPage === page.value}>
-                    {page.value}
-                  </Pagination.Link>
-                </Pagination.Item>
-              {/if}
-            {/each}
-            <Pagination.Item>
-              <Pagination.NextButton>
-                <span class="hidden sm:block">Next</span>
-                <svg class="h-4 w-4">
-                  <ChevronRightRegular class="h-4 w-4" />
-                </svg>
-              </Pagination.NextButton>
-            </Pagination.Item>
-          </Pagination.Content>
-        </Pagination.Root>
+      {#if searchedMods.length > perPage}
+        <Pagination
+          totalItems={searchedMods.length}
+          pageSize={perPage}
+          bind:currentPage={page}
+          limit={1}
+          onSetPage={(e: number) => (page = e)}
+        />
       {/if}
     {/if}
   </div>
