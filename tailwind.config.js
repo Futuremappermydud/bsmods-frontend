@@ -7,6 +7,7 @@ const config = {
   darkMode: ["class"],
   content: [
     "./src/**/*.{html,js,svelte, stories.svelte, ts}",
+    "./src/*.{html,js,svelte, stories.svelte, ts}",
     "./node_modules/@svelte-fui/core/**/*.{html,js,svelte,ts}",
   ],
   safelist: ["dark"],
