@@ -83,7 +83,7 @@
     <div
       class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded"
     >
-      {#each allGameVersions.toReversed() as item (item.id)}
+      {#each allGameVersions as item (item.id)}
         <Dropdown.Item value={item.version} data={item} class="bg-transparent"
           >{item.version}</Dropdown.Item
         >
