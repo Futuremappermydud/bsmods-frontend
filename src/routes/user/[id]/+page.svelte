@@ -30,7 +30,7 @@
     axios
       .get(
         appendURL(
-          `api/user/${data.info.user.id}/mods${isUser ? `?status=${modTab}` : ""}`,
+          `api/user/${data.info.user.id}/mods${isUser || userIsApprover ? `?status=${modTab}` : ""}`,
         ),
         {
           withCredentials: true,

@@ -8,7 +8,6 @@
     ArrowResetRegular,
     ArrowSyncRegular,
     CheckmarkRegular,
-    DismissRegular,
   } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
   import { getRelativeTimeString } from "$lib/utils/time";

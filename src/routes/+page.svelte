@@ -6,7 +6,7 @@
   class="mx-10 mt-10 flex w-stretch flex-col items-center gap-28 md:mx-14"
 >
   <div class="flex flex-col items-center">
-    <h1 class="font-nunito text-6xl font-bold">
+    <h1 class="flex flex-row font-nunito text-6xl font-bold">
       <span class="text-beatmods-pink">Beat</span>
       <span class="text-beatmods-purple">Mods</span>
     </h1>
