@@ -70,18 +70,18 @@
 {#snippet rightItems()}
   {#if userData.hasAttempted}
     {#if userData.authenticated && import.meta.env.DEV}
-      <a class="contents" href="/approval">
-        <svg class="w-6 h-6" viewBox="0 0 20 20">
-          <ColorLineRegular />
-        </svg>
-      </a>
       {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
-        <a class="contents" href="/upload">
+        <a class="contents" href="/approval">
           <svg class="w-6 h-6" viewBox="0 0 20 20">
-            <ArrowUploadRegular />
+            <ColorLineRegular />
           </svg>
         </a>
       {/if}
+      <a class="contents" href="/upload">
+        <svg class="w-6 h-6" viewBox="0 0 20 20">
+          <ArrowUploadRegular />
+        </svg>
+      </a>
     {/if}
     {#if userData.authenticated}
       <button
@@ -111,7 +111,7 @@
       <ul>
         {@render navItems()}
       </ul>
-      <div class="flex flex-1 justify-end py-1">
+      <div class="flex flex-1 justify-end py-1 gap-2 items-center">
         {@render rightItems()}
       </div>
     {:else}

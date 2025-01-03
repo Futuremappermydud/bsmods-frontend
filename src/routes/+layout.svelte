@@ -91,11 +91,22 @@
 </script>
 
 <svelte:head>
+  <meta property="og:title" content="BeatMods" />
+  <meta
+    property="og:description"
+    content="A Beat Saber mod repository maintained by the Beat Saber Modding Group"
+  />
   <title>BeatMods</title>
   <meta
     name="description"
-    content="This is where the description goes for SEO"
+    content="A Beat Saber mod repository maintained by the Beat Saber Modding Group"
   />
+  <meta
+    property="og:image"
+    content={new URL("images/favicon.ico", window.origin).toString()}
+  />
+  <meta property="og:image:width" content="128" />
+  <meta property="og:image:height" content="128" />
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 </svelte:head>
 
