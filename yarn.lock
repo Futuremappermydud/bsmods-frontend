@@ -2143,11 +2143,6 @@ sade@^1.7.4, sade@^1.8.1:
   dependencies:
     mri "^1.1.0"
 
-semver-parser@^4.1.7:
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/semver-parser/-/semver-parser-4.1.7.tgz#42bad5b70aa67f78909ee399769f5e7852efbbcc"
-  integrity sha512-RNNvmr1JKZ4Eia7Cyfxtr6aR7eiQs1bPGBv4EC3OJ5pTKEoHjLsT+dY1SSny2tq/uqx9bzNR4lL8tzaB70TN9A==
-
 semver@^7.6.3:
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
@@ -2286,11 +2281,6 @@ svelte-exmarkdown@^4.0.2:
     remark-parse "^11.0.0"
     remark-rehype "^11.1.1"
     unified "^11.0.5"
-
-svelte-paginate@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/svelte-paginate/-/svelte-paginate-0.1.0.tgz#738ebdeb3720a89ba738c54094a39ffc09b2b9b3"
-  integrity sha512-SHD9YWj3S+qu7gTeaOox9ZA2S+iiNOp4VKnoGKvF6vm2bzp9gMUihwYunDoYXl0z6OLvZ1MpaHt27/sNx/t/UA==
 
 svelte@^5.0.0:
   version "5.15.0"
