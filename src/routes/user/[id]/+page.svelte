@@ -12,7 +12,7 @@
   import { Status } from "$lib/types/Status";
   import { zip } from "$lib/utils/enum";
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
-  import Pagination from "$lib/components/ui/pagination/Pagination.svelte";
+  import Pagination from "$lib/components/ui/pagination/pagination.svelte";
 
   let { data }: { data: PageData } = $props();
   let isUser = data.userId === data.info.user.id;

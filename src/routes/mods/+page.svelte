@@ -7,7 +7,7 @@
   import { EmojiSadRegular } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
-  import Pagination from "$lib/components/ui/pagination/Pagination.svelte";
+  import Pagination from "$lib/components/ui/pagination/pagination.svelte";
 
   //state
   let modSearchError = $state(false);
