@@ -90,7 +90,7 @@
     {/if}
     {#if userData.authenticated}
       <button
-        class="border-non float-right flex aspect-square h-full justify-center bg-none transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
+        class="border-non float-right flex aspect-square h-full max-h-14 justify-center bg-none transition-transform duration-100 hover:scale-110 hover:cursor-pointer"
         onclick={goToProfile}
       >
         <img
@@ -122,7 +122,7 @@
     {:else}
       <div class="flex flex-1">
         <button
-          class="ml-auto flex aspect-square h-10 items-center justify-center rounded-xl bg-neutral-background-1 text-neutral-foreground-1 shadow-2"
+          class="ml-auto flex aspect-square h-10 w-max items-center justify-center rounded-xl bg-neutral-background-1 text-neutral-foreground-1 shadow-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -134,11 +134,13 @@
             <NavigationRegular />
           </svg>
 
-          <Menu.Root class="my-1 flex w-max flex-col px-4 py-2">
+          <Menu.Root class="my-1 flex w-48 flex-col px-4 py-2">
             <ul class="flex flex-col !gap-0">
               {@render navItems()}
             </ul>
-            <div class="mx-auto my-2 w-10">
+            <div
+              class="mx-auto my-2 flex w-10 w-max flex-col items-center gap-1"
+            >
               {@render rightItems()}
             </div>
           </Menu.Root>

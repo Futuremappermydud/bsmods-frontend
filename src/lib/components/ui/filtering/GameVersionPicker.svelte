@@ -10,10 +10,16 @@
     selectedVersion = $bindable(null),
     selectedGame = $bindable(null),
     required = false,
+    disabled = false,
+    removeLabel = false,
+    allVersions = $bindable({ versions: [] }),
   }: {
     selectedVersion?: string | null;
     selectedGame?: string | null;
     required?: boolean;
+    disabled?: boolean;
+    removeLabel?: boolean;
+    allVersions?: Versions;
   } = $props();
 
   //state
@@ -21,9 +27,6 @@
   let searchDataLoading = $state(true);
 
   //data
-  let allVersions: Versions = $state({
-    versions: [],
-  });
   let allGameVersions = $derived.by(() => {
     if (allVersions.versions.length === 0) return [];
     return allVersions.versions.filter(
@@ -56,17 +59,19 @@
   }
 </script>
 
-<Dropdown.Root bind:value={selectedVersion}>
+<Dropdown.Root bind:value={selectedVersion} on:change>
   <Dropdown.Trigger
     class="flex w-full items-center justify-center gap-2"
     let:data
   >
-    <Label class="flex-2 h-[20px] disabled:text-black" {required}
-      >Supports:</Label
-    >
+    {#if !removeLabel}
+      <Label class="flex-2 h-[20px] disabled:text-black" {required}
+        >Supports:</Label
+      >
+    {/if}
     <InputSkin
       class="flex-1"
-      disabled={!selectedGame || selectedGame === ""}
+      disabled={!selectedGame || selectedGame === "" || disabled}
       ariaInvalid={!selectedVersion && required}
     >
       {#if selectedVersion}

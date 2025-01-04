@@ -34,7 +34,7 @@
   >
     {#if isNotInsanelyStupidTiny.current}
       <ModIcon
-        src={appendURL("cdn/icon/default.png")}
+        src={appendURL(`cdn/icon/${mod.iconFileName}`)}
         modUrl="/mods/{mod.id}"
         {smallCorners}
       />

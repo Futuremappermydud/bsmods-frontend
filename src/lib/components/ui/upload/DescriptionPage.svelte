@@ -25,11 +25,11 @@
   </TabList>
   {#if descriptionTab == "write"}
     <Field
-      label="Summary"
+      label="Description"
       state={descriptionValidity.success ? "success" : "error"}
     >
       <TextArea
-        placeholder="Summary"
+        placeholder="Description"
         componentClass="!h-full w-full"
         bind:value={text}
         ariaInvalid={!descriptionValidity.success}

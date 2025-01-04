@@ -92,7 +92,7 @@
         <BannerImage {event} />
       {/if}
     </div>
-    <div class="flex h-auto flex-grow flex-col gap-4">
+    <div class="flex h-fit flex-grow flex-col gap-3">
       <div class="flex flex-grow flex-row">
         <div class="flex h-fit w-fit flex-1 flex-row gap-1 md:mt-1">
           <Link

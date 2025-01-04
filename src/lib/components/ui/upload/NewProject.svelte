@@ -240,28 +240,10 @@
     <Dialog.Header>Ready to Create?</Dialog.Header>
 
     <Dialog.Body class="h-40">
-      <div
-        class="relative h-fit rounded-xl bg-neutral-background-2 p-4 shadow-4"
-        class:opacity-0={icon !== "" || !submitDialog}
-      >
-        <div
-          class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 rounded-md border-2 border-dashed border-palette-yellow-background-3 border-opacity-100"
-        ></div>
-        <div class="flex h-6 flex-row content-center gap-2">
-          <svg class="h-6" viewBox="0 0 20 20">
-            <WarningFilled />
-          </svg>
-          <p class="">Mod Icon</p>
-        </div>
-        <p class="text-left text-xs">
-          If you do not provide an icon, one will be provided for you based on
-          your game!
-        </p>
-      </div>
       <p>
-        Clicking submit will create a new mod with the info you provided, you
-        can edit this later by going to your mod page. The following steps will
-        bring you to upload the first binary of your mod!
+        Clicking "Ok" will create a new mod with the info you provided, you can
+        edit this later by going to your mod page. After creating you will be
+        brought to your mod's page.
       </p>
     </Dialog.Body>
 

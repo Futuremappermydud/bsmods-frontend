@@ -25,7 +25,6 @@
 
   async function getMods() {
     modSearchLoading = true;
-    console.log(appendURL(`api/approval/new?gameName=${selectedGame}`));
     axios
       .get(appendURL(`api/approval/new?gameName=${selectedGame}`), {
         withCredentials: true,

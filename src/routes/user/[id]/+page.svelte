@@ -1,6 +1,6 @@
 <script lang="ts">
   import FilterView from "$lib/components/ui/filtering/FilterView.svelte";
-  import type { ModData } from "$lib/types/Mods";
+  import type { ModData, Mods } from "$lib/types/Mods";
   import { createModsIndex, searchModsIndex } from "$lib/utils/search";
   import { EmojiSadRegular } from "@svelte-fui/icons";
   import type { PageData } from "./$types";
@@ -39,7 +39,7 @@
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
-            createModsIndex(response.data.mods);
+            createModsIndex((response.data as Mods).mods.map((mod) => mod.mod));
 
             mods = response.data.mods;
           }
@@ -56,7 +56,9 @@
 
   let searchedMods: ModData[] = $derived.by(() => {
     if (search === "") return allGameMods;
-    return searchModsIndex(search);
+    return searchModsIndex(search)
+      .map((mod) => allGameMods.find((m) => m.mod.id === mod.id))
+      .filter((m) => !!m);
   });
 
   let page = $state(1);

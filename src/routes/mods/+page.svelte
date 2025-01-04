@@ -58,7 +58,7 @@
             let mods = response.data;
             allMods = mods;
 
-            createModsIndex(allMods.mods);
+            createModsIndex(allMods.mods.map((mod) => mod.mod));
           }
         } else {
           modSearchError = true;
@@ -76,7 +76,9 @@
   // Display
   let searchedMods: ModData[] = $derived.by(() => {
     if (search === "") return allGameMods;
-    return searchModsIndex(search);
+    return searchModsIndex(search)
+      .map((mod) => allGameMods.find((m) => m.mod.id === mod.id))
+      .filter((m) => !!m);
   });
 
   $inspect(searchedMods.length);

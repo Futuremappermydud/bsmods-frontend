@@ -170,7 +170,7 @@
                         class:!opacity-80={denialClicks > 1}
                       ></div>
                     </div>
-                    Revoke Verification!
+                    Revoke Verification
                   </Button>
                 {/if}
               </div>
@@ -183,7 +183,7 @@
                   This mod is <i>private</i>!
                 </p>
                 <p class="text-sm font-semibold">
-                  Only you (and admins) can see it!
+                  Only you (and admins) can see it.
                 </p>
                 {#if loadingSubmit}
                   <div
@@ -207,6 +207,15 @@
                     Submit!
                   </Button>
                 {/if}
+              </div>
+            {/if}
+            {#if isMadeByUser}
+              <div
+                class="flex flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
+              >
+                <Button href="/upload/version/{mod.info.id}">
+                  Add a new version
+                </Button>
               </div>
             {/if}
             <div class="rounded-xl bg-neutral-background-2 p-4 shadow-4">

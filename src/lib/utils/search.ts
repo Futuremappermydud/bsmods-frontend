@@ -2,15 +2,15 @@ import FlexSearch from "flexsearch";
 import type { Mod, ModData } from "../types/Mods";
 
 let modsIndex: FlexSearch.Index;
-let mods: ModData[];
+let mods: Mod[];
 
-export function createModsIndex(data: ModData[]) {
+export function createModsIndex(data: Mod[]) {
   // create the mods index
   modsIndex = new FlexSearch.Index({ tokenize: "forward" });
 
   data.forEach((mod, i) => {
     // index the title and content together
-    const item = `${mod.mod.name} ${mod.mod.description}`;
+    const item = `${mod.name} ${mod.description}`;
     // add the item to the index
     modsIndex.add(i, item);
   });
