@@ -21,6 +21,7 @@ export function checkUser(
   checkingRole: UserRoles,
   game: string,
 ) {
+  if (!roles) return false;
   let hasCheckingRole =
     roles.sitewide.includes(checkingRole) ||
     (roles.perGame[game as SupportedGames] || []).includes(checkingRole);
@@ -40,6 +41,7 @@ export function checkUserAnyGame(
   roles: UserRolesObject,
   checkingRole: UserRoles,
 ) {
+  if (!roles) return false;
   let hasCheckingRole =
     roles.sitewide.includes(checkingRole) ||
     (getAllPerGameRoles(roles) || []).includes(checkingRole);

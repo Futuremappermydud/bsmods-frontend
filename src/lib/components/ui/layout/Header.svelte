@@ -11,8 +11,13 @@
   import { appendURL } from "$lib/utils/url";
   import { MediaQuery } from "svelte/reactivity";
 
-  let { userData, isLight }: { userData: AuthedUser; isLight: Boolean } =
-    $props();
+  let {
+    userData,
+    isLight,
+  }: {
+    userData: AuthedUser;
+    isLight: Boolean;
+  } = $props();
 
   function login() {
     window.open(

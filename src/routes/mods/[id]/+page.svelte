@@ -47,7 +47,9 @@
   });
 
   let userIsApprover = $derived(
-    mod && checkUser(data.roles, UserRoles.Approver, mod?.info.gameName),
+    mod &&
+      data.roles &&
+      checkUser(data.roles, UserRoles.Approver, mod?.info.gameName),
   );
 
   let denialClicks = $state(0);

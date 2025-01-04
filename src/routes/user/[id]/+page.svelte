@@ -16,7 +16,8 @@
 
   let { data }: { data: PageData } = $props();
   let isUser = data.userId === data.info.user.id;
-  let userIsApprover = checkUserAnyGame(data.roles, UserRoles.Approver);
+  let userIsApprover =
+    data.roles && checkUserAnyGame(data.roles, UserRoles.Approver);
 
   //user-input
   let selectedGame = $state("BeatSaber");
