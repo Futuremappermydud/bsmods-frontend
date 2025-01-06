@@ -69,11 +69,11 @@
             </p>
           </a>
           <a
-            href="https://github.com/Assistant/ModAssistant/releases/latest"
+            href="https://github.com/bsmg/ModAssistant/releases/latest"
             target="=_blank"
             class="flex flex-1 items-center justify-center rounded-lg bg-red-600 p-2 shadow-4 transition-colors duration-100 hover:bg-red-500"
           >
-            <p class="font-semibold">Mod Assistant (Legacy)</p>
+            <p class="font-semibold">Mod Assistant</p>
           </a>
           <a
             href="https://example.com"
