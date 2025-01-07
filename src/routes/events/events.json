@@ -12,8 +12,8 @@
       "linkedMods": [
         {
           "name": "Synapse",
-          "id": 355,
-          "available": false
+          "id": 357,
+          "available": true
         }
       ]
     }
