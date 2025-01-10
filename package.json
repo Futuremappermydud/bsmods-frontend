@@ -14,7 +14,7 @@
   "devDependencies": {
     "@bundled-es-modules/axios": "^0.27.2",
     "@shikijs/rehype": "^1.24.4",
-    "@svelte-fui/core": "^1.0.0-alpha.19",
+    "@svelte-fui/core": "^1.0.0-alpha.20",
     "@svelte-fui/icons": "^0.0.1",
     "@svelte-fui/themes": "^0.1.3",
     "@sveltejs/adapter-node": "^3.0.0",
