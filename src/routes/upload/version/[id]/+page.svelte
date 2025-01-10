@@ -134,6 +134,7 @@
   let modVersion: string = $state("");
   let modDependencies: number[] = $state([]);
   let platform: Platform = Platform.UniversalPC;
+  let modZip: File | undefined = $state();
 
   //Validation
   let modNameScheme = Validator.zUploadModVersion.pick({ modVersion: true });
@@ -198,24 +199,25 @@
 
     let formData = new FormData();
 
-    supportedGameVersions
+    let gvStringIds = supportedGameVersions
       .map((v) => allGameVersions.versions.find((g) => g.version === v)?.id)
       .filter((v) => !!v)
-      .forEach((value, index) => {
-        formData.append(
-          `supportedGameVersionIds[${index}]`,
-          value?.toString() ?? "",
-        );
-      });
+      .join(",");
 
-    rawDeps
-      .map((d) => d.id)
-      .forEach((value, index) => {
-        formData.append(`dependencies[${index}]`, value?.toString() ?? "");
-      });
+    formData.append("supportedGameVersionIds", gvStringIds);
 
+    if (rawDeps && rawDeps.length > 0) {
+      let depStringIds = rawDeps
+        .map((d) => d.id)
+        .join(",");
+      formData.append("dependencies", depStringIds);
+    }
+  
     formData.append("modVersion", modVersion);
     formData.append("platform", platform.toString());
+    if (modZip) {
+      formData.append("file", modZip);
+    }
 
     axios
       .post(appendURL(`api/mods/${mod?.info.id}/upload`), formData, {
@@ -317,7 +319,15 @@
         class="flex flex-1 flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
       >
         <h1 class="mx-auto text-lg font-semibold">File Upload</h1>
-        <input type="file" />
+        <input type="file" onchange={(e => {
+          const target = e.target as HTMLInputElement;
+          if (target && target.files && target.files.length == 1) {
+            if (target.files[0].size > 75 * 1024 * 1024) {
+              return;
+            }
+            modZip = target.files[0];
+          }
+        })} />
       </div>
     </div>
     <div
