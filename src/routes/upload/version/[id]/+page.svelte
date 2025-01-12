@@ -35,6 +35,7 @@
     name: string;
     id: number;
     version: string;
+    versionId: number;
   }
 
   //UI State
@@ -185,10 +186,14 @@
 
   function addRawDependency() {
     let mod = allSelectedMods.find((m) => m.name === tempRawDepName);
+    let modVersion = tempRawDepAllVersions.find(
+      (mV) => mV.modVersion === tempRawDepVersion && mV.modId === mod?.id
+    );
     rawDeps.push({
       name: tempRawDepName,
       id: mod?.id ?? -1,
       version: tempRawDepVersion,
+      versionId: modVersion?.id ?? -1,
     });
     tempRawDepName = "";
     tempRawDepVersion = "";
@@ -208,7 +213,7 @@
 
     if (rawDeps && rawDeps.length > 0) {
       let depStringIds = rawDeps
-        .map((d) => d.id)
+        .map((d) => d.versionId)
         .join(",");
       formData.append("dependencies", depStringIds);
     }
