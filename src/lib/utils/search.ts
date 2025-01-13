@@ -22,6 +22,7 @@ export function searchModsIndex(searchTerm: string) {
   // escape special regex characters
   const match = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   // return matching mod indexes
+  if (!modsIndex) return [];
   const results = modsIndex.search(match);
 
   return (
