@@ -1,10 +1,10 @@
 {
   "events": [
     {
-      "name": "Extra Sensory II",
+      "name": "Extra Sensory II: ENCORE",
       "organizer": "TotalBS",
       "color": "",
-      "time": 1737237600000,
+      "time": 1737928800000,
       "url": "https://exsii.totalbs.dev/",
       "bannerType": "video",
       "videoMp4": "exsii/background.mp4",
@@ -13,7 +13,7 @@
         {
           "name": "Synapse",
           "id": 357,
-          "available": true
+          "available": false
         }
       ]
     }
