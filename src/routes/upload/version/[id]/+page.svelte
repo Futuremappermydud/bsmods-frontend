@@ -26,6 +26,7 @@
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import { z } from "zod";
   import type { Versions } from "$lib/types/Versions";
+    import { coerce } from "semver";
 
   let { data }: { data: PageData } = $props();
 
@@ -165,12 +166,37 @@
       }),
     )
     .refine((v) => {
+      // if dependencies are not empty, check if the version supports all selected game versions
       if (tempRawDepAllVersions.length === 0) return false;
+      // get the version object for the selected version
       let version = tempRawDepAllVersions.find((m) => m.modVersion === v);
-      return supportedGameVersions.every((g) =>
-        version?.supportedGameVersions.some((s) => s.version === g),
-      );
-    }, "Must support all selected game versions!");
+      //return supportedGameVersions.every((g) =>
+      //  version?.supportedGameVersions.some((s) => s.version === g),
+      //);
+      let errorSortingVersions = false;
+      // would use .sort() but it mutates the array, and svelte shits itself if that happens
+      let earliestGameVersion = supportedGameVersions.toSorted((a, b) => {
+        let asv = coerce(a);
+        let bsv = coerce(b);
+        if(asv && bsv) {
+          return asv.compare(bsv);
+        } else {
+          if (errorSortingVersions) {
+            console.error(`Unable to coerce Game Versions. Game Version dependency resolution might break.`);
+          }
+          errorSortingVersions = true;
+          return 0; 
+        }
+      })
+
+      if (errorSortingVersions) {
+        return supportedGameVersions.every((g) =>
+          version?.supportedGameVersions.some((s) => s.version === g),
+        );
+      } else {
+        return version?.supportedGameVersions.some(v => v.version === earliestGameVersion[0]) ?? false;
+      }
+    }, "Must support earliest game version!");
   let dependencyVersionValidity = $derived.by(() => {
     return dependencyVersionScheme.safeParse(tempRawDepVersion);
   });
