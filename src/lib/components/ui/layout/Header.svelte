@@ -53,14 +53,6 @@
     >
   </li>
   <li>
-    <a
-      class="nav"
-      href="/events"
-      data-text="Events"
-      data-selected={$page.url.pathname === "/events"}>Events</a
-    >
-  </li>
-  <li>
     <button
       class="nav"
       data-text="Wiki"
