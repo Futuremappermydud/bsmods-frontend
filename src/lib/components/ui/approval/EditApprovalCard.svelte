@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Mod, SupportedGameVersion } from "$lib/types/Mods";
-  import { Button, Link, Spinner } from "@svelte-fui/core";
+  import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
   import ModCardBase from "../mods/ModCardBase.svelte";
   import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
@@ -21,6 +21,13 @@
 
   let approvalClicks = $state(0);
   let denialClicks = $state(0);
+
+  let showModal = $state(false);
+  let modalHeader = $state("");
+  let modalBody:{
+    header: string;
+    body: string;
+  }[] = $state([]);
 
   function approve() {
     approvalClicks += 1;
@@ -119,25 +126,7 @@
   {:else if edit.edit.objectTableName == `mods` && `name` in edit.edit.object && `name` in edit.original}
   <div class="ml-auto flex flex-row gap-2">
     <div class="flex h-full min-w-20 flex-col gap-[3px]">
-      <div
-        class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
-      >
-        {edit.original.gameName}
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        {edit.original.category}
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={edit.original.gitUrl}>GitHub</Link>
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link>View Original</Link>
-      </div>
-    </div>
-    <div class="flex h-full min-w-20 flex-col gap-[3px]">
-      <div
-        class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
-      >
+      <div class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs">
         {edit.edit.object.gameName}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
@@ -147,25 +136,31 @@
         <Link href={edit.edit.object.gitUrl}>GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link>View Edit</Link>
+        <Link on:click={() => {
+          modalHeader = "View Edit";
+          modalBody = [
+            {
+              header: "Edit",
+              body: JSON.stringify(edit.edit.object, null, 2),
+            },
+            {
+              header: "Original",
+              body: JSON.stringify(edit.original, null, 2),
+            },
+          ];
+          showModal = true;
+        }}>View Raw</Link>
       </div>
     </div>
   </div>
   {/if}
   <div class="flex h-full w-14 flex-col gap-2">
-    <Button
-      class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
-      onclick={approve}
-    >
+    <Button class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1" onclick={approve}>
       <div class="flex flex-row gap-2">
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={approvalClicks > 0}
-        ></div>
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={approvalClicks > 1}
-        ></div>
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={approvalClicks > 0}>
+        </div>
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={approvalClicks > 1}>
+        </div>
       </div>
       <svg
         viewBox="0 0 20 20"
@@ -219,3 +214,18 @@
     />
   {/if}
 {/if}
+
+<Dialog.Root bind:open={showModal} type="modal" style="max-width: 75%; max-height: 75%;">
+  <Dialog.Header>{modalHeader}</Dialog.Header>
+
+  <Dialog.Body>
+    <div class="flex flex-col gap-4">
+      {#each modalBody as { header, body }}
+        <div class="flex flex-col gap-2">
+          <p class="font-semibold">{header}</p>
+          <pre class="bg-neutral-background-1 p-2 rounded-md text-wrap">{body}</pre>
+        </div>
+      {/each}
+    </div>
+  </Dialog.Body>
+</Dialog.Root>

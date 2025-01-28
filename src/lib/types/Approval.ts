@@ -4,7 +4,7 @@ import type { Platform } from "./Platform";
 import type { Status } from "./Status";
 import type { SupportedGames } from "./SupportedGames";
 
-interface ModVersionDBObject {
+export interface ModVersionDBObject {
   readonly id: number;
   modId: number;
   authorId: number;
@@ -23,7 +23,7 @@ interface ModVersionDBObject {
   readonly deletedAt: Date | null;
 }
 
-interface ModDBObject {
+export interface ModDBObject {
   readonly id: number;
   name: string;
   summary: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Mod } from "$lib/types/Mods";
-  import { Button, Link, Spinner } from "@svelte-fui/core";
+  import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
   import ModCardBase from "./ModCardBase.svelte";
   import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
@@ -17,6 +17,13 @@
 
   let approvalClicks = $state(0);
   let denialClicks = $state(0);
+
+  let showModal = $state(false);
+  let modalHeader = $state("");
+  let modalBody:{
+    header: string;
+    body: string;
+  }[] = $state([]);
 
   function approve() {
     approvalClicks += 1;
@@ -77,7 +84,11 @@
         <Link href={mod.gitUrl}>GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={mod.gitUrl}>Description</Link>
+        <Link on:click={() => {
+          modalHeader = "Description";
+          modalBody = [{ header: "", body: mod.description }];
+          showModal = true;
+        }}>Description</Link>
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
@@ -144,3 +155,18 @@
     <ModCardBase {mod} author={mod.authors} slot={approvalButtons} />
   {/if}
 {/if}
+
+<Dialog.Root bind:open={showModal} type="modal">
+  <Dialog.Header>{modalHeader}</Dialog.Header>
+
+  <Dialog.Body>
+    <div class="flex flex-col gap-4">
+      {#each modalBody as { header, body }}
+        <div class="flex flex-col gap-2">
+          <p class="font-semibold">{header}</p>
+          <pre class="bg-neutral-background-1 p-2 rounded-md text-wrap">{body}</pre>
+        </div>
+      {/each}
+    </div>
+  </Dialog.Body>
+</Dialog.Root>
