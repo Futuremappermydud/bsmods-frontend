@@ -133,7 +133,7 @@
         <Link href={versionApproval.mod.gitUrl}>GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href="/cdn/mods/{versionApproval.version.zipHash}">Download</Link>
+        <Link href={appendURL(`cdn/mods/${versionApproval.version.zipHash}`)}>Download</Link>
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
