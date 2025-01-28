@@ -1,11 +1,11 @@
 <script lang="ts">
-  import EditsApproval from "$lib/components/ui/approval/EditsApproval.svelte";
+  import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
   import NewModsApproval from "$lib/components/ui/approval/NewModsApproval.svelte";
   import NewVersionsApproval from "$lib/components/ui/approval/NewVersionsApproval.svelte";
   import GamePicker from "$lib/components/ui/filtering/GamePicker.svelte";
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
-  import type { NewApproval } from "$lib/types/Approval";
+  import type { ApprovalQueues } from "$lib/types/Approval";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
 
@@ -16,36 +16,69 @@
   let modSearchError = $state(false);
   let modSearchLoading = $state(false);
 
-  let newApproval: NewApproval | undefined = $state();
+  let approvalQueues: ApprovalQueues | undefined = $state({mods: undefined, modVersions: undefined, edits: undefined});
 
   $effect(() => {
     if (!selectedGame) return;
-    getMods();
+    modSearchLoading = true;
+    modSearchError = false;
+    switch (page) {
+      case "edits":
+          getApprovalQueue(`edits`).then((data) => {
+            if (data && data.edits) {
+              approvalQueues.edits = data.edits;
+              console.log(`Loaded ${approvalQueues.edits?.length} edits.`);
+            } else {
+            modSearchError = true;
+          }
+          });
+        break;
+      case "mods":
+        getApprovalQueue(`mods`).then((data) => {
+          if (data) {
+            approvalQueues.mods = data.mods;
+            console.log(`Loaded ${approvalQueues.mods?.length} mods.`);
+          } else {
+            modSearchError = true;
+          }
+        });
+        break;
+      case "versions":
+        getApprovalQueue(`modVersions`).then((data) => {
+          if (data) {
+            approvalQueues.modVersions = data.modVersions;
+            console.log(`Loaded ${approvalQueues.modVersions?.length} versions.`);
+          } else {
+            modSearchError = true;
+          }
+        });
+        break;
+      default:
+        console.error("Unknown page selected");
+        modSearchError = true;
+        break;
+    }
+    modSearchLoading = false;
   });
 
-  async function getMods() {
-    modSearchLoading = true;
-    axios
-      .get(appendURL(`api/approval/new?gameName=${selectedGame}`), {
+  async function getApprovalQueue(type: `edits` | `mods` | `modVersions`) {
+    return await axios
+      .get(appendURL(`api/approval/${encodeURIComponent(type)}?gameName=${encodeURIComponent(selectedGame)}`), {
         withCredentials: true,
       })
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           modSearchError = false;
-          if (response.data !== null) {
-            let mods = response.data;
-            newApproval = mods;
-          }
+          return response.data;
         } else {
           modSearchError = true;
         }
-        modSearchLoading = false;
       })
       .catch((error) => {
         console.error("An error occurred, contact a developer!");
         console.error(error);
         modSearchError = true;
-        modSearchLoading = false;
+        return null;
       });
   }
 </script>
@@ -68,13 +101,13 @@
     <GamePicker bind:selectedGame required={true} />
   </div>
 
-  {#if newApproval}
+  {#if approvalQueues && selectedGame}
     {#if page == "edits"}
-      <EditsApproval />
+      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []}/>
     {:else if page == "mods"}
-      <NewModsApproval mods={newApproval.mods} />
+      <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} />
     {:else if page == "versions"}
-      <NewVersionsApproval />
+      <NewVersionsApproval modVersions={approvalQueues.modVersions ? approvalQueues.modVersions : []} />
     {/if}
   {/if}
 </div>

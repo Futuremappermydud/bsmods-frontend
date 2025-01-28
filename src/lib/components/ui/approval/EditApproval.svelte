@@ -1,14 +1,14 @@
 <script lang="ts">
-    import type { VersionApproval } from "$lib/types/Approval";
+    import type { EditApproval } from "$lib/types/Approval";
     import axios from "axios";
-    import ModVersionApprovalCard from "../mods/ModVersionApprovalCard.svelte";
     import type { SupportedGameVersion } from "$lib/types/Mods";
     import { appendURL } from "$lib/utils/url";
+    import EditApprovalCard from "./EditApprovalCard.svelte";
   
     let {
-      modVersions,
+      edits,
     }: {
-      modVersions: VersionApproval[];
+      edits: EditApproval[];
     } = $props();
 
     let doneLoading = $state(false);
@@ -27,8 +27,8 @@
   
 {#if doneLoading}
   <div class="flex flex-col gap-4">
-    {#each modVersions as modVersion}
-      <ModVersionApprovalCard versionApproval={modVersion} gameVersions={gameVersions} />
+    {#each edits as edit}
+      <EditApprovalCard edit={edit} gameVersions={gameVersions} />
     {/each}
   </div>
 {/if}
