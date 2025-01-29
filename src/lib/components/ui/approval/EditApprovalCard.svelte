@@ -33,7 +33,7 @@
     approvalClicks += 1;
     if (approvalClicks > 1) {
       loading = true;
-      sendStatus("verified");
+      sendStatus(true);
     }
   }
 
@@ -41,16 +41,16 @@
     denialClicks += 1;
     if (denialClicks > 1) {
       loading = true;
-      sendStatus("removed");
+      sendStatus(false);
     }
   }
 
-  function sendStatus(status: string) {
+  function sendStatus(approved: boolean) {
     axios
       .post(
         appendURL(`api/approval/edit/${edit.edit.id}/approve`),
         {
-          status: status,
+          approved: approved,
         },
         {
           withCredentials: true,
@@ -59,7 +59,7 @@
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
-            window.location.reload();
+            //window.location.reload();
             loading = false;
             hide = true;
           }

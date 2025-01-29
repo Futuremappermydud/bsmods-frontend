@@ -55,7 +55,7 @@
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
-            window.location.reload();
+            //window.location.reload();
             loading = false;
             hide = true;
           }

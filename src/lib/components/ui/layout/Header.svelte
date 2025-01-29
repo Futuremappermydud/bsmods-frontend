@@ -71,14 +71,14 @@
 
 {#snippet rightItems()}
   {#if userData.hasAttempted}
+    {#if userData.authenticated && userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
+      <a class="contents" href="/approval">
+        <svg class="h-6 w-6" viewBox="0 0 20 20">
+          <ColorLineRegular />
+        </svg>
+      </a>
+    {/if}
     {#if userData.authenticated && import.meta.env.DEV}
-      {#if userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
-        <a class="contents" href="/approval">
-          <svg class="h-6 w-6" viewBox="0 0 20 20">
-            <ColorLineRegular />
-          </svg>
-        </a>
-      {/if}
       <a class="contents" href="/upload">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
           <ArrowUploadRegular />
