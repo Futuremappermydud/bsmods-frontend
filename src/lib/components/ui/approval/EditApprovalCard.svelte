@@ -50,7 +50,7 @@
       .post(
         appendURL(`api/approval/edit/${edit.edit.id}/approve`),
         {
-          approved: approved,
+          accepted: approved,
         },
         {
           withCredentials: true,
