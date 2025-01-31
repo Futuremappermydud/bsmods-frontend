@@ -227,7 +227,7 @@
               />
             </div>
             {#each versions as version (version.id)}
-              <VersionCard {version} />
+              <VersionCard version={version} mod={mod.info} />
             {/each}
           </div>
         </div>
