@@ -97,7 +97,7 @@
     formData.append("gitUrl", gitUrl);
     formData.append("description", description);
     formData.append("summary", summary);
-    formData.append("icon", iconFile ?? "");
+    iconFile ? formData.append("icon", iconFile) : undefined;
 
     axios
       .post(appendURL(`api/mods/create`), formData, {
@@ -144,15 +144,18 @@
         ></div>
         <div class="h-full p-4">
           <div class="flex h-full flex-col gap-4">
-            <div class="flex h-[350px] flex-col gap-1 md:h-[160px] md:flex-row">
-              <ImagePicker
-                classProp="aspect-square max-w-[160px] max-h-[160px]"
-                imageProp="rounded-xl"
-                required={true}
-                bind:avatar={icon}
-                bind:file={iconFile}
-                {iconScheme}
-              />
+            <div class="flex h-[350px] flex-row gap-1 md:h-[160px] md:flex-row">
+              <div class="flex flex-col gap-2 mb-4">
+                <p class="min-w-[120px]">Icon (8MB Max)</p>
+                <ImagePicker
+                  classProp="aspect-square max-w-[160px] max-h-[160px]"
+                  imageProp="rounded-xl"
+                  required={false}
+                  bind:avatar={icon}
+                  bind:file={iconFile}
+                  {iconScheme}
+                />
+              </div>
               <div
                 class="flex h-min w-full flex-col items-center gap-2 md:pl-5"
               >

@@ -215,15 +215,15 @@
   {/if}
 {/if}
 
-<Dialog.Root bind:open={showModal} type="modal" style="max-width: 75%; max-height: 75%;">
+<Dialog.Root bind:open={showModal} type="modal">
   <Dialog.Header>{modalHeader}</Dialog.Header>
 
   <Dialog.Body>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 pb-6">
       {#each modalBody as { header, body }}
         <div class="flex flex-col gap-2">
           <p class="font-semibold">{header}</p>
-          <pre class="bg-neutral-background-1 p-2 rounded-md text-wrap">{body}</pre>
+          <pre class="bg-neutral-background-1 p-1 rounded-md text-wrap">{body}</pre>
         </div>
       {/each}
     </div>
