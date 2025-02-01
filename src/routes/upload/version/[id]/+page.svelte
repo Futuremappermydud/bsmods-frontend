@@ -27,6 +27,7 @@
   import { z } from "zod";
   import type { Versions } from "$lib/types/Versions";
     import { coerce } from "semver";
+    import { env } from "$env/dynamic/public";
 
   let { data }: { data: PageData } = $props();
 
@@ -354,7 +355,7 @@
         <input type="file" onchange={(e => {
           const target = e.target as HTMLInputElement;
           if (target && target.files && target.files.length == 1) {
-            if (target.files[0].size > 150 * 1024 * 1024) {
+            if (target.files[0].size > +env.PUBLIC_FILE_UPLOAD_LIMIT_MB * 1024 * 1024) {
               return;
             }
             modZip = target.files[0];
