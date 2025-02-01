@@ -354,7 +354,7 @@
         <input type="file" onchange={(e => {
           const target = e.target as HTMLInputElement;
           if (target && target.files && target.files.length == 1) {
-            if (target.files[0].size > 75 * 1024 * 1024) {
+            if (target.files[0].size > 150 * 1024 * 1024) {
               return;
             }
             modZip = target.files[0];
