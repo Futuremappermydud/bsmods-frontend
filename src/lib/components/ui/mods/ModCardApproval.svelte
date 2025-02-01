@@ -160,7 +160,7 @@
   <Dialog.Header>{modalHeader}</Dialog.Header>
 
   <Dialog.Body>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 pb-4">
       {#each modalBody as { header, body }}
         <div class="flex flex-col gap-2">
           <p class="font-semibold">{header}</p>

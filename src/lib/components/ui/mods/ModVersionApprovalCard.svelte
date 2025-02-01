@@ -98,6 +98,7 @@
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link on:click={async () => {
           modalHeader = "Dependencies";
+          modalBody = [];
           for (const dep of versionApproval.version.dependencies) {
             await axios.get(appendURL(`api/modVersions/${encodeURIComponent(dep)}?raw=true`)).then((response) => {
               if (response.status === 200 && response.data && response.data.mod) {
@@ -205,11 +206,11 @@
   <Dialog.Header>{modalHeader}</Dialog.Header>
 
   <Dialog.Body>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 py-6">
       {#each modalBody as { header, body }}
         <div class="flex flex-col gap-2">
           <p class="font-semibold">{header}</p>
-          <pre class="bg-neutral-background-1 p-2 rounded-md text-wrap">{body}</pre>
+          <pre class="bg-neutral-background-1 p-1 rounded-md text-wrap">{body}</pre>
         </div>
       {/each}
     </div>
