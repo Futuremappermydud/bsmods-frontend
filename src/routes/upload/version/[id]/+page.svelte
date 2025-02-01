@@ -258,6 +258,7 @@
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
             console.log(response);
+            window.location.href = "/mods/" + response.data.modVersion.modId;
           }
         }
       })
