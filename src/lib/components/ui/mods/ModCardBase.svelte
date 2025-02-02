@@ -5,6 +5,7 @@
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
   import type { Snippet } from "svelte";
+    import { WarningRegular } from "@svelte-fui/icons";
 
   let {
     mod,
@@ -66,6 +67,14 @@
                 >{author.username}
               </Link>
             {/if}
+          </span>
+        {/if}
+        {#if mod.fileSize/1024/1024 > 50}
+          <span class="text-lg mt-auto h-fit w-fit tooltip">
+            <svg viewBox="0 0 30 30" class="w-4 text-neutral-foreground-2 md:w-4">
+              <WarningRegular />
+            </svg>
+            <span class="tooltiptext">This is a very large mod!</span>
           </span>
         {/if}
       </div>

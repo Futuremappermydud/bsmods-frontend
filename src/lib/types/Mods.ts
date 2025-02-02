@@ -39,6 +39,7 @@ export interface ModVersion {
   contentHashes: ContentHash[];
   downloadCount: number;
   supportedGameVersions: SupportedGameVersion[];
+  fileSize: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -56,6 +57,7 @@ export interface Mod {
   gitUrl: string;
   lastApprovedById: number;
   lastUpdatedById: number;
+  fileSize: number;
   createdAt: string;
   updatedAt: string;
 }
