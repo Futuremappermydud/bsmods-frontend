@@ -28,8 +28,56 @@
   import type { Versions } from "$lib/types/Versions";
     import { coerce } from "semver";
     import { env } from "$env/dynamic/public";
+    import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+    import type { AuthedUser } from "$lib/types/AuthedUser";
 
-  let { data }: { data: PageData } = $props();
+  let { data, text = $bindable() }: { userData: AuthedUser, data: PageData; text: string; } = $props();
+
+  let userData: AuthedUser = {
+    hasAttempted: false,
+    authenticated: false,
+    username: "Guest",
+    userId: -1,
+    roles: null,
+  };
+
+  try {
+    axios
+      .get(appendURL("api/auth"), {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+          let data = response.data;
+          userData = {
+            hasAttempted: true,
+            authenticated: true,
+            username: data.user.username,
+            userId: data.user.id,
+            roles: data.user.roles,
+          };
+          }
+        }
+      })
+      .catch((error) => {
+        userData = {
+          hasAttempted: true,
+          authenticated: false,
+          username: "Guest",
+          userId: -1,
+          roles: null,
+        };
+      });
+  } catch (error) {
+    userData = {
+      hasAttempted: true,
+      authenticated: false,
+      username: "Guest",
+      userId: -1,
+      roles: null,
+    };
+  }
 
   let mod: IndividualModData | undefined = $state();
 
@@ -356,7 +404,12 @@
           const target = e.target as HTMLInputElement;
           if (target && target.files && target.files.length == 1) {
             if (target.files[0].size > +env.PUBLIC_FILE_UPLOAD_LIMIT_MB * 1024 * 1024) {
-              return;
+              console.log("File too large, checking roles");
+              if (!userData.authenticated ||  userData.roles == null || !checkUserAnyGame(userData.roles, UserRoles.LargeFiles)){
+                console.log("no roles, denying upload");
+                return;
+              }
+              console.log("roles good, continuing upload");
             }
             modZip = target.files[0];
           }
