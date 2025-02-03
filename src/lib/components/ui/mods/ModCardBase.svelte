@@ -5,7 +5,7 @@
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
   import type { Snippet } from "svelte";
-    import { DatabaseArrowDownFilled, WarningRegular } from "@svelte-fui/icons";
+    import { DatabaseArrowDownFilled, WarningFilled } from "@svelte-fui/icons";
 
   let {
     mod,

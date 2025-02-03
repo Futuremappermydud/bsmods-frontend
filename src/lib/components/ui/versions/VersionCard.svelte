@@ -3,7 +3,7 @@
   import { Status } from "$lib/types/Status";
   import { appendURL } from "$lib/utils/url";
   import { Button, Spinner } from "@svelte-fui/core";
-  import { ArrowDownloadRegular, WarningRegular } from "@svelte-fui/icons";
+  import { ArrowDownloadRegular, WarningFilled } from "@svelte-fui/icons";
   import { numify } from "numify";
     import type { PageData } from "../../../../routes/$types";
     import axios from "axios";
@@ -89,10 +89,14 @@
       <!-- Redundant, yes, but I think in this card format, it looks much better -->
       <p class="flex-1 text-lg font-semibold">{mod.name} v{version.modVersion}</p>
 
-      {#if mod.fileSize/1024/1024 > 50}
+      <div class="flex flex-row bg-neutral-background-3 rounded-md p-1 px-1 items-center gap-1">
+        {(version.fileSize /1024 > 1024 ? `${Math.round(version.fileSize/1024/1024)}MB` : (`${Math.round(version.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(version.fileSize/1024)}KB`))}
+      </div>
+
+      {#if version.fileSize/1024/1024 > 50}
         <div class="flex flex-row bg-neutral-background-3 rounded-md p-1 px-1 items-center gap-1 tooltip">
-          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
-            <WarningRegular />
+          <svg viewBox="0 0 20 20" class="w-6 text-neutral-foreground-2 text-yellow-400 md:w-6">
+            <WarningFilled />
           </svg>
           <span class="tooltiptext">This is a very large mod!</span>
         </div>
