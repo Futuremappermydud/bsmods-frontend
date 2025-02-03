@@ -198,7 +198,7 @@
       </div>
     </div>
   {:else}
-    <ModCardBase mod={versionApproval.mod} author={versionApproval.mod.authors} slot={approvalButtons} />
+    <ModCardBase mod={versionApproval.mod} latestSize={versionApproval.version.fileSize} author={versionApproval.mod.authors} slot={approvalButtons} />
   {/if}
 {/if}
 

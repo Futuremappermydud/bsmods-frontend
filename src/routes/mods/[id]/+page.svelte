@@ -58,8 +58,8 @@
   let loadingSubmit = $state(false);
 
   // Display
-  let latestSize: number = $derived.by(() => {
-    let selectedVersionSize = versions[0].fileSize;
+  let latestSize: number | undefined = $derived.by(() => {
+    let selectedVersionSize = versions ? versions[0].fileSize : undefined;
     return selectedVersionSize;
   });
 
