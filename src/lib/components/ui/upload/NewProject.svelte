@@ -16,11 +16,10 @@
   import CategoryDropdown from "$lib/components/ui/upload/CategoryDropdown.svelte";
   import { z } from "zod";
   import { isValidSquareImage } from "$lib/utils/image";
-  import { WarningFilled } from "@svelte-fui/icons";
   import axios from "axios";
   import { appendURL } from "$lib/utils/url";
 
-  let dataTab = $state("summary");
+  let dataTab = $state("description");
 
   let submitDialog = $state(false);
 
@@ -146,7 +145,7 @@
         <div class="h-full p-4">
           <div class="flex h-full flex-col gap-4">
             <div class="flex h-[350px] flex-row gap-1 md:h-[160px] md:flex-row">
-              <div class="flex flex-col gap-2 mb-4">
+              <div class="mb-4 flex flex-col gap-2">
                 <p class="min-w-[120px]">Icon (8MB Max)</p>
                 <ImagePicker
                   classProp="aspect-square max-w-[160px] max-h-[160px]"
@@ -215,7 +214,7 @@
       <div class="flex h-full flex-row items-center pb-4 pt-4">
         <div class="ml-4 w-28">
           <TabList disabled={false} layout="vertical" bind:value={dataTab}>
-            <Tab value="summary">Summary</Tab>
+            <Tab value="description">Description</Tab>
             <Tab value="checklist" disabled={true}>Checklist WIP</Tab>
           </TabList>
         </div>
@@ -225,7 +224,7 @@
         <div
           class="absolute bottom-0 left-36 right-0 top-0 mb-2 mr-2 mt-2 block h-auto flex-[5.5]"
         >
-          {#if dataTab == "summary"}
+          {#if dataTab == "description"}
             <DescriptionPage bind:text={description} {descriptionScheme} />
           {/if}
         </div>

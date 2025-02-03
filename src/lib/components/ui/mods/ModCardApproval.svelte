@@ -20,7 +20,7 @@
 
   let showModal = $state(false);
   let modalHeader = $state("");
-  let modalBody:{
+  let modalBody: {
     header: string;
     body: string;
   }[] = $state([]);
@@ -84,11 +84,13 @@
         <Link href={mod.gitUrl}>GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link on:click={() => {
-          modalHeader = "Description";
-          modalBody = [{ header: "", body: mod.description }];
-          showModal = true;
-        }}>Description</Link>
+        <Link
+          on:click={() => {
+            modalHeader = "Description";
+            modalBody = [{ header: "", body: mod.description }];
+            showModal = true;
+          }}>Description</Link
+        >
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
@@ -143,9 +145,6 @@
     <div
       class="relative h-28 rounded-[17.5px] bg-neutral-background-2 shadow-4"
     >
-      <div
-        class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 float-left rounded-[13.5px] border-2 border-dashed border-neutral-background-6"
-      ></div>
       <div class="flex h-28 flex-row items-center justify-center gap-4">
         <Spinner />
         <p>Loading...</p>
@@ -164,7 +163,8 @@
       {#each modalBody as { header, body }}
         <div class="flex flex-col gap-2">
           <p class="font-semibold">{header}</p>
-          <pre class="bg-neutral-background-1 p-2 rounded-md text-wrap">{body}</pre>
+          <pre
+            class="text-wrap rounded-md bg-neutral-background-1 p-2">{body}</pre>
         </div>
       {/each}
     </div>

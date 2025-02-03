@@ -5,11 +5,14 @@
   import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
-  import type { ModVersionDBObject, VersionApproval } from "$lib/types/Approval";
+  import type {
+    ModVersionDBObject,
+    VersionApproval,
+  } from "$lib/types/Approval";
 
   let {
     versionApproval,
-    gameVersions
+    gameVersions,
   }: {
     versionApproval: VersionApproval;
     gameVersions: SupportedGameVersion[];
@@ -23,7 +26,7 @@
 
   let showModal = $state(false);
   let modalHeader = $state("");
-  let modalBody:{
+  let modalBody: {
     header: string;
     body: string;
   }[] = $state([]);
@@ -47,7 +50,9 @@
   function sendStatus(status: string) {
     axios
       .post(
-        appendURL(`api/approval/modVersion/${versionApproval.version.id}/approve`),
+        appendURL(
+          `api/approval/modVersion/${versionApproval.version.id}/approve`,
+        ),
         {
           status: status,
         },
@@ -84,38 +89,69 @@
         {versionApproval.version.status}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link on:click={() => {
-          modalHeader = "Content Hashes";
-          modalBody = versionApproval.version.contentHashes.map((hash) => {
-            return {
-              header: hash.path,
-              body: hash.hash,
-            };
-          });
-          showModal = true;
-        }}>{versionApproval.version.contentHashes.length} {versionApproval.version.contentHashes.length == 1 ? `File` : `Files`}</Link>
+        <Link
+          on:click={() => {
+            modalHeader = "Content Hashes";
+            modalBody = versionApproval.version.contentHashes.map((hash) => {
+              return {
+                header: hash.path,
+                body: hash.hash,
+              };
+            });
+            showModal = true;
+          }}
+          >{versionApproval.version.contentHashes.length}
+          {versionApproval.version.contentHashes.length == 1
+            ? `File`
+            : `Files`}</Link
+        >
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link on:click={async () => {
-          modalHeader = "Dependencies";
-          modalBody = [];
-          for (const dep of versionApproval.version.dependencies) {
-            await axios.get(appendURL(`api/modVersions/${encodeURIComponent(dep)}?raw=true`)).then((response) => {
-              if (response.status === 200 && response.data && response.data.mod) {
-                let mod = response.data.mod as Mod;
-                let modVersion = response.data.modVersion as ModVersionDBObject;
-                modalBody.push({
-                  header: `${mod.name} (${modVersion.modVersion})`,
-                  body: `Mod Status: ${mod.status}\nVersion Status: ${modVersion.status}\nVersion: ${modVersion.modVersion}\nPlatform: ${modVersion.platform}\nGame Versions: ${modVersion.supportedGameVersions.map((gameVersion) => {
-                    let versionString = gameVersions.find((gv) => gv.id === gameVersion)?.version;
-                    return versionString ? versionString : `${gameVersion}`;
-                  }).join(", ")}\nGitHub: ${mod.gitUrl}\nDownload: /cdn/mods/${modVersion.zipHash}`,
+        <Link
+          on:click={async () => {
+            modalHeader = "Dependencies";
+            modalBody = [];
+            for (const dep of versionApproval.version.dependencies) {
+              await axios
+                .get(
+                  appendURL(
+                    `api/modVersions/${encodeURIComponent(dep)}?raw=true`,
+                  ),
+                )
+                .then((response) => {
+                  if (
+                    response.status === 200 &&
+                    response.data &&
+                    response.data.mod
+                  ) {
+                    let mod = response.data.mod as Mod;
+                    let modVersion = response.data
+                      .modVersion as ModVersionDBObject;
+                    modalBody.push({
+                      header: `${mod.name} (${modVersion.modVersion})`,
+                      body: `Mod Status: ${mod.status}\nVersion Status: ${modVersion.status}\nVersion: ${modVersion.modVersion}\nPlatform: ${modVersion.platform}\nGame Versions: ${modVersion.supportedGameVersions
+                        .map((gameVersion) => {
+                          let versionString = gameVersions.find(
+                            (gv) => gv.id === gameVersion,
+                          )?.version;
+                          return versionString
+                            ? versionString
+                            : `${gameVersion}`;
+                        })
+                        .join(
+                          ", ",
+                        )}\nGitHub: ${mod.gitUrl}\nDownload: /cdn/mods/${modVersion.zipHash}`,
+                    });
+                  }
                 });
-              }
-            });
-          }
-          showModal = true;
-        }}>{versionApproval.version.dependencies.length} {versionApproval.version.dependencies.length == 1 ? `Dep` : `Deps`}</Link>
+            }
+            showModal = true;
+          }}
+          >{versionApproval.version.dependencies.length}
+          {versionApproval.version.dependencies.length == 1
+            ? `Dep`
+            : `Deps`}</Link
+        >
       </div>
     </div>
     <div class="flex h-full min-w-20 flex-col gap-[3px]">
@@ -125,16 +161,22 @@
         {versionApproval.version.platform}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        {versionApproval.version.supportedGameVersions.map((gameVersion) => {
-          let versionString = gameVersions.find((gv) => gv.id === gameVersion)?.version;
-          return versionString ? versionString : `${gameVersion}`;
-        }).join(", ")}
+        {versionApproval.version.supportedGameVersions
+          .map((gameVersion) => {
+            let versionString = gameVersions.find(
+              (gv) => gv.id === gameVersion,
+            )?.version;
+            return versionString ? versionString : `${gameVersion}`;
+          })
+          .join(", ")}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link href={versionApproval.mod.gitUrl}>GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={appendURL(`cdn/mods/${versionApproval.version.zipHash}`)}>Download</Link>
+        <Link href={appendURL(`cdn/mods/${versionApproval.version.zipHash}`)}
+          >Download</Link
+        >
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
@@ -198,7 +240,12 @@
       </div>
     </div>
   {:else}
-    <ModCardBase mod={versionApproval.mod} latestSize={versionApproval.version.fileSize} author={versionApproval.mod.authors} slot={approvalButtons} />
+    <ModCardBase 
+      mod={versionApproval.mod} 
+      latestSize={versionApproval.version.fileSize} 
+      author={versionApproval.mod.authors} 
+      slot={approvalButtons} 
+    />
   {/if}
 {/if}
 
@@ -210,7 +257,8 @@
       {#each modalBody as { header, body }}
         <div class="flex flex-col gap-2">
           <p class="font-semibold">{header}</p>
-          <pre class="bg-neutral-background-1 p-1 rounded-md text-wrap">{body}</pre>
+          <pre
+            class="text-wrap rounded-md bg-neutral-background-1 p-1">{body}</pre>
         </div>
       {/each}
     </div>

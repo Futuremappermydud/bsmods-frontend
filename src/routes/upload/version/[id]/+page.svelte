@@ -26,10 +26,10 @@
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import { z } from "zod";
   import type { Versions } from "$lib/types/Versions";
-    import { coerce } from "semver";
-    import { env } from "$env/dynamic/public";
-    import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
-    import type { AuthedUser } from "$lib/types/AuthedUser";
+  import { coerce } from "semver";
+  import { env } from "$env/dynamic/public";
+  import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+  import type { AuthedUser } from "$lib/types/AuthedUser";
 
   let { data, text = $bindable() }: { userData: AuthedUser, data: PageData; text: string; } = $props();
 
@@ -227,23 +227,29 @@
       let earliestGameVersion = supportedGameVersions.toSorted((a, b) => {
         let asv = coerce(a);
         let bsv = coerce(b);
-        if(asv && bsv) {
+        if (asv && bsv) {
           return asv.compare(bsv);
         } else {
           if (errorSortingVersions) {
-            console.error(`Unable to coerce Game Versions. Game Version dependency resolution might break.`);
+            console.error(
+              `Unable to coerce Game Versions. Game Version dependency resolution might break.`,
+            );
           }
           errorSortingVersions = true;
-          return 0; 
+          return 0;
         }
-      })
+      });
 
       if (errorSortingVersions) {
         return supportedGameVersions.every((g) =>
           version?.supportedGameVersions.some((s) => s.version === g),
         );
       } else {
-        return version?.supportedGameVersions.some(v => v.version === earliestGameVersion[0]) ?? false;
+        return (
+          version?.supportedGameVersions.some(
+            (v) => v.version === earliestGameVersion[0],
+          ) ?? false
+        );
       }
     }, "Must support earliest game version!");
   let dependencyVersionValidity = $derived.by(() => {
@@ -262,7 +268,7 @@
   function addRawDependency() {
     let mod = allSelectedMods.find((m) => m.name === tempRawDepName);
     let modVersion = tempRawDepAllVersions.find(
-      (mV) => mV.modVersion === tempRawDepVersion && mV.modId === mod?.id
+      (mV) => mV.modVersion === tempRawDepVersion && mV.modId === mod?.id,
     );
     rawDeps.push({
       name: tempRawDepName,
@@ -287,12 +293,10 @@
     formData.append("supportedGameVersionIds", gvStringIds);
 
     if (rawDeps && rawDeps.length > 0) {
-      let depStringIds = rawDeps
-        .map((d) => d.versionId)
-        .join(",");
+      let depStringIds = rawDeps.map((d) => d.versionId).join(",");
       formData.append("dependencies", depStringIds);
     }
-  
+
     formData.append("modVersion", modVersion);
     formData.append("platform", platform.toString());
     if (modZip) {
@@ -400,20 +404,23 @@
         class="flex flex-1 flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
       >
         <h1 class="mx-auto text-lg font-semibold">File Upload</h1>
-        <input type="file" onchange={(e => {
-          const target = e.target as HTMLInputElement;
-          if (target && target.files && target.files.length == 1) {
-            if (target.files[0].size > +env.PUBLIC_FILE_UPLOAD_LIMIT_MB * 1024 * 1024) {
-              console.log("File too large, checking roles");
-              if (!userData.authenticated ||  userData.roles == null || !checkUserAnyGame(userData.roles, UserRoles.LargeFiles)){
-                console.log("no roles, denying upload");
-                return;
+        <input
+          type="file"
+          onchange={(e) => {
+            const target = e.target as HTMLInputElement;
+            if (target && target.files && target.files.length == 1) {
+              if (target.files[0].size > +env.PUBLIC_FILE_UPLOAD_LIMIT_MB * 1024 * 1024) {
+                console.log("File too large, checking roles");
+                if (!userData.authenticated ||  userData.roles == null || !checkUserAnyGame(userData.roles, UserRoles.LargeFiles)){
+                  console.log("no roles, denying upload");
+                  return;
+                }
+                console.log("roles good, continuing upload");
               }
-              console.log("roles good, continuing upload");
+              modZip = target.files[0];
             }
-            modZip = target.files[0];
-          }
-        })} />
+          }}
+        />
       </div>
     </div>
     <div

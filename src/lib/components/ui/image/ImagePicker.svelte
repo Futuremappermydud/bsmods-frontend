@@ -56,7 +56,7 @@
   >
     {#if avatar}
       <img
-        class="h-full w-full cursor-pointer {imageProp}"
+        class="h-full w-full cursor-pointer {imageProp} bg-[#00000066] shadow-2"
         src={avatar}
         alt="Mod Icon"
       />

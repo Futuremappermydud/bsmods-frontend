@@ -15,3 +15,9 @@ export enum Categories {
   Editor = `editor`,
   Other = `other`,
 }
+
+export function convertCategories(value: string): Categories | undefined {
+  return Object.values(Categories).includes(value as Categories)
+    ? (value as Categories)
+    : undefined;
+}
