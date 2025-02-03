@@ -5,7 +5,7 @@
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
   import type { Snippet } from "svelte";
-    import { WarningRegular } from "@svelte-fui/icons";
+    import { DatabaseArrowDownFilled, WarningRegular } from "@svelte-fui/icons";
 
   let {
     mod,
@@ -69,18 +69,27 @@
             {/if}
           </span>
         {/if}
+      </div>
+      <p class="text-left text-xs text-neutral-foreground-3 md:text-sm">
+        {mod.summary}
+      </p>
+      <div class="flex w-fit flex-row gap-2">
+        <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
+          <DatabaseArrowDownFilled/>
+        </svg>
+        <span
+          class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
+          >{(mod.fileSize /1024 > 1024 ? `${Math.round(mod.fileSize/1024/1024)}MB` : (`${Math.round(mod.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(mod.fileSize/1024)}KB`))}</span
+        >
         {#if mod.fileSize/1024/1024 > 50}
           <span class="text-lg mt-auto h-fit w-fit tooltip">
-            <svg viewBox="0 0 30 30" class="w-4 text-neutral-foreground-2 md:w-4">
-              <WarningRegular />
+            <svg viewBox="0 0 30 30" class="w-6 text-neutral-foreground-2 text-yellow-400 md:w-6">
+              <WarningFilled />
             </svg>
             <span class="tooltiptext">This is a very large mod!</span>
           </span>
         {/if}
       </div>
-      <p class="text-left text-xs text-neutral-foreground-3 md:text-sm">
-        {mod.summary}
-      </p>
     </div>
     {#if slot}
       {@render slot()}

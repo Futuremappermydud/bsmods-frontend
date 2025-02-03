@@ -8,7 +8,6 @@
     ArrowResetRegular,
     ArrowSyncRegular,
     CheckmarkRegular,
-    TextBulletListCheckmarkFilled,
   } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
   import { getRelativeTimeString } from "$lib/utils/time";
@@ -59,15 +58,6 @@
           <span
             class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
             >{mod.mod.status}</span
-          >
-        </div>
-        <div class="flex w-fit flex-row gap-2">
-          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
-            <TextBulletListCheckmarkFilled/>
-          </svg>
-          <span
-            class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
-            >{(mod.mod.fileSize /1024 > 1024 ? `${Math.round(mod.mod.fileSize/1024/1024)}MB` : `${Math.round(mod.mod.fileSize/1024)}KB`)}</span
           >
         </div>
       </div>
