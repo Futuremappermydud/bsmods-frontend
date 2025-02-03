@@ -1,12 +1,26 @@
 <script lang="ts">
-  import type { Mod, SupportedGameVersion } from "$lib/types/Mods";
+  import { object } from "zod";
+  import type { SupportedGameVersion } from "$lib/types/Mods";
   import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
   import ModCardBase from "../mods/ModCardBase.svelte";
-  import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
+  import {
+    ArrowDownFilled,
+    ArrowDownRegular,
+    ArrowRightFilled,
+    CheckmarkRegular,
+    DismissRegular,
+  } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
-  import type { EditApproval, VersionApproval } from "$lib/types/Approval";
-  import { object } from "zod";
+  import type {
+    EditApproval,
+    EditQueueDBObject,
+    ModApproval,
+    ModDBObject,
+    ModVersionApproval,
+    ModVersionDBObject,
+  } from "$lib/types/Approval";
+  import MarkdownViewer from "../markdown/MarkdownViewer.svelte";
 
   let {
     edit,
@@ -22,12 +36,24 @@
   let approvalClicks = $state(0);
   let denialClicks = $state(0);
 
+  interface Change {
+    key: string;
+    isMarkdown?: boolean;
+    oldValue: any;
+    newValue: any;
+  }
+
   let showModal = $state(false);
-  let modalHeader = $state("");
-  let modalBody:{
-    header: string;
-    body: string;
-  }[] = $state([]);
+  let showChangeModal = $state(false);
+  let showPreviewModal = $state(false);
+  let changeBody: Change[] = $state([]);
+  let previewBody: Change | undefined = $state();
+
+  function preview(change: Change) {
+    previewBody = change;
+    showPreviewModal = true;
+    showChangeModal = false;
+  }
 
   function approve() {
     approvalClicks += 1;
@@ -124,43 +150,120 @@
       </div>
     </div>
   {:else if edit.edit.objectTableName == `mods` && `name` in edit.edit.object && `name` in edit.original}
-  <div class="ml-auto flex flex-row gap-2">
-    <div class="flex h-full min-w-20 flex-col gap-[3px]">
-      <div class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs">
-        {edit.edit.object.gameName}
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        {edit.edit.object.category}
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={edit.edit.object.gitUrl}>GitHub</Link>
-      </div>
-      <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link on:click={() => {
-          modalHeader = "View Edit";
-          modalBody = [
-            {
-              header: "Edit",
-              body: JSON.stringify(edit.edit.object, null, 2),
-            },
-            {
-              header: "Original",
-              body: JSON.stringify(edit.original, null, 2),
-            },
-          ];
-          showModal = true;
-        }}>View Raw</Link>
+    <div class="ml-auto flex flex-row gap-2">
+      <div class="flex h-full min-w-20 flex-col gap-[3px]">
+        <div
+          class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
+        >
+          {edit.edit.object.gameName}
+        </div>
+        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
+          {edit.edit.object.category}
+        </div>
+        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
+          <Link href={edit.edit.object.gitUrl}>GitHub</Link>
+        </div>
+        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
+          <Link
+            on:click={() => {
+              changeBody = [];
+              if (edit.edit.objectTableName == `mods`) {
+                for (let key of Object.keys(
+                  edit.edit.object,
+                ) as (keyof ModApproval)[]) {
+                  let editProp = (edit.edit.object as ModApproval)[
+                    key as keyof ModApproval
+                  ];
+                  let originalProp = (edit.original as ModDBObject)[
+                    key as keyof ModDBObject
+                  ];
+                  if (Array.isArray(editProp) && Array.isArray(originalProp)) {
+                    if (
+                      !editProp.every(
+                        (v) => v === originalProp.find((o) => o === v),
+                      ) ||
+                      !originalProp.every(
+                        (v) => v === editProp.find((o) => o === v),
+                      )
+                    ) {
+                      changeBody.push({
+                        key: key,
+                        oldValue: originalProp.join(`, `),
+                        newValue: editProp.join(`, `),
+                      });
+                    }
+                    continue;
+                  }
+
+                  if (editProp != originalProp) {
+                    changeBody.push({
+                      key: key,
+                      isMarkdown: key === `description`,
+                      oldValue: originalProp,
+                      newValue: editProp,
+                    });
+                  }
+                }
+              } else if (edit.edit.objectTableName == `modVersions`) {
+                for (let key of Object.keys(
+                  edit.edit.object,
+                ) as (keyof ModVersionApproval)[]) {
+                  let editProp = (edit.edit.object as ModVersionApproval)[
+                    key as keyof ModVersionApproval
+                  ];
+                  let originalProp = (edit.original as ModVersionDBObject)[
+                    key as keyof ModVersionDBObject
+                  ];
+                  if (Array.isArray(editProp) && Array.isArray(originalProp)) {
+                    if (
+                      !editProp.every(
+                        (v) => v === originalProp.find((o) => o === v),
+                      ) ||
+                      !originalProp.every(
+                        (v) => v === editProp.find((o) => o === v),
+                      )
+                    ) {
+                      changeBody.push({
+                        key: key,
+                        oldValue: originalProp.join(`, `),
+                        newValue: editProp.join(`, `),
+                      });
+                    }
+                    continue;
+                  }
+
+                  if (editProp != originalProp) {
+                    changeBody.push({
+                      key: key,
+                      oldValue: originalProp,
+                      newValue: editProp,
+                    });
+                  }
+                }
+              }
+              showModal = true;
+              showChangeModal = true;
+              showPreviewModal = false;
+            }}>View Changes</Link
+          >
+        </div>
       </div>
     </div>
-  </div>
   {/if}
   <div class="flex h-full w-14 flex-col gap-2">
-    <Button class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1" onclick={approve}>
+    <Button
+      class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
+      onclick={approve}
+    >
       <div class="flex flex-row gap-2">
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={approvalClicks > 0}>
-        </div>
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={approvalClicks > 1}>
-        </div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={approvalClicks > 0}
+        ></div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={approvalClicks > 1}
+        ></div>
       </div>
       <svg
         viewBox="0 0 20 20"
@@ -198,9 +301,6 @@
     <div
       class="relative h-28 rounded-[17.5px] bg-neutral-background-2 shadow-4"
     >
-      <div
-        class="pointer-events-none absolute bottom-1 left-1 right-1 top-1 float-left rounded-[13.5px] border-2 border-dashed border-neutral-background-6"
-      ></div>
       <div class="flex h-28 flex-row items-center justify-center gap-4">
         <Spinner />
         <p>Loading...</p>
@@ -216,16 +316,72 @@
 {/if}
 
 <Dialog.Root bind:open={showModal} type="modal">
-  <Dialog.Header>{modalHeader}</Dialog.Header>
+  <Dialog.Header>View Edit</Dialog.Header>
 
   <Dialog.Body>
     <div class="flex flex-col gap-4 pb-6">
-      {#each modalBody as { header, body }}
+      {#if showChangeModal}
         <div class="flex flex-col gap-2">
-          <p class="font-semibold">{header}</p>
-          <pre class="bg-neutral-background-1 p-1 rounded-md text-wrap">{body}</pre>
+          {#each changeBody as change}
+            <div class="flex flex-row items-center gap-2">
+              <span class="silly-capitalize text-right font-semibold"
+                >{change.key}:
+              </span>
+              <span
+                class="max-w-40 overflow-hidden overflow-ellipsis whitespace-nowrap text-right text-red-500"
+                >{change.oldValue}</span
+              >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <ArrowRightFilled />
+              </svg>
+              <span
+                class="max-w-40 overflow-hidden overflow-ellipsis whitespace-nowrap text-right text-green-500"
+                >{change.newValue}</span
+              >
+              {#if change.isMarkdown}
+                <Button size="sm" onclick={() => preview(change)}>
+                  Show Preview
+                </Button>
+              {/if}
+            </div>
+          {/each}
         </div>
-      {/each}
+      {:else if showPreviewModal && previewBody}
+        <Button
+          class="w-fit"
+          onclick={() => {
+            showPreviewModal = false;
+            showChangeModal = true;
+          }}>Hide Preview</Button
+        >
+        <div class="flex flex-col justify-center gap-4 align-middle">
+          <div
+            class="md-container max-h-[30vh] w-full flex-1 overflow-scroll rounded border-2 border-solid border-red-500 p-1 text-left"
+          >
+            <MarkdownViewer text={previewBody.oldValue} />
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <ArrowDownFilled />
+          </svg>
+          <div
+            class="md-container max-h-[30vh] w-full flex-1 overflow-scroll rounded border-2 border-solid border-green-500 p-1 text-left"
+          >
+            <MarkdownViewer text={previewBody.newValue} />
+          </div>
+        </div>
+      {/if}
     </div>
   </Dialog.Body>
 </Dialog.Root>

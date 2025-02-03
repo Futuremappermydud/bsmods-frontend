@@ -5,12 +5,16 @@
   import { Button, Spinner } from "@svelte-fui/core";
   import { ArrowDownloadRegular } from "@svelte-fui/icons";
   import { numify } from "numify";
-    import type { PageData } from "../../../../routes/$types";
-    import axios from "axios";
+  import type { PageData } from "../../../../routes/$types";
+  import axios from "axios";
 
-
-
-  let { version, mod, isAuthor, isApprover }: { version: ModVersion, mod: Mod, isAuthor:boolean, isApprover:boolean } = $props();
+  let {
+    version,
+    mod,
+    isAuthor,
+    isApprover,
+  }: { version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean } =
+    $props();
 
   let denialClicks = $state(0);
   let loadingDenial = $state(false);
@@ -87,9 +91,13 @@
   <div class="flex flex-col gap-2">
     <div class="flex flex-row items-center gap-2">
       <!-- Redundant, yes, but I think in this card format, it looks much better -->
-      <p class="flex-1 text-lg font-semibold">{mod.name} v{version.modVersion}</p>
+      <p class="flex-1 text-lg font-semibold">
+        {mod.name} v{version.modVersion}
+      </p>
 
-      <div class="flex flex-row bg-neutral-background-3 rounded-md p-1 px-1 items-center gap-1">
+      <div
+        class="flex flex-row items-center gap-1 rounded-md bg-neutral-background-3 p-1 px-1"
+      >
         <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
           <ArrowDownloadRegular />
         </svg>
@@ -100,23 +108,31 @@
 
       <!-- design is my passion - please revisit these colors, theyre fucked  -->
       {#if version.status === Status.Verified}
-        <p class="silly-capitalize text-sm bg-green-700 rounded-md p-1">{version.status}</p>
+        <p class="silly-capitalize rounded-md bg-green-700 p-1 text-sm">
+          {version.status}
+        </p>
       {:else if version.status === Status.Unverified}
-        <p class="silly-capitalize text-sm bg-orange-700 rounded-md p-1">{version.status}</p>
+        <p class="silly-capitalize rounded-md bg-orange-700 p-1 text-sm">
+          {version.status}
+        </p>
       {:else if version.status === Status.Private}
-        <p class="silly-capitalize text-sm bg-blue-700 rounded-md p-1">{version.status}</p>
+        <p class="silly-capitalize rounded-md bg-blue-700 p-1 text-sm">
+          {version.status}
+        </p>
       {:else if version.status === Status.Removed}
-        <p class="silly-capitalize text-sm bg-red-700 rounded-md p-1">{version.status}</p>
+        <p class="silly-capitalize rounded-md bg-red-700 p-1 text-sm">
+          {version.status}
+        </p>
       {/if}
     </div>
     <div>
       <p class="font-semibold">Supports:</p>
-      <div class="flex flex-row flex-wrap text-center items-center">
-      {#each version.supportedGameVersions as supportedGameVersion}
-        <p class="text-sm bg-neutral-background-3 rounded-md m-1 p-1">
-          {supportedGameVersion.version}
-        </p>
-      {/each}
+      <div class="flex flex-row flex-wrap items-center text-center">
+        {#each version.supportedGameVersions as supportedGameVersion}
+          <p class="m-1 rounded-md bg-neutral-background-3 p-1 text-sm">
+            {supportedGameVersion.version}
+          </p>
+        {/each}
       </div>
     </div>
   </div>
@@ -124,30 +140,43 @@
     class=""
     onclick={() => {
       window.open(appendURL(`cdn/mod/${version.zipHash}.zip`));
-    }}>Download</Button>
+    }}>Download</Button
+  >
 
-    {#if version.status === Status.Verified && isApprover}
-      {#if loadingSubmit}
+  {#if version.status === Status.Verified && isApprover}
+    {#if loadingSubmit}
       <div class="flex h-fit flex-row items-center justify-center gap-4">
         <Spinner />
         <p>Loading...</p>
       </div>
-      {:else}
+    {:else}
       <Button onclick={deny} class="text-palette-red-foreground-1">
-      <div class="flex flex-row gap-2">
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={denialClicks > 0}></div>
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={denialClicks > 1}></div>
-      </div>
-      Revoke Verification
-    </Button>
-  {/if}
-    {:else if version.status === Status.Private && (isAuthor || isApprover)}
+        <div class="flex flex-row gap-2">
+          <div
+            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+            class:!opacity-80={denialClicks > 0}
+          ></div>
+          <div
+            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+            class:!opacity-80={denialClicks > 1}
+          ></div>
+        </div>
+        Revoke Verification
+      </Button>
+    {/if}
+  {:else if version.status === Status.Private && (isAuthor || isApprover)}
     <Button onclick={submit} class="text-palette-red-foreground-1">
       <div class="flex flex-row gap-2">
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={submitClicks > 0}></div>
-        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={submitClicks > 1}></div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={submitClicks > 0}
+        ></div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={submitClicks > 1}
+        ></div>
       </div>
       Submit for Verification
     </Button>
-    {/if}
+  {/if}
 </div>
