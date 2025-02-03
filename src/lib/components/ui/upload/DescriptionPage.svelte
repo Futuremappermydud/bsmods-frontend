@@ -9,16 +9,18 @@
   let {
     text = $bindable(),
     descriptionScheme,
+    modPage,
   }: {
-    text: string;
+    text: string | undefined;
     descriptionScheme: z.Schema;
+    modPage?: boolean;
   } = $props();
 
   let descriptionTab = $state("write");
   let descriptionValidity = $derived(descriptionScheme.safeParse(text));
 </script>
 
-<div class="flex h-full flex-[4] flex-col items-center gap-1 pb-2 pr-2">
+<div class="description flex h-full flex-[4] flex-col items-center gap-1">
   <TabList disabled={false} layout="horizontal" bind:value={descriptionTab}>
     <Tab value="write">Write</Tab>
     <Tab value="preview">Markdown Preview</Tab>
@@ -43,7 +45,15 @@
     <div
       class="md-container w-full flex-1 overflow-scroll rounded border-2 border-solid border-neutral-foreground-disabled p-1 text-left"
     >
-      <MarkdownViewer {text} />
+      <MarkdownViewer text={text ?? ""} />
     </div>
   {/if}
 </div>
+
+<style lang="postcss">
+  :global(.description) {
+    :global(.fui-field) {
+      @apply !flex !h-full !flex-col;
+    }
+  }
+</style>

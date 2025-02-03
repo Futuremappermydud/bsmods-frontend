@@ -32,7 +32,7 @@
   <input
     type="radio"
     {id}
-    name={_name}
+    name={_name ? _name.toString() : undefined}
     class="fui-tab-input"
     class:enabled={$value$ === value}
     {value}

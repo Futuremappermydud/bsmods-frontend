@@ -16,7 +16,11 @@
   let modSearchError = $state(false);
   let modSearchLoading = $state(false);
 
-  let approvalQueues: ApprovalQueues | undefined = $state({mods: undefined, modVersions: undefined, edits: undefined});
+  let approvalQueues: ApprovalQueues | undefined = $state({
+    mods: undefined,
+    modVersions: undefined,
+    edits: undefined,
+  });
 
   $effect(() => {
     if (!selectedGame) return;
@@ -24,14 +28,14 @@
     modSearchError = false;
     switch (page) {
       case "edits":
-          getApprovalQueue(`edits`).then((data) => {
-            if (data && data.edits) {
-              approvalQueues.edits = data.edits;
-              console.log(`Loaded ${approvalQueues.edits?.length} edits.`);
-            } else {
+        getApprovalQueue(`edits`).then((data) => {
+          if (data && data.edits) {
+            approvalQueues.edits = data.edits;
+            console.log(`Loaded ${approvalQueues.edits?.length} edits.`);
+          } else {
             modSearchError = true;
           }
-          });
+        });
         break;
       case "mods":
         getApprovalQueue(`mods`).then((data) => {
@@ -47,7 +51,9 @@
         getApprovalQueue(`modVersions`).then((data) => {
           if (data) {
             approvalQueues.modVersions = data.modVersions;
-            console.log(`Loaded ${approvalQueues.modVersions?.length} versions.`);
+            console.log(
+              `Loaded ${approvalQueues.modVersions?.length} versions.`,
+            );
           } else {
             modSearchError = true;
           }
@@ -63,9 +69,14 @@
 
   async function getApprovalQueue(type: `edits` | `mods` | `modVersions`) {
     return await axios
-      .get(appendURL(`api/approval/${encodeURIComponent(type)}?gameName=${encodeURIComponent(selectedGame)}`), {
-        withCredentials: true,
-      })
+      .get(
+        appendURL(
+          `api/approval/${encodeURIComponent(type)}?gameName=${encodeURIComponent(selectedGame)}`,
+        ),
+        {
+          withCredentials: true,
+        },
+      )
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           modSearchError = false;
@@ -103,11 +114,15 @@
 
   {#if approvalQueues && selectedGame}
     {#if page == "edits"}
-      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []}/>
+      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []} />
     {:else if page == "mods"}
       <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} />
     {:else if page == "versions"}
-      <NewVersionsApproval modVersions={approvalQueues.modVersions ? approvalQueues.modVersions : []} />
+      <NewVersionsApproval
+        modVersions={approvalQueues.modVersions
+          ? approvalQueues.modVersions
+          : []}
+      />
     {/if}
   {/if}
 </div>

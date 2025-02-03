@@ -26,7 +26,7 @@
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import { z } from "zod";
   import type { Versions } from "$lib/types/Versions";
-    import { coerce } from "semver";
+  import { coerce } from "semver";
 
   let { data }: { data: PageData } = $props();
 
@@ -178,23 +178,29 @@
       let earliestGameVersion = supportedGameVersions.toSorted((a, b) => {
         let asv = coerce(a);
         let bsv = coerce(b);
-        if(asv && bsv) {
+        if (asv && bsv) {
           return asv.compare(bsv);
         } else {
           if (errorSortingVersions) {
-            console.error(`Unable to coerce Game Versions. Game Version dependency resolution might break.`);
+            console.error(
+              `Unable to coerce Game Versions. Game Version dependency resolution might break.`,
+            );
           }
           errorSortingVersions = true;
-          return 0; 
+          return 0;
         }
-      })
+      });
 
       if (errorSortingVersions) {
         return supportedGameVersions.every((g) =>
           version?.supportedGameVersions.some((s) => s.version === g),
         );
       } else {
-        return version?.supportedGameVersions.some(v => v.version === earliestGameVersion[0]) ?? false;
+        return (
+          version?.supportedGameVersions.some(
+            (v) => v.version === earliestGameVersion[0],
+          ) ?? false
+        );
       }
     }, "Must support earliest game version!");
   let dependencyVersionValidity = $derived.by(() => {
@@ -213,7 +219,7 @@
   function addRawDependency() {
     let mod = allSelectedMods.find((m) => m.name === tempRawDepName);
     let modVersion = tempRawDepAllVersions.find(
-      (mV) => mV.modVersion === tempRawDepVersion && mV.modId === mod?.id
+      (mV) => mV.modVersion === tempRawDepVersion && mV.modId === mod?.id,
     );
     rawDeps.push({
       name: tempRawDepName,
@@ -238,12 +244,10 @@
     formData.append("supportedGameVersionIds", gvStringIds);
 
     if (rawDeps && rawDeps.length > 0) {
-      let depStringIds = rawDeps
-        .map((d) => d.versionId)
-        .join(",");
+      let depStringIds = rawDeps.map((d) => d.versionId).join(",");
       formData.append("dependencies", depStringIds);
     }
-  
+
     formData.append("modVersion", modVersion);
     formData.append("platform", platform.toString());
     if (modZip) {
@@ -350,15 +354,18 @@
         class="flex flex-1 flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
       >
         <h1 class="mx-auto text-lg font-semibold">File Upload</h1>
-        <input type="file" onchange={(e => {
-          const target = e.target as HTMLInputElement;
-          if (target && target.files && target.files.length == 1) {
-            if (target.files[0].size > 75 * 1024 * 1024) {
-              return;
+        <input
+          type="file"
+          onchange={(e) => {
+            const target = e.target as HTMLInputElement;
+            if (target && target.files && target.files.length == 1) {
+              if (target.files[0].size > 75 * 1024 * 1024) {
+                return;
+              }
+              modZip = target.files[0];
             }
-            modZip = target.files[0];
-          }
-        })} />
+          }}
+        />
       </div>
     </div>
     <div

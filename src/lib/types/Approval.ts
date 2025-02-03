@@ -41,10 +41,34 @@ export interface ModDBObject {
   readonly deletedAt: Date;
 }
 
-export type ModVersionApproval = Omit<ModVersionDBObject, `modId` | `id` | `createdAt` | `updatedAt` | `deletedAt` | `authorId` | `status` | `contentHashes` | `zipHash` | `lastApprovedById` | `lastUpdatedById` | `downloadCount`>
-export type ModApproval = Omit<ModDBObject, `id` | `createdAt` | `updatedAt` | `deletedAt` | `iconFileName` | `status` | `lastApprovedById` | `lastUpdatedById` >
+export type ModVersionApproval = Omit<
+  ModVersionDBObject,
+  | `modId`
+  | `id`
+  | `createdAt`
+  | `updatedAt`
+  | `deletedAt`
+  | `authorId`
+  | `status`
+  | `contentHashes`
+  | `zipHash`
+  | `lastApprovedById`
+  | `lastUpdatedById`
+  | `downloadCount`
+>;
+export type ModApproval = Omit<
+  ModDBObject,
+  | `id`
+  | `createdAt`
+  | `updatedAt`
+  | `deletedAt`
+  | `iconFileName`
+  | `status`
+  | `lastApprovedById`
+  | `lastUpdatedById`
+>;
 
-interface EditQueueDBObject {
+export interface EditQueueDBObject {
   readonly id: number;
   submitterId: number;
   objectId: number;

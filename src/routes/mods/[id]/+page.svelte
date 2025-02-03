@@ -3,16 +3,29 @@
   import MarkdownViewer from "$lib/components/ui/markdown/MarkdownViewer.svelte";
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
   import type { IndividualModData } from "$lib/types/Mods";
-  import { Button, Link, Spinner } from "@svelte-fui/core";
+  import {
+    Button,
+    Field,
+    FieldMessageError,
+    Input,
+    Link,
+    Spinner,
+  } from "@svelte-fui/core";
   import type { PageData } from "./$types";
   import axios from "axios";
   import { appendURL } from "$lib/utils/url";
-  import ModCardBase from "$lib/components/ui/mods/ModCardBase.svelte";
   import { checkUser, UserRoles } from "$lib/types/UserRoles";
+  import ModCardEditable from "$lib/components/ui/mods/ModCardEditable.svelte";
+  import { z } from "zod";
+  import DescriptionPage from "$lib/components/ui/upload/DescriptionPage.svelte";
+  import { untrack } from "svelte";
+  import { Categories, convertCategories } from "$lib/types/Categories";
+  import { sendRevoke, sendSaveEdit, sendSubmit } from "$lib/utils/api";
 
   let { data }: { data: PageData } = $props();
 
   let mod: IndividualModData | undefined = $state();
+  let editing = $state(false);
 
   let version = $state("");
 
@@ -49,8 +62,9 @@
   let userIsApprover = $derived.by(() => {
     if (!mod) return false;
     if (!data.roles) return false;
-    return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName)
+    return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName);
   });
+
   let denialClicks = $state(0);
   let loadingDenial = $state(false);
 
@@ -61,7 +75,9 @@
     denialClicks += 1;
     if (denialClicks > 1) {
       loadingDenial = true;
-      sendRevoke();
+      sendRevoke(mod, () => {
+        loadingDenial = false;
+      });
     }
   }
 
@@ -69,54 +85,96 @@
     submitClicks += 1;
     if (submitClicks > 1) {
       loadingSubmit = true;
-      sendSubmit();
+      sendSubmit(mod, () => {
+        loadingDenial = false;
+      });
     }
   }
 
-  function sendSubmit() {
-    axios
-      .post(appendURL(`api/mods/${mod?.info.id}/submit`), {
-        withCredentials: true,
-      })
-      .then((response) => {
-        if (response.status === 302 || response.status === 200) {
-          if (response.data !== null) {
-            window.location.reload();
-            loadingSubmit = false;
-          }
-        } else {
-        }
-      })
-      .catch((error) => {
-        console.error("An error occurred, contact a developer!");
-        console.error(error);
-      });
+  // Editing
+
+  let selectedGame: string | undefined = $state(undefined);
+  let category: Categories | undefined = $state(undefined);
+  let modName: string | undefined = $state(undefined);
+  let summary: string | undefined = $state(undefined);
+  let icon: string | undefined = $state(undefined);
+  let iconFile: File | undefined = $state();
+  let gitUrl: string | undefined = $state(undefined);
+  let description: string | undefined = $state(undefined);
+
+  function explicitEffect(fn: () => void, depsFn: () => {}) {
+    $effect(() => {
+      depsFn();
+      untrack(fn);
+    });
   }
 
-  function sendRevoke() {
-    axios
-      .post(
-        appendURL(`api/approval/mod/${mod?.info.id}/approve`),
-        {
-          status: "unverified",
-        },
-        {
-          withCredentials: true,
-        },
-      )
-      .then((response) => {
-        if (response.status === 302 || response.status === 200) {
-          if (response.data !== null) {
-            window.location.reload();
-            loadingDenial = false;
-          }
-        } else {
-        }
-      })
-      .catch((error) => {
-        console.error("An error occurred, contact a developer!");
-        console.error(error);
-      });
+  explicitEffect(
+    () => {
+      if (mod) {
+        selectedGame = mod.info.gameName;
+        category = convertCategories(mod.info.category);
+        console.log(category + " to " + mod.info.category);
+        modName = mod.info.name;
+        summary = mod.info.summary;
+        icon = appendURL(`cdn/icon/${mod.info.iconFileName}`);
+        gitUrl = mod.info.gitUrl;
+        description = mod.info.description;
+      }
+    },
+    () => [mod],
+  );
+
+  // Metadata Validation
+
+  let gitUrlScheme = z
+    .string()
+    .min(8, "URL must contain at least 8 character(s)")
+    .max(100)
+    .regex(
+      /^(https?:\/\/)?(www\.)?(github\.com|gitlab\.com)(\/.*)?$/,
+      "Must be Github/Gitlab URL",
+    )
+    .regex(
+      /^(.*com\/[^\/]+\/[^\/]+\/?)/,
+      "Must point to a project on Github/Gitlab",
+    )
+    .regex(
+      /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+      "Must be a valid URL",
+    );
+  let descriptionScheme = z
+    .string()
+    .max(4096, "Description must contain at most 4096 character(s)");
+
+  let gitUrlValidity = $derived(gitUrlScheme.safeParse(gitUrl));
+
+  let loadingSave = $state(false);
+
+  function save() {
+    console.log("Saving...");
+    if (
+      !selectedGame ||
+      !category ||
+      !modName ||
+      !summary ||
+      !gitUrl ||
+      !description
+    )
+      return;
+    loadingSave = true;
+    sendSaveEdit(
+      mod,
+      selectedGame,
+      category,
+      modName,
+      summary,
+      gitUrl,
+      description,
+      () => {
+        loadingSave = false;
+      },
+    );
   }
 </script>
 
@@ -132,13 +190,22 @@
         <p>No mod found!</p>
       </div>
     {:else}
-      <ModCardBase
+      <ModCardEditable
         mod={mod?.info}
-        author={mod?.info.authors}
-        smallCorners={true}
+        {isMadeByUser}
+        bind:editing
+        bind:modName
+        bind:summary
+        bind:icon
+        bind:iconFile
+        saveFunc={save}
       />
       <div class="flex flex-col gap-4 lg:flex-row">
-        <div class="order-2 flex flex-1 flex-col">
+        <div
+          class="order-2 flex flex-1 flex-col"
+          class:opacity-50={editing}
+          class:pointer-events-none={editing}
+        >
           <div class="flex flex-col gap-4">
             {#if userIsApprover && mod.info.status === "verified"}
               <div
@@ -226,7 +293,12 @@
               />
             </div>
             {#each versions as version (version.id)}
-              <VersionCard version={version} mod={mod.info} isApprover={userIsApprover} isAuthor={isMadeByUser} />
+              <VersionCard
+                {version}
+                mod={mod.info}
+                isApprover={userIsApprover}
+                isAuthor={isMadeByUser}
+              />
             {/each}
           </div>
         </div>
@@ -234,18 +306,60 @@
           <div
             class="flex h-fit flex-col rounded-xl bg-neutral-background-2 p-4 shadow-4"
           >
-            <h2 class="text-lg font-semibold">
-              More Info <Link href={mod.info.gitUrl}>Here!</Link>
-            </h2>
+            {#if editing}
+              <div class="git-url flex flex-row">
+                <h2 class="self-center p-2 text-lg font-semibold">More Info</h2>
+                <div
+                  class="!my-auto flex h-fit w-[400px] flex-1 flex-row gap-1 md:mt-1"
+                >
+                  <Field state={gitUrlValidity.success ? "success" : "error"}>
+                    <Input
+                      bind:value={gitUrl}
+                      ariaInvalid={!gitUrlValidity.success}
+                    />
+                    <FieldMessageError open={!gitUrlValidity.success}
+                      >{gitUrlValidity.error?.format()
+                        ._errors[0]}</FieldMessageError
+                    >
+                  </Field>
+                </div>
+              </div>
+            {:else}
+              <h2 class="text-lg font-semibold">
+                More Info <Link href={mod.info.gitUrl}>Here!</Link>
+              </h2>
+            {/if}
           </div>
           <div
             class="flex h-fit flex-col rounded-xl bg-neutral-background-2 p-4 shadow-4"
+            class:min-h-[400px]={editing}
           >
-            <h1 class="text-xl font-semibold">Description:</h1>
-            <MarkdownViewer text={mod.info.description} />
+            {#if editing}
+              <DescriptionPage bind:text={description} {descriptionScheme}
+              ></DescriptionPage>
+            {:else}
+              <h1 class="text-xl font-semibold">Description:</h1>
+              <MarkdownViewer text={mod.info.description} />
+            {/if}
           </div>
         </div>
       </div>
     {/if}
   {/await}
 </div>
+
+<style lang="postcss">
+  :global(.fui-field:not(:has(.fui-text-area))) {
+    @apply !flex !flex-col;
+  }
+
+  :global(.fui-field:has(.fui-text-area)) {
+    @apply w-full;
+  }
+
+  .git-url {
+    :global(.fui-label) {
+      @apply hidden;
+    }
+  }
+</style>
