@@ -2,12 +2,83 @@
   import type { Mod, ModVersion } from "$lib/types/Mods";
   import { Status } from "$lib/types/Status";
   import { appendURL } from "$lib/utils/url";
-  import { Button } from "@svelte-fui/core";
+  import { Button, Spinner } from "@svelte-fui/core";
   import { ArrowDownloadRegular, WarningRegular } from "@svelte-fui/icons";
   import { numify } from "numify";
+    import type { PageData } from "../../../../routes/$types";
+    import axios from "axios";
 
 
-  let { version, mod }: { version: ModVersion, mod: Mod } = $props();
+
+  let { version, mod, isAuthor, isApprover }: { version: ModVersion, mod: Mod, isAuthor:boolean, isApprover:boolean } = $props();
+
+  let denialClicks = $state(0);
+  let loadingDenial = $state(false);
+
+  let submitClicks = $state(0);
+  let loadingSubmit = $state(false);
+
+  function deny() {
+    denialClicks += 1;
+    if (denialClicks > 1) {
+      loadingDenial = true;
+      sendRevoke();
+    }
+  }
+
+  function submit() {
+    submitClicks += 1;
+    if (submitClicks > 1) {
+      loadingSubmit = true;
+      sendSubmit();
+    }
+  }
+
+  function sendSubmit() {
+    axios
+      .post(appendURL(`api/modVersions/${version.id}/submit`), {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+            window.location.reload();
+            loadingSubmit = false;
+          }
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred, contact a developer!");
+        console.error(error);
+      });
+  }
+
+  function sendRevoke() {
+    axios
+      .post(
+        appendURL(`api/approval/modVersion/${version.id}/revoke`),
+        {
+          allowDependants: false,
+        },
+        {
+          withCredentials: true,
+        },
+      )
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+            window.location.reload();
+            loadingDenial = false;
+          }
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred, contact a developer!");
+        console.error(error);
+      });
+  }
 </script>
 
 <div
@@ -36,10 +107,13 @@
         </span>
       </div>
 
+      <!-- design is my passion - please revisit these colors, theyre fucked  -->
       {#if version.status === Status.Verified}
         <p class="silly-capitalize text-sm bg-green-700 rounded-md p-1">{version.status}</p>
       {:else if version.status === Status.Unverified}
         <p class="silly-capitalize text-sm bg-orange-700 rounded-md p-1">{version.status}</p>
+      {:else if version.status === Status.Private}
+        <p class="silly-capitalize text-sm bg-blue-700 rounded-md p-1">{version.status}</p>
       {:else if version.status === Status.Removed}
         <p class="silly-capitalize text-sm bg-red-700 rounded-md p-1">{version.status}</p>
       {/if}
@@ -59,6 +133,30 @@
     class=""
     onclick={() => {
       window.open(appendURL(`cdn/mod/${version.zipHash}.zip`));
-    }}>Download</Button
-  >
+    }}>Download</Button>
+
+    {#if version.status === Status.Verified && isApprover}
+      {#if loadingSubmit}
+      <div class="flex h-fit flex-row items-center justify-center gap-4">
+        <Spinner />
+        <p>Loading...</p>
+      </div>
+      {:else}
+      <Button onclick={deny} class="text-palette-red-foreground-1">
+      <div class="flex flex-row gap-2">
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={denialClicks > 0}></div>
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={denialClicks > 1}></div>
+      </div>
+      Revoke Verification
+    </Button>
+  {/if}
+    {:else if version.status === Status.Private && (isAuthor || isApprover)}
+    <Button onclick={submit} class="text-palette-red-foreground-1">
+      <div class="flex flex-row gap-2">
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={submitClicks > 0}></div>
+        <div class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20" class:!opacity-80={submitClicks > 1}></div>
+      </div>
+      Submit for Verification
+    </Button>
+    {/if}
 </div>

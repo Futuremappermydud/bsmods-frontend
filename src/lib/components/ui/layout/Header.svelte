@@ -78,7 +78,7 @@
         </svg>
       </a>
     {/if}
-    {#if userData.authenticated && import.meta.env.DEV}
+    {#if userData.authenticated}
       <a class="contents" href="/upload">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
           <ArrowUploadRegular />

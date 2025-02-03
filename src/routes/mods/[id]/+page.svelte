@@ -46,12 +46,11 @@
     return mod.info.authors.some((a) => a.id === data.userId);
   });
 
-  let userIsApprover = $derived(
-    mod &&
-      data.roles &&
-      checkUser(data.roles, UserRoles.Approver, mod?.info.gameName),
-  );
-
+  let userIsApprover = $derived.by(() => {
+    if (!mod) return false;
+    if (!data.roles) return false;
+    return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName)
+  });
   let denialClicks = $state(0);
   let loadingDenial = $state(false);
 
@@ -227,7 +226,7 @@
               />
             </div>
             {#each versions as version (version.id)}
-              <VersionCard version={version} mod={mod.info} />
+              <VersionCard version={version} mod={mod.info} isApprover={userIsApprover} isAuthor={isMadeByUser} />
             {/each}
           </div>
         </div>
