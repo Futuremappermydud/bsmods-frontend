@@ -2,7 +2,7 @@
   import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
   import MarkdownViewer from "$lib/components/ui/markdown/MarkdownViewer.svelte";
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
-  import type { IndividualModData } from "$lib/types/Mods";
+  import type { IndividualModData, ModData } from "$lib/types/Mods";
   import { Button, Link, Spinner } from "@svelte-fui/core";
   import type { PageData } from "./$types";
   import axios from "axios";
@@ -12,7 +12,7 @@
 
   let { data }: { data: PageData } = $props();
 
-  let mod: IndividualModData | undefined = $state();
+  let mod: IndividualModData = $state();
 
   let version = $state("");
 
@@ -56,6 +56,12 @@
 
   let submitClicks = $state(0);
   let loadingSubmit = $state(false);
+
+  // Display
+  let latestSize: number = $derived.by(() => {
+    let selectedVersionSize = versions[0].fileSize;
+    return selectedVersionSize;
+  });
 
   function deny() {
     denialClicks += 1;
@@ -133,7 +139,8 @@
       </div>
     {:else}
       <ModCardBase
-        mod={mod?.info}
+        mod={mod.info}
+        latestSize={latestSize}
         author={mod?.info.authors}
         smallCorners={true}
       />

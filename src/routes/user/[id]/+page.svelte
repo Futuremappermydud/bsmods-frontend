@@ -110,7 +110,7 @@
     {/if}
     {#if slicedMods}
       {#each slicedMods as mod}
-        <ModCardProfile mod={mod.mod} />
+        <ModCardProfile mod={mod} />
       {/each}
       {#if searchedMods.length > perPage}
         <Pagination

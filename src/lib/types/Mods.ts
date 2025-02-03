@@ -57,7 +57,6 @@ export interface Mod {
   gitUrl: string;
   lastApprovedById: number;
   lastUpdatedById: number;
-  fileSize: number;
   createdAt: string;
   updatedAt: string;
 }

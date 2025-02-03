@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Link } from "@svelte-fui/core";
-  import type { Mod, ModAuthor } from "$lib/types/Mods";
+  import type { Mod, ModAuthor, ModData } from "$lib/types/Mods";
   import ModIcon from "./ModIcon.svelte";
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
@@ -9,11 +9,13 @@
 
   let {
     mod,
+    latestSize,
     author,
     smallCorners = false,
     slot,
   }: {
     mod: Mod;
+    latestSize: number;
     author: ModAuthor | ModAuthor[] | undefined;
     smallCorners?: boolean;
     slot?: Snippet;
@@ -79,9 +81,9 @@
         </svg>
         <span
           class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
-          >{(mod.fileSize /1024 > 1024 ? `${Math.round(mod.fileSize/1024/1024)}MB` : (`${Math.round(mod.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(mod.fileSize/1024)}KB`))}</span
+          >{(latestSize /1024 > 1024 ? `${Math.round(latestSize/1024/1024)}MB` : (`${Math.round(latestSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(latestSize/1024)}KB`))}</span
         >
-        {#if mod.fileSize/1024/1024 > 50}
+        {#if latestSize/1024/1024 > 50}
           <span class="text-lg mt-auto h-fit w-fit tooltip">
             <svg viewBox="0 0 30 30" class="w-6 text-neutral-foreground-2 text-yellow-400 md:w-6">
               <WarningFilled />
