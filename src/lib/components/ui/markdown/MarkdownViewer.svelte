@@ -58,4 +58,16 @@
   :global(h3.fix) {
     @apply mb-4 border-b-[1px] border-solid border-neutral-foreground-disabled pb-1 pt-2;
   }
+
+  :global(h1.fix) {
+    @apply h-11;
+  }
+
+  :global(h2.fix) {
+    @apply h-9;
+  }
+
+  :global(h3.fix) {
+    @apply h-8;
+  }
 </style>
