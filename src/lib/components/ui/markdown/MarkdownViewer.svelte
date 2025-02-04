@@ -14,6 +14,8 @@
         {
           h1: "fix",
           h2: "fix",
+          h3: "fix",
+          h4: "fix",
           a: "fix",
           p: "fix",
           li: "fix",
@@ -32,12 +34,11 @@
     color: revert !important;
     font-size: revert !important;
     font-weight: revert !important;
-    line-height: revert !important;
+    line-height: 1.5 !important;
   }
 
   :global(p.fix) {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    @apply mb-4 mt-0 !text-neutral-foreground-2;
   }
 
   :global(ul > li.fix) {
@@ -54,20 +55,31 @@
   }
 
   :global(h2.fix),
-  :global(h1.fix),
-  :global(h3.fix) {
+  :global(h1.fix) {
     @apply mb-4 border-b-[1px] border-solid border-neutral-foreground-disabled pb-1 pt-2;
   }
 
   :global(h1.fix) {
-    @apply h-11;
+    @apply !h-14;
   }
 
   :global(h2.fix) {
-    @apply h-9;
+    @apply !h-10;
   }
 
   :global(h3.fix) {
-    @apply h-8;
+    @apply my-0 !h-8 font-semibold;
+  }
+
+  :global(h4.fix) {
+    @apply my-5 !h-8 font-semibold;
+  }
+
+  :global(a.fix) {
+    @apply !text-blue-500 duration-100 hover:!text-blue-400;
+  }
+
+  :global(a.fix > img) {
+    @apply !inline;
   }
 </style>
