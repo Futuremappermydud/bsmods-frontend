@@ -345,7 +345,6 @@
               <DescriptionPage bind:text={description} {descriptionScheme}
               ></DescriptionPage>
             {:else}
-              <h1 class="text-xl font-semibold">Description:</h1>
               <MarkdownViewer text={mod.info.description} />
             {/if}
           </div>
