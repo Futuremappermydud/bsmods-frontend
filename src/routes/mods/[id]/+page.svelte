@@ -326,7 +326,7 @@
               </div>
             {:else}
               <h2 class="text-lg font-semibold">
-                More Info <Link href={mod.info.gitUrl}>Here!</Link>
+                More Info <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">Here!</Link>
               </h2>
             {/if}
           </div>
