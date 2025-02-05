@@ -9,7 +9,7 @@
 </script>
 
 <div class="flex aspect-video w-auto rounded-[10px] bg-[#00000066] shadow-4">
-  <a href={event.url} aria-label="Extra Sensory">
+  <a href={event.url} target="=_blank" rel="no-referrer" aria-label="Extra Sensory">
     <video
       playsinline={true}
       autoplay={true}

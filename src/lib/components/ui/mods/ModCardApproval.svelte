@@ -81,7 +81,7 @@
         {mod.status}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={mod.gitUrl}>GitHub</Link>
+        <Link href={mod.gitUrl} target="=_blank" rel="no-referrer">GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link
