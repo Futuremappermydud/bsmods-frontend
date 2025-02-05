@@ -171,7 +171,7 @@
           .join(", ")}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={versionApproval.mod.gitUrl}>GitHub</Link>
+        <Link href={versionApproval.mod.gitUrl} target="=_blank" rel="no-referrer">GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link href={appendURL(`cdn/mods/${versionApproval.version.zipHash}`)}
