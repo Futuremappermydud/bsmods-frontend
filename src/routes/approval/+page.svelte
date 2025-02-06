@@ -3,15 +3,20 @@
   import NewModsApproval from "$lib/components/ui/approval/NewModsApproval.svelte";
   import NewVersionsApproval from "$lib/components/ui/approval/NewVersionsApproval.svelte";
   import GamePicker from "$lib/components/ui/filtering/GamePicker.svelte";
+  import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import type { ApprovalQueues } from "$lib/types/Approval";
+  import type { Versions } from "$lib/types/Versions";
   import { appendURL } from "$lib/utils/url";
+    import { DocumentSplitHintFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
   let page = $state("mods");
 
+  let allGameVersions: Versions = $state({ versions: [] });
   let selectedGame = $state("");
+  let selectedVersion = $state("");
 
   let modSearchError = $state(false);
   let modSearchLoading = $state(false);
@@ -23,9 +28,14 @@
   });
 
   $effect(() => {
+    doShit();
+  });
+
+  async function doShit() {
     if (!selectedGame) return;
     modSearchLoading = true;
     modSearchError = false;
+    if (!approvalQueues) return;
     switch (page) {
       case "edits":
         getApprovalQueue(`edits`).then((data) => {
@@ -51,6 +61,13 @@
         getApprovalQueue(`modVersions`).then((data) => {
           if (data) {
             approvalQueues.modVersions = data.modVersions;
+            if (selectedVersion && selectedVersion.length > 0) {
+              if (approvalQueues.modVersions) {
+                approvalQueues.modVersions = approvalQueues.modVersions.filter(
+                  (modVersion) => modVersion.version.supportedGameVersionIds.includes(allGameVersions.versions.find((version) => version.version === selectedVersion)?.id as number),
+                );
+              }
+            }
             console.log(
               `Loaded ${approvalQueues.modVersions?.length} versions.`,
             );
@@ -65,7 +82,7 @@
         break;
     }
     modSearchLoading = false;
-  });
+  }
 
   async function getApprovalQueue(type: `edits` | `mods` | `modVersions`) {
     return await axios
@@ -92,6 +109,8 @@
         return null;
       });
   }
+
+
 </script>
 
 <div class="flex flex-col items-center gap-4 text-center">
@@ -110,6 +129,14 @@
     class="flex flex-1 flex-col justify-start gap-3 rounded-xl bg-neutral-background-2 p-2 shadow-4"
   >
     <GamePicker bind:selectedGame required={true} />
+    <GameVersionPicker removeLabel={true}
+      bind:allVersions={allGameVersions}
+      bind:selectedGame
+      bind:selectedVersion
+      required={false}
+      disabled={page == "edits" || page == "mods"}
+      on:change={() => doShit()}
+    />
   </div>
 
   {#if approvalQueues && selectedGame}
