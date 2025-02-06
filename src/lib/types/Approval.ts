@@ -1,3 +1,4 @@
+import type { SemVer } from "semver";
 import type { Categories } from "./Categories";
 import type { ContentHash, Mod } from "./Mods";
 import type { Platform } from "./Platform";
@@ -8,8 +9,8 @@ export interface ModVersionDBObject {
   readonly id: number;
   modId: number;
   authorId: number;
-  modVersion: string;
-  supportedGameVersions: number[];
+  modVersion: SemVer; // fuck you ig
+  supportedGameVersionIds: number[];
   status: Status;
   dependencies: number[]; // array of modVersion ids
   platform: Platform;
