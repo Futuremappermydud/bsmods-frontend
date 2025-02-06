@@ -35,6 +35,7 @@
           <a
             href="https://bsmg.wiki/modding/"
             target="=_blank"
+            rel="no-referrer"
             class="flex flex-1 items-center justify-center rounded-lg bg-green-400 p-2 shadow-4 transition-colors duration-100 hover:bg-green-500 dark:bg-green-800 hover:dark:bg-green-700"
           >
             <p class="font-semibold">Mod Creation Guide</p>
@@ -58,6 +59,7 @@
           <a
             href="https://www.bsmanager.io/"
             target="=_blank"
+            rel="no-referrer"
             class="flex flex-1 items-center justify-center rounded-lg bg-brand-web-80 p-2 shadow-4 transition-colors duration-100 hover:bg-brand-web-90"
           >
             <p class="font-semibold">
@@ -69,6 +71,7 @@
           <a
             href="https://github.com/bsmg/ModAssistant/releases/latest"
             target="=_blank"
+            rel="no-referrer"
             class="flex flex-1 items-center justify-center rounded-lg bg-red-600 p-2 shadow-4 transition-colors duration-100 hover:bg-red-500"
           >
             <p class="font-semibold">Mod Assistant</p>
@@ -76,6 +79,7 @@
           <a
             href="https://example.com"
             target="=_blank"
+            rel="no-referrer"
             aria-disabled={true}
             class="pointer-events-none flex flex-1 items-center justify-center rounded-lg bg-moddingpink-signaturePink p-2 opacity-40 shadow-4"
           >
@@ -88,7 +92,10 @@
       class="flex h-fit w-full flex-1 flex-row gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-16"
     >
       <p class="text-lg font-semibold">Need Help?</p>
-      <Link href="https://bsmg.wiki" class="sigma !text-lg !font-semibold"
+      <Link href="https://bsmg.wiki"
+            target="=_blank"
+            rel="no-referrer"
+            class="sigma !text-lg !font-semibold"
         >Check out the Wiki!</Link
       >
     </div>

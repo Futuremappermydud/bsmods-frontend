@@ -21,6 +21,7 @@
     ModVersionDBObject,
   } from "$lib/types/Approval";
   import MarkdownViewer from "../markdown/MarkdownViewer.svelte";
+    import { SemVer } from "semver";
 
   let {
     edit,
@@ -100,68 +101,18 @@
 </script>
 
 {#snippet approvalButtons()}
-  {#if edit.edit.objectTableName == `modVersions` && `modVersion` in edit.edit.object && `modVersion` in edit.original}
     <div class="ml-auto flex flex-row gap-2">
       <div class="flex h-full min-w-20 flex-col gap-[3px]">
         <div
           class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
         >
-          {edit.original.modVersion}
+          {edit.mod.gameName}
         </div>
         <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.original.supportedGameVersions
-            .map((gameVersion) => {
-              let versionString = gameVersions.find(
-                (gv) => gv.id === gameVersion,
-              )?.version;
-              return versionString ? versionString : `${gameVersion}`;
-            })
-            .join(", ")}
+          {edit.mod.category}
         </div>
         <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.original.platform}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.original.dependencies.length} Deps
-        </div>
-      </div>
-      <div class="flex h-full min-w-20 flex-col gap-[3px]">
-        <div
-          class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
-        >
-          {edit.edit.object.modVersion}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.edit.object.supportedGameVersions
-            .map((gameVersion) => {
-              let versionString = gameVersions.find(
-                (gv) => gv.id === gameVersion,
-              )?.version;
-              return versionString ? versionString : `${gameVersion}`;
-            })
-            .join(", ")}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.edit.object.platform}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.edit.object.dependencies.length} Deps
-        </div>
-      </div>
-    </div>
-  {:else if edit.edit.objectTableName == `mods` && `name` in edit.edit.object && `name` in edit.original}
-    <div class="ml-auto flex flex-row gap-2">
-      <div class="flex h-full min-w-20 flex-col gap-[3px]">
-        <div
-          class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
-        >
-          {edit.edit.object.gameName}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          {edit.edit.object.category}
-        </div>
-        <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-          <Link href={edit.edit.object.gitUrl}>GitHub</Link>
+          <Link href={edit.mod.gitUrl} target="=_blank" rel="no-referrer">GitHub</Link>
         </div>
         <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
           <Link
@@ -214,7 +165,7 @@
                   let originalProp = (edit.original as ModVersionDBObject)[
                     key as keyof ModVersionDBObject
                   ];
-                  if (Array.isArray(editProp) && Array.isArray(originalProp)) {
+                  if (Array.isArray(editProp) && Array.isArray(originalProp)) { //todo: check the dependency array and convert that to something human readable
                     if (
                       !editProp.every(
                         (v) => v === originalProp.find((o) => o === v),
@@ -233,11 +184,19 @@
                   }
 
                   if (editProp != originalProp) {
-                    changeBody.push({
+                    if (key === `modVersion`) {
+                      changeBody.push({
                       key: key,
-                      oldValue: originalProp,
-                      newValue: editProp,
+                      oldValue: (originalProp as SemVer).raw,
+                      newValue: (editProp as SemVer).raw,
                     });
+                    } else {
+                      changeBody.push({
+                        key: key,
+                        oldValue: originalProp,
+                        newValue: editProp,
+                      });
+                    }
                   }
                 }
               }
@@ -249,7 +208,6 @@
         </div>
       </div>
     </div>
-  {/if}
   <div class="flex h-full w-14 flex-col gap-2">
     <Button
       class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"

@@ -6,11 +6,16 @@
         <a
           class="my-auto !h-fit !w-fit text-xs duration-150 hover:text-brand-foreground-link-hover"
           href="https://github.com/Futuremappermydud/bsmods-frontend"
+          target="=_blank"
+          rel="no-referrer"
           >Frontend</a
         >
         <a
           class="my-auto !h-fit !w-fit text-xs duration-150 hover:text-brand-foreground-link-hover"
-          href="https://github.com/Saeraphinx/badbsmods">Backend</a
+          href="https://github.com/Saeraphinx/badbsmods"
+          target="=_blank"
+          rel="no-referrer"
+            >Backend</a
         >
       </div>
     </div>

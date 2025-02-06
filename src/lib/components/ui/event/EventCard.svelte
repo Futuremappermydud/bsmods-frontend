@@ -97,6 +97,8 @@
         <div class="flex h-fit w-fit flex-1 flex-row gap-1 md:mt-1">
           <Link
             href={event.url}
+            target="=_blank"
+            rel="no-referrer"
             class="!text-lg font-semibold leading-5 md:!text-xl"
             >{event.name}</Link
           >

@@ -129,7 +129,7 @@
                       .modVersion as ModVersionDBObject;
                     modalBody.push({
                       header: `${mod.name} (${modVersion.modVersion})`,
-                      body: `Mod Status: ${mod.status}\nVersion Status: ${modVersion.status}\nVersion: ${modVersion.modVersion}\nPlatform: ${modVersion.platform}\nGame Versions: ${modVersion.supportedGameVersions
+                      body: `Mod Status: ${mod.status}\nVersion Status: ${modVersion.status}\nVersion: ${modVersion.modVersion}\nPlatform: ${modVersion.platform}\nGame Versions: ${modVersion.supportedGameVersionIds
                         .map((gameVersion) => {
                           let versionString = gameVersions.find(
                             (gv) => gv.id === gameVersion,
@@ -161,7 +161,7 @@
         {versionApproval.version.platform}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        {versionApproval.version.supportedGameVersions
+        {versionApproval.version.supportedGameVersionIds
           .map((gameVersion) => {
             let versionString = gameVersions.find(
               (gv) => gv.id === gameVersion,
@@ -171,7 +171,7 @@
           .join(", ")}
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
-        <Link href={versionApproval.mod.gitUrl}>GitHub</Link>
+        <Link href={versionApproval.mod.gitUrl} target="=_blank" rel="no-referrer">GitHub</Link>
       </div>
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link href={appendURL(`cdn/mods/${versionApproval.version.zipHash}`)}
