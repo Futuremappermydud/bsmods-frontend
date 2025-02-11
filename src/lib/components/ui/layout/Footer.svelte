@@ -1,3 +1,7 @@
+<script>
+    import { appendURL } from "$lib/utils/url";
+</script>
+
 <footer class="mt-10 flex h-[51px] w-fit flex-col">
   <div class="ml-10 mr-auto flex h-[50px] w-fit">
     <div class="ml-5 flex flex-row items-center gap-4">
@@ -16,6 +20,13 @@
           target="=_blank"
           rel="no-referrer"
             >Backend</a
+        >
+        <a
+          class="my-auto !h-fit !w-fit text-xs duration-150 hover:text-brand-foreground-link-hover"
+          href="{appendURL(`api/docs`)}"
+          target="=_blank"
+          rel="no-referrer"
+          >API Documentation</a
         >
       </div>
     </div>
