@@ -113,6 +113,12 @@
       .catch((error) => {
         console.error("An error occurred, contact a developer!");
         console.error(error);
+        if (error.response) {
+          if (error.response.status && error.response.data) {
+            console.error(error.response.status);
+            console.error(error.response.data);
+          }
+        }
       });
   }
 </script>
