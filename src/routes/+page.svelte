@@ -44,7 +44,7 @@
             href="/upload"
             class="flex flex-1 items-center justify-center rounded-lg bg-brand-teams-80 p-2 shadow-4 transition-colors duration-100 hover:bg-brand-teams-90"
           >
-            <p class="font-semibold">Upload a Mod</p>
+            <p class="font-semibold">Create a New Mod</p>
           </a>
         </div>
       </div>
