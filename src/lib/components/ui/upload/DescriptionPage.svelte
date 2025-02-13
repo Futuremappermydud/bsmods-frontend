@@ -31,7 +31,7 @@
       state={descriptionValidity.success ? "success" : "error"}
     >
       <TextArea
-        placeholder="Description"
+        placeholder="A longer description of your mod and what it does"
         componentClass="!h-full w-full"
         bind:value={text}
         ariaInvalid={!descriptionValidity.success}

@@ -2,7 +2,7 @@
   import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
   import MarkdownViewer from "$lib/components/ui/markdown/MarkdownViewer.svelte";
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
-  import type { IndividualModData } from "$lib/types/Mods";
+  import type { IndividualModData, ModData } from "$lib/types/Mods";
   import {
     Button,
     Field,
@@ -70,6 +70,12 @@
 
   let submitClicks = $state(0);
   let loadingSubmit = $state(false);
+
+  // Display
+  let latestSize: number | undefined = $derived.by(() => {
+    let selectedVersionSize = versions ? versions[0].fileSize : undefined;
+    return selectedVersionSize;
+  });
 
   function deny() {
     denialClicks += 1;
@@ -192,6 +198,7 @@
     {:else}
       <ModCardEditable
         mod={mod?.info}
+        latestSize={latestSize}
         {isMadeByUser}
         bind:editing
         bind:modName
