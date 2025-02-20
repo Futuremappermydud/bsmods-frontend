@@ -69,11 +69,12 @@
     .refine((value) => Object.keys(Categories).includes(value));
   let descriptionScheme = z
     .string()
+    .min(3, "Description must contain at least 3 character(s)") // to be removed at a later date
     .max(4096, "Description must contain at most 4096 character(s)");
   let summaryScheme = z
     .string()
     .min(10, "Summary must contain at least 10 character(s)")
-    .max(200, "Summary must contain at most 200 character(s)");
+    .max(160, "Summary must contain at most 160 character(s)");
   let iconScheme = z
     .string()
     .nonempty("Icon must be provided")
@@ -114,6 +115,12 @@
       .catch((error) => {
         console.error("An error occurred, contact a developer!");
         console.error(error);
+        if (error.response) {
+          if (error.response.status && error.response.data) {
+            console.error(error.response.status);
+            console.error(error.response.data);
+          }
+        }
       });
   }
 </script>

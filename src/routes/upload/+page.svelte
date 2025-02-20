@@ -6,7 +6,7 @@
   <p
     class="absolute left-4 top-16 text-lg font-semibold text-neutral-foreground-4"
   >
-    Upload Mod
+    Create a New Mod
   </p>
 
   <NewProject />
