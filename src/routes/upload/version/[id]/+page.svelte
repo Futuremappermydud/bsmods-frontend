@@ -17,6 +17,13 @@
     FieldMessageError,
     Input,
     Spinner,
+    Dropdown,
+    InputSkin,
+    Accordion,
+    AccordionHeader,
+    AccordionItem,
+    AccordionPanel,
+    Icon,
   } from "@svelte-fui/core";
   import ModCardBase from "$lib/components/ui/mods/ModCardBase.svelte";
   import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
@@ -27,10 +34,12 @@
   import { z } from "zod";
   import type { Versions } from "$lib/types/Versions";
   import { coerce } from "semver";
+    import { ChevronDoubleDownFilled } from "@svelte-fui/icons";
 
   let { data }: { data: PageData } = $props();
 
   let mod: IndividualModData | undefined = $state();
+  let selectedVersion:ModVersion | undefined = $state();
 
   interface Dependency {
     name: string;
@@ -276,6 +285,62 @@
         }
       });
   }
+
+  async function importDepenenciesFromOtherVersion() {
+    // this will unfortuntnaly be ineffiecint, but fuck it wii ball
+    let versionToPullFrom = selectedVersion;
+    if (!versionToPullFrom) {
+      console.error(`borked`);
+      return;
+    }
+
+    for (let depId of versionToPullFrom.dependencies) {
+      let modData = await axios.get(appendURL(`/api/modversions/${depId}?raw=true`)).then((res) => {
+        if (res.status !== 200) {
+          return null;
+        } else {
+          return res.data;
+        }
+      })
+
+      rawDeps.push({
+        id: modData.mod.id,
+        name: modData.mod.name,
+        version: modData.modVersion.modVersion,
+        versionId: modData.modVersion.id
+      })
+    }
+  }
+
+  async function importFromOtherVersion() {
+    let versionToPullFrom = selectedVersion;
+    if (!versionToPullFrom) {
+      console.error(`borked`);
+      return;
+    }
+    importDepenenciesFromOtherVersion();
+    modVersion = versionToPullFrom?.modVersion;
+    for (let sGV of versionToPullFrom.supportedGameVersions) {
+      tempSelectedVersion = sGV.version
+      addVersion();
+    }
+  }
+
+  let disableImportButton = $derived.by(() => {
+    if (rawDeps.length > 0) {
+      return true
+    }
+
+    if (supportedGameVersions.length > 0) {
+      return true
+    }
+
+    if (modVersion !== "") {
+      return true
+    }
+
+    return false;
+  })
 </script>
 
 <div class="flex flex-col gap-4">
@@ -297,6 +362,48 @@
       />
     {/if}
   {/await}
+  <div class="mx-8 flex h-fit w-auto flex-row gap-4">
+    <Accordion collapsible={true} class="w-full">
+      <AccordionItem value="item-1">
+        <AccordionHeader class="items-center gap-2" position="start" as="h1">
+          <p>Advanced Settings</p>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <ChevronDoubleDownFilled />
+          </svg>
+        </AccordionHeader>
+        <AccordionPanel>
+          <div class="p-4 flex h-fit w-auto flex-col gap-4 bg-neutral-background-2 rounded-xl">
+            <div>
+              <p class="fs-4">Import version metadata from another already uploaded version of {mod?.info.name}.</p>
+            </div>
+            <div class="p-1 flex h-fit w-auto flex-row gap-4 bg-neutral-background-2">
+          <Dropdown.Root class="max-w-[196px]" bind:value={selectedVersion}>
+            <Dropdown.Trigger let:data>
+              <InputSkin class="min-w-[196px]">
+                {#if data}
+                  <span>{data.modVersion}</span>
+                {:else}
+                  <span>Select a Version</span>
+                {/if}
+                <Dropdown.Arrow />
+              </InputSkin>
+            </Dropdown.Trigger>
+      
+            <Dropdown.Menu>
+              {#if mod}
+                {#each mod.versions as item}
+                  <Dropdown.Item value={item} data={item}>{`${item.modVersion}`}</Dropdown.Item>
+                {/each}
+              {/if}
+            </Dropdown.Menu>
+          </Dropdown.Root>
+          <Button disabled={disableImportButton} class="min-w-[160px]" on:click={importFromOtherVersion}>Import Metadata</Button>
+        </div>
+        </div>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  </div> 
   <div class="mx-10 flex flex-row gap-4">
     <div class="flex flex-col gap-4">
       <div
