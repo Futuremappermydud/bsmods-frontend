@@ -106,6 +106,7 @@
   let tempRawDepVersion = $state("");
   let tempRawDepAllVersions: ModVersion[] = $state([]);
   let rawDeps: Dependency[] = $state([]);
+  let tempRawAllowedVersions: ModVersion[] = $state([]);
 
   async function getMods() {
     return await axios
@@ -142,6 +143,16 @@
                 .versions as ModVersion[];
             }
           }
+
+          if (tempRawDepAllVersions.length === 0) {
+            console.error("No versions found for mod!");
+          } else {
+            tempRawAllowedVersions = tempRawDepAllVersions.filter((v) => {
+              let valid = dependencyVersionScheme.safeParse(v.modVersion);
+              return valid.success;
+            });
+          }
+
           loadingTempRawDepVersions = false;
         })
         .catch((error) => {
@@ -149,6 +160,8 @@
           console.error(error);
           loadingTempRawDepVersions = false;
         });
+
+
     }
   }
 
@@ -287,6 +300,7 @@
     });
     tempRawDepName = "";
     tempRawDepVersion = "";
+    tempRawDepAllVersions = [];
   }
 
   function upload() {
@@ -581,7 +595,7 @@
             label="Mod Version"
             state={dependencyVersionValidity.success ? "success" : "error"}
           >
-            <Input
+            <!--<Input
               bind:value={tempRawDepVersion}
               ariaInvalid={!dependencyVersionValidity.success &&
                 dependencyNameValidity.success}
@@ -589,6 +603,29 @@
                 loadingTempRawDepVersions}
               class="w-56"
             />
+            -->
+            <Dropdown.Root class="max-w-[196px]" bind:value={tempRawDepVersion}>
+              <Dropdown.Trigger let:data>
+                <InputSkin disabled={tempRawDepAllVersions.length === 0 ||
+                  loadingTempRawDepVersions} ariaInvalid={!dependencyVersionValidity.success &&
+                    dependencyNameValidity.success} class="min-w-[196px]">
+                  {#if data && tempRawDepAllVersions.length > 0}
+                    <span>{data}</span>
+                  {:else}
+                    <span>Select a Version</span>
+                  {/if}
+                  <Dropdown.Arrow />
+                </InputSkin>
+              </Dropdown.Trigger>
+              <Dropdown.Menu >
+                {#if tempRawAllowedVersions}
+                  {#each tempRawAllowedVersions as item}
+                    <Dropdown.Item value={item.modVersion} data={item.modVersion}>{`${item.modVersion}`}</Dropdown.Item> <!--TODO: actually use the object instead of going from obj > string > obj-->
+                  {/each}
+                {/if}
+              </Dropdown.Menu>
+            </Dropdown.Root>
+
             <FieldMessageError
               open={!dependencyVersionValidity.success &&
                 dependencyNameValidity.success}
