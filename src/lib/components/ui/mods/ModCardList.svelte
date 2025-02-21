@@ -65,4 +65,4 @@
   {/if}
 {/snippet}
 
-<ModCardBase mod={mod.mod} author={mod.mod.authors} slot={rightItems} />
+<ModCardBase mod={mod.mod} latestSize={undefined} author={mod.mod.authors} slot={rightItems} />

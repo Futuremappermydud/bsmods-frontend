@@ -19,6 +19,7 @@ export interface ModVersionDBObject {
   downloadCount: number;
   lastApprovedById: number | null;
   lastUpdatedById: number;
+  fileSize: number;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt: Date | null;
@@ -56,6 +57,7 @@ export type ModVersionApproval = Omit<
   | `lastApprovedById`
   | `lastUpdatedById`
   | `downloadCount`
+  | `fileSize`
 >;
 export type ModApproval = Omit<
   ModDBObject,

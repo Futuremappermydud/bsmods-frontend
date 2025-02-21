@@ -2,7 +2,7 @@
   import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
   import MarkdownViewer from "$lib/components/ui/markdown/MarkdownViewer.svelte";
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
-  import type { IndividualModData } from "$lib/types/Mods";
+  import type { IndividualModData, ModData } from "$lib/types/Mods";
   import {
     Button,
     Field,

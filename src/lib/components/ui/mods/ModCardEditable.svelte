@@ -119,6 +119,7 @@
 {#if !editing}
   <ModCardBase
     {mod}
+    latestSize={undefined}
     author={mod.authors}
     slot={editingMarker}
     smallCorners={true}
