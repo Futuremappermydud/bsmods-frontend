@@ -57,6 +57,7 @@ export type ModVersionApproval = Omit<
   | `lastApprovedById`
   | `lastUpdatedById`
   | `downloadCount`
+  | `fileSize`
 >;
 export type ModApproval = Omit<
   ModDBObject,
