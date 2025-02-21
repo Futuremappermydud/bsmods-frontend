@@ -15,7 +15,7 @@
     slot,
   }: {
     mod: Mod;
-    latestSize: number | undefined;
+    latestSize?: number | undefined;
     author: ModAuthor | ModAuthor[] | undefined;
     smallCorners?: boolean;
     slot?: Snippet;
