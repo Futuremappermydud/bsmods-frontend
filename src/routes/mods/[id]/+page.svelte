@@ -71,12 +71,6 @@
   let submitClicks = $state(0);
   let loadingSubmit = $state(false);
 
-  // Display
-  let latestSize: number | undefined = $derived.by(() => {
-    let selectedVersionSize = versions ? versions[0].fileSize : undefined;
-    return selectedVersionSize;
-  });
-
   function deny() {
     denialClicks += 1;
     if (denialClicks > 1) {
@@ -198,7 +192,6 @@
     {:else}
       <ModCardEditable
         mod={mod?.info}
-        latestSize={latestSize}
         {isMadeByUser}
         bind:editing
         bind:modName
