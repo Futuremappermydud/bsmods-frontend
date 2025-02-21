@@ -267,6 +267,7 @@
   {:else}
     <ModCardBase
       mod={edit.mod}
+      latestSize={undefined}
       author={edit.mod.authors}
       slot={approvalButtons}
     />

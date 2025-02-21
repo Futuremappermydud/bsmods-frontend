@@ -21,4 +21,4 @@
   {/if}
 {/snippet}
 
-<ModCardBase mod={mod.mod} latestSize={mod.latest?.fileSize} author={mod.mod.authors} slot={privateMarker} />
+<ModCardBase mod={mod.mod} latestSize={undefined} author={mod.mod.authors} slot={privateMarker} />

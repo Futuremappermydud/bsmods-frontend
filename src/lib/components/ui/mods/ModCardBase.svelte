@@ -75,23 +75,25 @@
       <p class="text-left text-xs text-neutral-foreground-3 md:text-sm">
         {mod.summary}
       </p>
-      <div class="flex w-fit flex-row gap-2">
-        <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
-          <DatabaseArrowDownFilled/>
-        </svg>
-        <span
-          class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
-          >{latestSize ? (latestSize /1024 > 1024 ? `${Math.round(latestSize/1024/1024)}MB` : (`${Math.round(latestSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(latestSize/1024)}KB`)) : `0KB`}</span
-        >
-        {#if latestSize && latestSize/1024/1024 > 50}
-          <span class="text-lg mt-auto h-fit w-fit tooltip">
-            <svg viewBox="0 0 30 30" class="w-6 text-neutral-foreground-2 text-yellow-400 md:w-6">
-              <WarningFilled />
-            </svg>
-            <span class="tooltiptext">This is a very large mod!</span>
-          </span>
-        {/if}
-      </div>
+      {#if latestSize!=undefined && latestSize!=0}
+        <div class="flex w-fit flex-row gap-2">
+          <svg viewBox="0 0 20 20" class="w-4 text-neutral-foreground-2 md:w-4">
+            <DatabaseArrowDownFilled/>
+          </svg>
+          <span
+            class="silly-capitalize text-sm text-neutral-foreground-2 md:text-base"
+            >{latestSize ? (latestSize /1024 > 1024 ? `${Math.round(latestSize/1024/1024)}MB` : (`${Math.round(latestSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(latestSize/1024)}KB`)) : `0KB`}</span
+          >
+          {#if latestSize && latestSize/1024/1024 > 50}
+            <span class="text-lg mt-auto h-fit w-fit tooltip">
+              <svg viewBox="0 0 30 30" class="w-6 text-neutral-foreground-2 text-yellow-400 md:w-6">
+                <WarningFilled />
+              </svg>
+              <span class="tooltiptext">This is a very large mod!</span>
+            </span>
+          {/if}
+        </div>
+      {/if}
     </div>
     {#if slot}
       {@render slot()}

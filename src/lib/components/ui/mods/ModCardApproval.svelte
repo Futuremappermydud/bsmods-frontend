@@ -151,7 +151,7 @@
       </div>
     </div>
   {:else}
-    <ModCardBase {mod} author={mod.authors} slot={approvalButtons} />
+    <ModCardBase {mod} latestSize={undefined} author={mod.authors} slot={approvalButtons} />
   {/if}
 {/if}
 

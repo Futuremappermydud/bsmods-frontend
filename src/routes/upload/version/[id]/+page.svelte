@@ -407,6 +407,7 @@
     {:else}
       <ModCardBase
         mod={mod?.info}
+        latestSize={undefined}
         author={mod?.info.authors}
         smallCorners={true}
       />

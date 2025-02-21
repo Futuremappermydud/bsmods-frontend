@@ -10,7 +10,6 @@
 
   let {
     mod,
-    latestSize,
     isMadeByUser,
     editing = $bindable(false),
     modName = $bindable(),
@@ -20,7 +19,6 @@
     saveFunc,
   }: {
     mod: Mod;
-    latestSize: number;
     isMadeByUser: boolean;
     editing: boolean;
     modName: string | undefined;
@@ -121,7 +119,7 @@
 {#if !editing}
   <ModCardBase
     {mod}
-    latestSize={latestSize}
+    latestSize={undefined}
     author={mod.authors}
     slot={editingMarker}
     smallCorners={true}
