@@ -116,7 +116,7 @@
         </div>
         <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
           <Link
-            on:click={() => {
+            on:click={async () => {
               changeBody = [];
               if (edit.edit.objectTableName == `mods`) {
                 for (let key of Object.keys(
@@ -174,11 +174,62 @@
                         (v) => v === editProp.find((o) => o === v),
                       )
                     ) {
-                      changeBody.push({
-                        key: key,
-                        oldValue: originalProp.join(`, `),
-                        newValue: editProp.join(`, `),
-                      });
+                      if (key === `dependencies`) { //dear god the inefficiency
+                        let oldDepArray: string[] = [];
+                        let newDepArray: string[] = [];
+                        for (let dep of editProp) {
+                          await axios.get(appendURL(`api/modversions/${dep}`)).then((response) => {
+                            if (response.status === 200) {
+                              let mod = response.data;
+                              oldDepArray.push(`${mod.name} v^${mod.version}`);
+                            }
+                          });
+                        }
+
+                        for (let dep of originalProp) {
+                          await axios.get(appendURL(`api/modversions/${dep}`)).then((response) => {
+                            if (response.status === 200) {
+                              let mod = response.data;
+                              newDepArray.push(`${mod.name} v^${mod.version}`);
+                            }
+                          });
+                        }
+                        changeBody.push({
+                          key: key,
+                          isMarkdown: true,
+                          oldValue: originalProp.join(`, `),
+                          newValue: editProp.join(`, `),
+                        });
+                      } else if (key === `supportedGameVersionIds`) {
+                        let oldgvArray: string[] = [];
+                        let newgvArray: string[] = [];
+                        for (let gv of editProp) {
+                          let gameVersion = gameVersions.find((gvg) => gvg.id === gv);
+                          if (gameVersion) {
+                            oldgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
+                          }
+                        }
+
+                        for (let gv of originalProp) {
+                          let gameVersion = gameVersions.find((gvg) => gvg.id === gv);
+                          if (gameVersion) {
+                            newgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
+                          }
+                        }
+
+                        changeBody.push({
+                          key: key,
+                          isMarkdown: true,
+                          oldValue: oldgvArray.join(`, `),
+                          newValue: newgvArray.join(`, `),
+                        });
+                      } else {
+                        changeBody.push({
+                          key: key,
+                          oldValue: originalProp.join(`, `),
+                          newValue: editProp.join(`, `),
+                        });
+                      }
                     }
                     continue;
                   }
