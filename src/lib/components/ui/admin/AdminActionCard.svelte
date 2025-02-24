@@ -56,6 +56,7 @@
     <p class="text-l p-2 text-neutral-foreground-3">{description}</p>
     {#if slot}
         {@render slot()}
+        <div class="h-2"></div>
     {/if}
     <Button on:click={buttonAction} disabled={isButtonAwaitingResponse}>{buttonText}</Button>
     {#if isButtonAwaitingResponse}
