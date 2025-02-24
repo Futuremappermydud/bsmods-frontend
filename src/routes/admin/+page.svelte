@@ -1,6 +1,7 @@
 <script lang="ts">
     import GameVersionManagement from "$lib/components/ui/admin/GameVersionManagement.svelte";
     import OneShots from "$lib/components/ui/admin/OneShots.svelte";
+    import UserManagement from "$lib/components/ui/admin/UserManagement.svelte";
     import Tab from "$lib/components/ui/tablist/Tab.svelte";
     import TabList from "$lib/components/ui/tablist/TabList.svelte";
     import { UserRoles } from "$lib/types/UserRoles";
@@ -11,25 +12,52 @@
     let isAuthorized = $derived.by(() => {
         if (!data || !data.roles) return false;
 
-        if (data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+        if (data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
             return true;
         } else {
             return false;
         }
     });
+
+    let isAdmin = $derived.by(() => {
+        if (!data || !data.roles) return false;
+
+        if (data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    let isApprover = $derived.by(() => {
+        if (!data || !data.roles) return false;
+
+        if (data.roles.sitewide.includes(UserRoles.Approver) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
     let page = $state("os");
 </script>
 
 <div class="flex flex-col items-center gap-4 text-center">
     {#if isAuthorized}
         <TabList disabled={false} layout="horizontal" bind:value={page}>
-            <Tab value="os">One Shots</Tab>
-            <Tab value="users">User Management</Tab>
-            <Tab value="gv">Game Version Management</Tab>
+            {#if isAdmin}
+                <Tab value="os">One Shots</Tab>
+            {/if}
+            {#if isApprover}
+                <Tab value="users">User Management</Tab>
+            {/if}
+            {#if isAdmin}
+                <Tab value="gv">Game Version Management</Tab>
+            {/if}
         </TabList>
 
         {#if page === "users"}
-            <!--<UserManagement />-->
+            <UserManagement />
         {:else if page === "gv"}
             <GameVersionManagement />
         {:else if page === "os"}

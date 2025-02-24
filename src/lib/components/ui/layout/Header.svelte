@@ -5,6 +5,8 @@
     ArrowUploadRegular,
     ColorLineRegular,
     NavigationRegular,
+    SettingsFilled,
+    SettingsRegular,
   } from "@svelte-fui/icons";
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
   import type { AuthedUser } from "$lib/types/AuthedUser";
@@ -71,6 +73,13 @@
 
 {#snippet rightItems()}
   {#if userData.hasAttempted}
+    {#if userData.authenticated && userData.roles && (checkUserAnyGame(userData.roles, UserRoles.Admin) || checkUserAnyGame(userData.roles, UserRoles.Approver))}
+      <a class="contents" href="/admin">
+        <svg class="h-6 w-6" viewBox="0 0 20 20">
+          <SettingsRegular />
+        </svg>
+      </a>
+    {/if}
     {#if userData.authenticated && userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
       <a class="contents" href="/approval">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
