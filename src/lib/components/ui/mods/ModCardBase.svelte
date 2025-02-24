@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Link } from "@svelte-fui/core";
+  import { Link, Tooltip } from "@svelte-fui/core";
   import type { Mod, ModAuthor, ModData } from "$lib/types/Mods";
   import ModIcon from "./ModIcon.svelte";
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
   import type { Snippet } from "svelte";
-    import { DatabaseArrowDownFilled, WarningFilled } from "@svelte-fui/icons";
+    import { DatabaseArrowDownFilled, InfoFilled, WarningFilled } from "@svelte-fui/icons";
 
   let {
     mod,
@@ -13,12 +13,14 @@
     author,
     smallCorners = false,
     slot,
+    info,
   }: {
     mod: Mod;
     latestSize?: number | undefined;
     author: ModAuthor | ModAuthor[] | undefined;
     smallCorners?: boolean;
     slot?: Snippet;
+    info?: Snippet;
   } = $props();
 
   function searchProfile(author: ModAuthor) {
@@ -96,6 +98,16 @@
         </div>
       {/if}
     </div>
+    {#if info}
+    <div class="flex flex-row ml-auto h-8 w-8 bg-neutral-background-1 rounded-md p-1 px-1 items-center gap-1">
+      <Tooltip>
+        <svg viewBox="0 0 20 20" class="w-6 text-neutral-foreground-2 md:w-6">
+          <InfoFilled />
+        </svg>
+        <span slot="content" class="text-left">{@render info()}</span>
+      </Tooltip>
+    </div>
+    {/if}
     {#if slot}
       {@render slot()}
     {/if}

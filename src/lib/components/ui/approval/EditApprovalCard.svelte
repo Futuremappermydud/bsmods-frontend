@@ -101,7 +101,7 @@
 </script>
 
 {#snippet approvalButtons()}
-    <div class="ml-auto flex flex-row gap-2">
+    <div class="flex flex-row gap-2">
       <div class="flex h-full min-w-20 flex-col gap-[3px]">
         <div
           class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
@@ -305,6 +305,14 @@
   </div>
 {/snippet}
 
+{#snippet info()}
+  Edit ID: {edit.edit.id}<br>
+  Edit Table Name: {edit.edit.objectTableName}<br>
+  Edit Object ID: {edit.edit.objectId}<br>
+  Submitted by: {edit.edit.submitterId}<br>
+  Submitted at: {new Date(edit.edit.createdAt).toLocaleString()}<br>
+{/snippet}
+
 {#if !hide}
   {#if loading}
     <div
@@ -320,6 +328,7 @@
       mod={edit.mod}
       latestSize={undefined}
       author={edit.mod.authors}
+      info={info}
       slot={approvalButtons}
     />
   {/if}

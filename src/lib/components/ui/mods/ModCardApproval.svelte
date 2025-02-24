@@ -70,7 +70,7 @@
 </script>
 
 {#snippet approvalButtons()}
-  <div class="ml-auto flex flex-row gap-2">
+  <div class="flex flex-row gap-2">
     <div class="flex h-full min-w-20 flex-col gap-[3px]">
       <div
         class="silly-capitalize w-full rounded bg-neutral-background-1 p-1 text-xs"
@@ -140,6 +140,10 @@
   </div>
 {/snippet}
 
+{#snippet info()}
+  Mod ID: {mod.id}
+{/snippet}
+
 {#if !hide}
   {#if loading}
     <div
@@ -151,7 +155,7 @@
       </div>
     </div>
   {:else}
-    <ModCardBase {mod} latestSize={undefined} author={mod.authors} slot={approvalButtons} />
+    <ModCardBase {mod} latestSize={undefined} author={mod.authors} slot={approvalButtons} info={info}/>
   {/if}
 {/if}
 

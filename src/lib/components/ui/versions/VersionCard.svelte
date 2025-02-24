@@ -2,8 +2,8 @@
   import type { Mod, ModVersion } from "$lib/types/Mods";
   import { Status } from "$lib/types/Status";
   import { appendURL } from "$lib/utils/url";
-  import { Button, Spinner } from "@svelte-fui/core";
-  import { ArrowDownloadRegular, WarningFilled } from "@svelte-fui/icons";
+  import { Button, Spinner, Tooltip } from "@svelte-fui/core";
+  import { ArrowDownloadRegular, InfoFilled, WarningFilled } from "@svelte-fui/icons";
   import { numify } from "numify";
   import type { PageData } from "../../../../routes/$types";
   import axios from "axios";
@@ -137,6 +137,23 @@
           {version.status}
         </p>
       {/if}
+      <div class="flex flex-row bg-neutral-background-3 rounded-md p-1 px-1 items-center gap-1">
+        <Tooltip>
+          <svg viewBox="0 0 20 20" class="w-6 text-neutral-foreground-2  md:w-6">
+            <InfoFilled />
+          </svg>
+          <span slot="content">
+            ID: {version.id}<br>
+            {#if version.dependencies.length > 0}
+              Dependency IDs: {version.dependencies.join(`, `)}<br>
+            {/if}
+            Uploaded by: {version.author.username}<br>
+            Zip Hash: {version.zipHash}<br>
+            Uploaded at: {new Date(version.createdAt).toLocaleString()}<br>
+            Last Updated at: {new Date(version.updatedAt).toLocaleString()}<br>
+          </span>
+        </Tooltip>
+      </div>
     </div>
     <div>
       <p class="font-semibold">Supports:</p>
@@ -193,3 +210,9 @@
     </Button>
   {/if}
 </div>
+
+<style>
+  :global(.fui-tooltip-content) {
+  max-width: 100em !important; /* why am i limited to 240px */
+}
+</style>
