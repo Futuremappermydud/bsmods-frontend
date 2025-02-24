@@ -51,7 +51,7 @@
           <span class="text-md mb-0.5 mt-auto h-fit text-neutral-foreground-2"
             >By
             {#if Array.isArray(author)}
-              {#each author as singleAuthor}
+              {#each author as singleAuthor, i}
                 <Link
                   class="z-50"
                   as="button"
@@ -59,6 +59,7 @@
                   inline={true}
                   >{singleAuthor.username}
                 </Link>
+                {i != author.length - 1 ? "& " : ""}
               {/each}
             {:else}
               <Link
