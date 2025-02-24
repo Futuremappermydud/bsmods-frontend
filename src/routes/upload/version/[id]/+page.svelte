@@ -108,6 +108,8 @@
   let rawDeps: Dependency[] = $state([]);
   let tempRawAllowedVersions: ModVersion[] = $state([]);
 
+  let errorObj:any = $state(null);
+
   async function getMods() {
     return await axios
       .get(appendURL(`api/mods/${data.id}`), { withCredentials: true })
@@ -345,6 +347,7 @@
           if (error.response.status && error.response.data) {
             console.error(error.response.status);
             console.error(error.response.data);
+            errorObj = error.response.data;
           }
         }
       });
@@ -654,6 +657,7 @@
   <Button
     class="w-fit self-center shadow-8"
     onclick={() => {
+      errorObj = null;
       submitDialog = true;
     }}
   >
@@ -670,6 +674,9 @@
         mod page and click "Submit" to mark the version as ready for
         verification,
       </p>
+      {#if errorObj !== null}
+        <p class="text-red-500">{errorObj.message ? errorObj.message : `Unknown error.`}<br>See browser console for more information.</p>
+      {/if}
     </Dialog.Body>
 
     <Dialog.Actions class="justify-end">

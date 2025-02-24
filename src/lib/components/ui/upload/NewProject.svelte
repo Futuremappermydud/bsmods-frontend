@@ -23,6 +23,8 @@
 
   let submitDialog = $state(false);
 
+  let errorObj: any = $state(null);
+
   $effect(() => {
     if (submitDialog) {
       document.body.classList.add("overflow-hidden");
@@ -119,6 +121,7 @@
           if (error.response.status && error.response.data) {
             console.error(error.response.status);
             console.error(error.response.data);
+            errorObj = error.response.data;
           }
         }
       });
@@ -255,6 +258,9 @@
         edit this later by going to your mod page. After creating you will be
         brought to your mod's page.
       </p>
+      {#if errorObj !== null}
+        <p class="text-red-500">{errorObj.message ? errorObj.message : `Unknown error.`}<br>See browser console for more information.</p>
+      {/if}
     </Dialog.Body>
 
     <Dialog.Actions class="justify-end">
