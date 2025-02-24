@@ -25,8 +25,7 @@
 
     async function buttonAction() {
         isButtonAwaitingResponse = true;
-        await axios.post(buttonUrl, {
-            data: reqBody ? reqBody : undefined,
+        await axios.post(buttonUrl, reqBody, {
             withCredentials: true
         }).then((res) => {
             console.log("Action executed successfully");
