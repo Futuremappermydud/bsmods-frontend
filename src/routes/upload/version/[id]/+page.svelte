@@ -456,9 +456,11 @@
       
             <Dropdown.Menu>
               {#if mod}
+              <div class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded">
                 {#each mod.versions as item}
                   <Dropdown.Item value={item} data={item}>{`${item.modVersion}`}</Dropdown.Item>
                 {/each}
+              </div>
               {/if}
             </Dropdown.Menu>
           </Dropdown.Root>
@@ -618,11 +620,13 @@
                 </InputSkin>
               </Dropdown.Trigger>
               <Dropdown.Menu >
+                <div class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded">
                 {#if tempRawAllowedVersions}
                   {#each tempRawAllowedVersions as item}
                     <Dropdown.Item value={item.modVersion} data={item.modVersion}>{`${item.modVersion}`}</Dropdown.Item> <!--TODO: actually use the object instead of going from obj > string > obj-->
                   {/each}
                 {/if}
+                </div>
               </Dropdown.Menu>
             </Dropdown.Root>
 
