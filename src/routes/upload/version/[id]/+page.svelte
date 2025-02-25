@@ -175,7 +175,7 @@
     axios
       .get(
         appendURL(
-          `api/mods?gameName=${mod?.info.gameName}&gameVersion=${v}&visibility=verified&platform=universalpc`,
+          `api/mods?gameName=${mod?.info.gameName}&gameVersion=${v}&visibility=unverified&platform=universalpc`,
         ),
         { withCredentials: false },
       )
@@ -377,6 +377,24 @@
         versionId: modData.modVersion.id
       })
     }
+    tempRawDepName = "";
+    tempRawDepVersion = ""
+  }
+
+  function importGameVersionsFromOtherVersion() {
+    let versionToPullFrom = selectedVersion;
+    if (!versionToPullFrom) {
+      console.error(`borked`);
+      return;
+    }
+    for (let sGV of versionToPullFrom.supportedGameVersions) {
+      tempSelectedVersion = sGV.version
+      if (supportedGameVersions.includes(tempSelectedVersion)) {
+        continue;
+      }
+      addVersion();
+    }
+    selectedVersion = undefined;
   }
 
   async function importFromOtherVersion() {
@@ -386,26 +404,18 @@
       return;
     }
     importDepenenciesFromOtherVersion();
-    modVersion = versionToPullFrom?.modVersion;
-    for (let sGV of versionToPullFrom.supportedGameVersions) {
-      tempSelectedVersion = sGV.version
-      addVersion();
-    }
+    //modVersion = versionToPullFrom?.modVersion;
+    importGameVersionsFromOtherVersion();
   }
 
   let disableImportButton = $derived.by(() => {
+    if (!selectedVersion) {
+      return true;
+    }
+
     if (rawDeps.length > 0) {
       return true
     }
-
-    if (supportedGameVersions.length > 0) {
-      return true
-    }
-
-    if (modVersion !== "") {
-      return true
-    }
-
     return false;
   })
 </script>
@@ -467,7 +477,9 @@
               {/if}
             </Dropdown.Menu>
           </Dropdown.Root>
-          <Button disabled={disableImportButton} class="min-w-[160px]" on:click={importFromOtherVersion}>Import Metadata</Button>
+          <Button disabled={disableImportButton} class="min-w-[160px]" on:click={importFromOtherVersion}>Import All Metadata</Button>
+          <Button disabled={disableImportButton} class="min-w-[160px]" on:click={importGameVersionsFromOtherVersion}>Import Game Versions</Button>
+          <Button disabled={disableImportButton} class="min-w-[160px]" on:click={importDepenenciesFromOtherVersion}>Import Dependencies</Button>
         </div>
         </div>
         </AccordionPanel>
