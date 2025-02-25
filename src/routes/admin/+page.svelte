@@ -4,15 +4,24 @@
     import UserManagement from "$lib/components/ui/admin/UserManagement.svelte";
     import Tab from "$lib/components/ui/tablist/Tab.svelte";
     import TabList from "$lib/components/ui/tablist/TabList.svelte";
-    import { UserRoles } from "$lib/types/UserRoles";
+    import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
+    import { getStatus, type ServerStatus } from "$lib/utils/status";
+    import { onMount } from "svelte";
     import type { PageData } from "./$types";
+    import { Link } from "@svelte-fui/core";
 
     let { data }: { data: PageData } = $props();
+
+    let serverStatus:ServerStatus|undefined = $state();
+
+    onMount(async () => {
+        serverStatus = await getStatus();
+    });
 
     let isAuthorized = $derived.by(() => {
         if (!data || !data.roles) return false;
 
-        if (data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+        if (isAdmin || isApprover) {
             return true;
         } else {
             return false;
@@ -22,7 +31,7 @@
     let isAdmin = $derived.by(() => {
         if (!data || !data.roles) return false;
 
-        if (data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+        if (checkUserAnyGame(data.roles, UserRoles.Admin)) {
             return true;
         } else {
             return false;
@@ -32,7 +41,7 @@
     let isApprover = $derived.by(() => {
         if (!data || !data.roles) return false;
 
-        if (data.roles.sitewide.includes(UserRoles.Approver) || data.roles.sitewide.includes(UserRoles.Admin) || data.roles.sitewide.includes(UserRoles.AllPermissions)) {
+        if (checkUserAnyGame(data.roles, UserRoles.Approver)) {
             return true;
         } else {
             return false;
@@ -44,6 +53,11 @@
 
 <div class="flex flex-col items-center gap-4 text-center">
     {#if isAuthorized}
+        <div class="bg-neutral-background-2 rounded-lg p-4">
+            <h1 class="text-3xl">Status</h1>
+            <p>Frontend: <Link target="_blank" href="https://github.com/Futuremappermydud/bsmods-frontend/commit/{serverStatus?.frontend.gitVersion}">{serverStatus?.frontend.gitVersion}</Link> | Backend: ({serverStatus?.httpCode}) <Link target="_blank" href="https://github.com/Saeraphinx/BadBeatMods/commit/{serverStatus?.backend.gitVersion}">{serverStatus?.backend.gitVersion}</Link><br>
+            {serverStatus?.backend.veryImportantMessage}</p>
+        </div>
         <TabList disabled={false} layout="horizontal" bind:value={page}>
             {#if isAdmin}
                 <Tab value="os">One Shots</Tab>

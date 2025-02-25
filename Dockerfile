@@ -23,5 +23,9 @@ COPY --chown=1001:1001 --from=builder /app/build ./build
 USER nodejs
 EXPOSE 3000
 ENV NODE_ENV=production
+ARG GIT_VERSION=unknown
+ARG GIT_REPO=unknown
+ENV PUBLIC_GIT_VERSION=$GIT_VERSION
+ENV PUBLIC_GIT_REPO=$GIT_REPO
 
 CMD ["node", "build"]
