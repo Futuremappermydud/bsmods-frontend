@@ -175,7 +175,7 @@
     axios
       .get(
         appendURL(
-          `api/mods?gameName=${mod?.info.gameName}&gameVersion=${v}&visibility=unverified&platform=universalpc`,
+          `api/mods?gameName=${mod?.info.gameName}&gameVersion=${v}&status=unverified&platform=universalpc`,
         ),
         { withCredentials: false },
       )
