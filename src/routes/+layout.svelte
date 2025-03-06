@@ -29,8 +29,21 @@
 
     schemeMedia.addEventListener("change", handler);
 
-    theme = schemeMedia.matches ? webLightTheme : webDarkTheme;
+    let storedSettings = {
+      theme: localStorage.getItem("theme"),
+      showCursor: localStorage.getItem("showCursor")
+    };
 
+    if (storedSettings.theme) {
+      theme = storedSettings.theme === "dark" ? webDarkTheme : webLightTheme;
+    } else {
+      theme = schemeMedia.matches ? webLightTheme : webDarkTheme;
+    }
+
+    if (storedSettings.showCursor) {
+      showCursor = storedSettings.showCursor === "true";
+    }
+      
     return () => {
       schemeMedia.removeEventListener("change", handler);
     };

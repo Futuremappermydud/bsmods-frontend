@@ -23,6 +23,7 @@
       <Menu.Item
         on:click={() => {
           theme = webLightTheme;
+          localStorage.setItem("theme", "light");
         }}
       >
         <div>Light</div>
@@ -30,6 +31,7 @@
       <Menu.Item
         on:click={() => {
           theme = webDarkTheme;
+          localStorage.setItem("theme", "dark");
         }}
       >
         <div>Dark</div>
@@ -37,6 +39,7 @@
       <Menu.Item
         on:click={() => {
           showCursor = !showCursor;
+          localStorage.setItem("showCursor", showCursor.toString());
         }}
       >
         <div>Toggle Block Cursor</div>
