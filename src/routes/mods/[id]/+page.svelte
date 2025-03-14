@@ -293,12 +293,14 @@
               />
             </div>
             {#each versions as version (version.id)}
-              <VersionCard
-                {version}
-                mod={mod.info}
-                isApprover={userIsApprover}
-                isAuthor={isMadeByUser}
-              />
+              {#if version.status == "verified" || userIsApprover || isMadeByUser}
+                <VersionCard
+                  {version}
+                  mod={mod.info}
+                  isApprover={userIsApprover}
+                  isAuthor={isMadeByUser}
+                />
+              {/if}
             {/each}
           </div>
         </div>
