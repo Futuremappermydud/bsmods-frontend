@@ -9,7 +9,8 @@
   import type { ApprovalQueues } from "$lib/types/Approval";
   import type { Versions } from "$lib/types/Versions";
   import { appendURL } from "$lib/utils/url";
-    import { DocumentSplitHintFilled } from "@svelte-fui/icons";
+  import { Label, Switch, Dialog } from "@svelte-fui/core";
+  import { DocumentSplitHintFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
   let page = $state("mods");
@@ -17,6 +18,7 @@
   let allGameVersions: Versions = $state({ versions: [] });
   let selectedGame = $state("");
   let selectedVersion = $state("");
+  let includeUnverified = $state(false);
 
   let modSearchError = $state(false);
   let modSearchLoading = $state(false);
@@ -26,6 +28,13 @@
     modVersions: undefined,
     edits: undefined,
   });
+
+  let showModal = $state(false);
+  let modalHeader = $state("");
+  let modalBody: {
+    header: string;
+    body: string;
+  }[] = $state([]);
 
   $effect(() => {
     doShit();
@@ -88,7 +97,7 @@
     return await axios
       .get(
         appendURL(
-          `api/approval/${encodeURIComponent(type)}?gameName=${encodeURIComponent(selectedGame)}`,
+          `api/approval/${encodeURIComponent(type)}?gameName=${encodeURIComponent(selectedGame)}&includeUnverified=${encodeURIComponent(includeUnverified)}`,
         ),
         {
           withCredentials: true,
@@ -110,6 +119,14 @@
       });
   }
 
+  async function displayModal(
+    header: string,
+    body: { header: string; body: string }[],
+  ) {
+    modalHeader = header;
+    modalBody = body;
+    showModal = true;
+  }
 
 </script>
 
@@ -137,19 +154,39 @@
       disabled={page == "edits" || page == "mods"}
       on:change={() => doShit()}
     />
+    <Switch
+      bind:checked={includeUnverified}
+    ><Label>Include Unverified</Label></Switch>
   </div>
 
   {#if approvalQueues && selectedGame}
     {#if page == "edits"}
-      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []} />
+      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []} {displayModal} />
     {:else if page == "mods"}
-      <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} />
+      <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} {displayModal} />
     {:else if page == "versions"}
-      <NewVersionsApproval
+       <NewVersionsApproval
         modVersions={approvalQueues.modVersions
           ? approvalQueues.modVersions
           : []}
+        {displayModal}
       />
     {/if}
   {/if}
 </div>
+
+<Dialog.Root bind:open={showModal} type="modal">
+  <Dialog.Header>{modalHeader}</Dialog.Header>
+
+  <Dialog.Body>
+    <div class="flex flex-col gap-4 pb-4">
+      {#each modalBody as { header, body }}
+        <div class="flex flex-col gap-2">
+          <p class="font-semibold">{header}</p>
+          <pre
+            class="text-wrap rounded-md bg-neutral-background-1 p-2">{body}</pre>
+        </div>
+      {/each}
+    </div>
+  </Dialog.Body>
+</Dialog.Root>

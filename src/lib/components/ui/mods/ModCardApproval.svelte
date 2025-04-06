@@ -1,35 +1,41 @@
 <script lang="ts">
   import type { Mod } from "$lib/types/Mods";
-  import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
+  import { Button, Link, Spinner } from "@svelte-fui/core";
   import ModCardBase from "./ModCardBase.svelte";
-  import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
+  import { CheckmarkNoteFilled, CheckmarkRegular, DismissRegular, LineDashesRegular, LineFilled } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
+  import { ApprovalAction, type DisplayModalFunction } from "$lib/types/Approval";
+  
 
   let {
     mod,
+    displayModal,
   }: {
     mod: Mod;
+    displayModal: DisplayModalFunction;
   } = $props();
 
   let loading = $state(false);
   let hide = $state(false);
 
   let approvalClicks = $state(0);
+  let unverifyClicks = $state(0);
   let denialClicks = $state(0);
-
-  let showModal = $state(false);
-  let modalHeader = $state("");
-  let modalBody: {
-    header: string;
-    body: string;
-  }[] = $state([]);
 
   function approve() {
     approvalClicks += 1;
     if (approvalClicks > 1) {
       loading = true;
-      sendStatus("verified");
+      sendStatus(ApprovalAction.Accept);
+    }
+  }
+
+  function unverify() {
+    unverifyClicks += 1;
+    if (unverifyClicks > 1) {
+      loading = true;
+      sendStatus(ApprovalAction.Deny);
     }
   }
 
@@ -37,16 +43,16 @@
     denialClicks += 1;
     if (denialClicks > 1) {
       loading = true;
-      sendStatus("removed");
+      sendStatus(ApprovalAction.Remove);
     }
   }
 
-  function sendStatus(status: string) {
+  function sendStatus(status: ApprovalAction) {
     axios
       .post(
         appendURL(`api/approval/mod/${mod.id}/approve`),
         {
-          status: status,
+          action: status,
         },
         {
           withCredentials: true,
@@ -63,6 +69,21 @@
         }
       })
       .catch((error) => {
+        let errorMessage = "Unknown error";
+        if (error.response) {
+          errorMessage = error.response.data.message;
+        } else if (error.request) {
+          errorMessage = "No response from server";
+        }
+        displayModal(
+          "Error",
+          [
+            {
+              header: "An error occurred. Check the console for more details.",
+              body: errorMessage,
+            },
+          ]
+        );
         console.error("An error occurred, contact a developer!");
         console.error(error);
       });
@@ -86,19 +107,20 @@
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link
           on:click={() => {
-            modalHeader = "Description";
-            modalBody = [{ header: "", body: mod.description }];
-            showModal = true;
+            displayModal(
+              "Description",
+             [{ header: "", body: mod.description }]
+            );
           }}>Description</Link
         >
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
       <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
+        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={approve}
       >
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-1">
           <div
             class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
             class:!opacity-80={approvalClicks > 0}
@@ -110,16 +132,37 @@
         </div>
         <svg
           viewBox="0 0 20 20"
-          class="aspect-square h-auto text-palette-green-foreground-3"
+          class="aspect-square h-auto text-palette-green-foreground-3 pl-1"
         >
           <CheckmarkRegular />
         </svg>
       </Button>
+      <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
+      onclick={unverify}
+    >
+      <div class="flex flex-row gap-1">
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={unverifyClicks > 0}
+        ></div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={unverifyClicks > 1}
+        ></div>
+      </div>
+      <svg
+        viewBox="0 0 20 20"
+        class="aspect-square h-auto text-palette-yellow-foreground-3 pl-1"
+      >
+        <LineFilled />
+      </svg>
+
+      </Button>
       <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
+        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={deny}
       >
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-1">
           <div
             class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
             class:!opacity-80={denialClicks > 0}
@@ -131,7 +174,7 @@
         </div>
         <svg
           viewBox="0 0 19 19"
-          class="aspect-square h-auto text-palette-red-foreground-3"
+          class="aspect-square h-auto text-palette-red-foreground-3 pl-1"
         >
           <DismissRegular />
         </svg>
@@ -158,19 +201,3 @@
     <ModCardBase {mod} latestSize={undefined} author={mod.authors} slot={approvalButtons} info={info}/>
   {/if}
 {/if}
-
-<Dialog.Root bind:open={showModal} type="modal">
-  <Dialog.Header>{modalHeader}</Dialog.Header>
-
-  <Dialog.Body>
-    <div class="flex flex-col gap-4 pb-4">
-      {#each modalBody as { header, body }}
-        <div class="flex flex-col gap-2">
-          <p class="font-semibold">{header}</p>
-          <pre
-            class="text-wrap rounded-md bg-neutral-background-1 p-2">{body}</pre>
-        </div>
-      {/each}
-    </div>
-  </Dialog.Body>
-</Dialog.Root>

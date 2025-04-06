@@ -1,41 +1,47 @@
 <script lang="ts">
   import type { Mod, SupportedGameVersion } from "$lib/types/Mods";
-  import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
+  import { Button, Link, Spinner } from "@svelte-fui/core";
   import ModCardBase from "./ModCardBase.svelte";
-  import { CheckmarkRegular, DismissRegular } from "@svelte-fui/icons";
+  import { CheckmarkRegular, DismissRegular, LineFilled } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
-  import type {
-    ModVersionDBObject,
-    VersionApproval,
+  import {
+    ApprovalAction,
+    type DisplayModalFunction,
+    type ModVersionDBObject,
+    type VersionApproval,
   } from "$lib/types/Approval";
 
   let {
     versionApproval,
     gameVersions,
+    displayModal,
   }: {
     versionApproval: VersionApproval;
     gameVersions: SupportedGameVersion[];
+    displayModal: DisplayModalFunction;
   } = $props();
 
   let loading = $state(false);
   let hide = $state(false);
 
   let approvalClicks = $state(0);
+  let unverifyClicks = $state(0);
   let denialClicks = $state(0);
-
-  let showModal = $state(false);
-  let modalHeader = $state("");
-  let modalBody: {
-    header: string;
-    body: string;
-  }[] = $state([]);
 
   function approve() {
     approvalClicks += 1;
     if (approvalClicks > 1) {
       loading = true;
-      sendStatus("verified");
+      sendStatus(ApprovalAction.Accept);
+    }
+  }
+
+  function unverify() {
+    unverifyClicks += 1;
+    if (unverifyClicks > 1) {
+      loading = true;
+      sendStatus(ApprovalAction.Deny);
     }
   }
 
@@ -43,18 +49,18 @@
     denialClicks += 1;
     if (denialClicks > 1) {
       loading = true;
-      sendStatus("removed");
+      sendStatus(ApprovalAction.Remove);
     }
   }
 
-  function sendStatus(status: string) {
+  function sendStatus(status: ApprovalAction) {
     axios
       .post(
         appendURL(
           `api/approval/modVersion/${versionApproval.version.id}/approve`,
         ),
         {
-          status: status,
+          action: status,
         },
         {
           withCredentials: true,
@@ -91,14 +97,16 @@
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link
           on:click={() => {
-            modalHeader = "Content Hashes";
-            modalBody = versionApproval.version.contentHashes.map((hash) => {
+            let modalBody = versionApproval.version.contentHashes.map((hash) => {
               return {
                 header: hash.path,
                 body: hash.hash,
               };
             });
-            showModal = true;
+            displayModal(
+              "Content Hashes",
+              modalBody,
+            );
           }}
           >{versionApproval.version.contentHashes.length}
           {versionApproval.version.contentHashes.length == 1
@@ -109,8 +117,7 @@
       <div class="w-full rounded bg-neutral-background-1 p-1 text-xs">
         <Link
           on:click={async () => {
-            modalHeader = "Dependencies";
-            modalBody = [];
+            let modalBody:{header: string, body: string}[] = [];
             for (const dep of versionApproval.version.dependencies) {
               await axios
                 .get(
@@ -145,7 +152,10 @@
                   }
                 });
             }
-            showModal = true;
+            displayModal(
+              "Dependencies",
+              modalBody,
+            );
           }}
           >{versionApproval.version.dependencies.length}
           {versionApproval.version.dependencies.length == 1
@@ -181,10 +191,10 @@
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
       <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
+        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={approve}
       >
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-1">
           <div
             class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
             class:!opacity-80={approvalClicks > 0}
@@ -196,16 +206,37 @@
         </div>
         <svg
           viewBox="0 0 20 20"
-          class="aspect-square h-auto text-palette-green-foreground-3"
+          class="aspect-square h-auto text-palette-green-foreground-3 pl-1"
         >
           <CheckmarkRegular />
         </svg>
       </Button>
+      <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
+      onclick={unverify}
+    >
+      <div class="flex flex-row gap-1">
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={unverifyClicks > 0}
+        ></div>
+        <div
+          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
+          class:!opacity-80={unverifyClicks > 1}
+        ></div>
+      </div>
+      <svg
+        viewBox="0 0 20 20"
+        class="aspect-square h-auto text-palette-yellow-foreground-3 pl-1"
+      >
+        <LineFilled />
+      </svg>
+
+      </Button>
       <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-col gap-0 p-1"
+        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={deny}
       >
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-1">
           <div
             class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
             class:!opacity-80={denialClicks > 0}
@@ -217,7 +248,7 @@
         </div>
         <svg
           viewBox="0 0 19 19"
-          class="aspect-square h-auto text-palette-red-foreground-3"
+          class="aspect-square h-auto text-palette-red-foreground-3 pl-1"
         >
           <DismissRegular />
         </svg>
@@ -254,19 +285,3 @@
     />
   {/if}
 {/if}
-
-<Dialog.Root bind:open={showModal} type="modal">
-  <Dialog.Header>{modalHeader}</Dialog.Header>
-
-  <Dialog.Body>
-    <div class="flex flex-col gap-4 py-6">
-      {#each modalBody as { header, body }}
-        <div class="flex flex-col gap-2">
-          <p class="font-semibold">{header}</p>
-          <pre
-            class="text-wrap rounded-md bg-neutral-background-1 p-1">{body}</pre>
-        </div>
-      {/each}
-    </div>
-  </Dialog.Body>
-</Dialog.Root>

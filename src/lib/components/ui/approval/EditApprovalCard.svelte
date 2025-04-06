@@ -1,7 +1,7 @@
 <script lang="ts">
   import { object } from "zod";
   import type { SupportedGameVersion } from "$lib/types/Mods";
-  import { Button, Link, Spinner, Dialog } from "@svelte-fui/core";
+  import { Button, Link, Spinner, Dialog, App } from "@svelte-fui/core";
   import ModCardBase from "../mods/ModCardBase.svelte";
   import {
     ArrowDownFilled,
@@ -12,13 +12,15 @@
   } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
-  import type {
-    EditApproval,
-    EditQueueDBObject,
-    ModApproval,
-    ModDBObject,
-    ModVersionApproval,
-    ModVersionDBObject,
+  import {
+    ApprovalAction,
+    type DisplayModalFunction,
+    type EditApproval,
+    type EditQueueDBObject,
+    type ModApproval,
+    type ModDBObject,
+    type ModVersionApproval,
+    type ModVersionDBObject,
   } from "$lib/types/Approval";
   import MarkdownViewer from "../markdown/MarkdownViewer.svelte";
     import { SemVer } from "semver";
@@ -26,9 +28,11 @@
   let {
     edit,
     gameVersions,
+    displayModal, // this is going to go unused for now, since edits are a lot more complex than mods and mod versions
   }: {
     edit: EditApproval;
     gameVersions: SupportedGameVersion[];
+    displayModal: DisplayModalFunction;
   } = $props();
 
   let loading = $state(false);
@@ -60,7 +64,7 @@
     approvalClicks += 1;
     if (approvalClicks > 1) {
       loading = true;
-      sendStatus(true);
+      sendStatus(ApprovalAction.Accept);
     }
   }
 
@@ -68,16 +72,16 @@
     denialClicks += 1;
     if (denialClicks > 1) {
       loading = true;
-      sendStatus(false);
+      sendStatus(ApprovalAction.Deny);
     }
   }
 
-  function sendStatus(approved: boolean) {
+  function sendStatus(approved: ApprovalAction) {
     axios
       .post(
         appendURL(`api/approval/edit/${edit.edit.id}/approve`),
         {
-          accepted: approved,
+          action: approved,
         },
         {
           withCredentials: true,
