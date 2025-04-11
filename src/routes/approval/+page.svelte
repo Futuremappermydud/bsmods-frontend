@@ -9,8 +9,8 @@
   import type { ApprovalQueues } from "$lib/types/Approval";
   import type { Versions } from "$lib/types/Versions";
   import { appendURL } from "$lib/utils/url";
-  import { Label, Switch, Dialog } from "@svelte-fui/core";
-  import { DocumentSplitHintFilled } from "@svelte-fui/icons";
+  import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio } from "@svelte-fui/core";
+    import { DismissFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
   let page = $state("mods");
@@ -128,6 +128,26 @@
     showModal = true;
   }
 
+  let approvalModalDisplay = $state(true); 
+  let approvalModalHeader = $state("Placeholder Header");
+  let approvalModalBody = $state("Placeholder Body");
+  let approvalModalType = $state<`edits` | `mods` | `modVersions`>(
+    "mods",
+  );
+  let approvalModalModName = $state("");
+
+  async function displayApprovalModal(
+    type: `edits` | `mods` | `modVersions`,
+    header: string,
+    body: string,
+    modName: string
+  ) {
+    approvalModalType = type;
+    approvalModalHeader = header;
+    approvalModalBody = body;
+    approvalModalModName = modName;
+    approvalModalDisplay = true;
+  }
 </script>
 
 <div class="flex flex-col items-center gap-4 text-center">
@@ -187,6 +207,60 @@
             class="text-wrap rounded-md bg-neutral-background-1 p-2">{body}</pre>
         </div>
       {/each}
+    </div>
+  </Dialog.Body>
+</Dialog.Root>
+
+<Dialog.Root bind:open={approvalModalDisplay} type="modal">
+  <Dialog.Header>
+    {approvalModalHeader}
+    <!--<span class="float-right">
+      <Button class="border-none p-1 w-4 h-4" on:click={() => (approvalModalDisplay = false)}>
+        <svg
+          viewBox="0 0 16 16"
+          class="aspect-square h-auto text-neutral-400"
+        >
+          <DismissFilled />
+        </svg>
+      </Button>
+    </span>-->
+  </Dialog.Header>
+
+  <Dialog.Body>
+    <div class="flex flex-col gap-4 pb-4">
+      <p>{approvalModalBody}</p>
+      <p class="text-sm text-neutral-foreground-4">
+        {#if approvalModalType == "edits"}
+          This edit will be applied to the mod, and the mod will be updated.
+        {:else}
+          Placeholder Text
+        {/if}
+      </p>
+    </div>
+    <div class="flex flex-row gap-4 pb-4">
+      <div class="flex flex-row justify-center gap-2 p-4">
+        <RadioGroup>
+          <Label>Action</Label>
+        {#if approvalModalType == "edits"}
+          <Radio>Approve</Radio>
+          <Radio>Reject</Radio>
+        {:else}
+          <Radio>Verify</Radio>
+          <Radio>Unverified</Radio>
+          <Radio>Remove</Radio>
+        {/if}
+        </RadioGroup>
+      </div>
+      <div class="flex flex-col justify-center gap-2 p-2">
+        <Field>
+          <Label>Reason</Label>
+          <Input />
+          <FieldMessageInfo open>This will be shared with the authors of {approvalModalModName} & will be visible on the mod's page.</FieldMessageInfo>
+        </Field>
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 pb-4">
+      <Button>Submit</Button>
     </div>
   </Dialog.Body>
 </Dialog.Root>
