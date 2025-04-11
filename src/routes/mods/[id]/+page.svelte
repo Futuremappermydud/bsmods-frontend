@@ -21,6 +21,7 @@
   import { untrack } from "svelte";
   import { Categories, convertCategories } from "$lib/types/Categories";
   import { sendRevoke, sendSaveEdit, sendSubmit } from "$lib/utils/api";
+    import VersionCardV2 from "$lib/components/ui/versions/VersionCardV2.svelte";
 
   let { data }: { data: PageData } = $props();
 
@@ -294,7 +295,7 @@
             </div>
             {#each versions as version (version.id)}
               {#if version.status == "verified" || userIsApprover || isMadeByUser}
-                <VersionCard
+                <VersionCardV2
                   {version}
                   mod={mod.info}
                   isApprover={userIsApprover}

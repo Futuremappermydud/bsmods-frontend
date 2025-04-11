@@ -17,6 +17,7 @@
   }: { version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean } =
     $props();
 
+  // #region approval
   let denialClicks = $state(0);
   let loadingDenial = $state(false);
 
@@ -84,11 +85,13 @@
         console.error(error);
       });
   }
+  // #endregion approval
 </script>
 
 <div
   class="relative flex flex-col gap-1 rounded-xl bg-neutral-background-2 p-4 shadow-4"
 >
+  <!-- #region top bar-->
   <div class="flex flex-col gap-2">
     <div class="flex flex-row items-center gap-2">
       <!-- Redundant, yes, but I think in this card format, it looks much better -->
@@ -96,7 +99,7 @@
         {mod.name} v{version.modVersion}
       </p>
 
-      <div class="flex flex-row bg-neutral-background-3 rounded-md p-1 px-1 items-center gap-1">
+      <div class="flex flex-row items-center gap-1 rounded-md bg-neutral-background-3 p-1">
         {(version.fileSize /1024 > 1024 ? `${Math.round(version.fileSize/1024/1024)}MB` : (`${Math.round(version.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(version.fileSize/1024)}KB`))}
       </div>
 
@@ -155,6 +158,7 @@
         </Tooltip>
       </div>
     </div>
+    <!-- #endregion -->
     <div>
       <p class="font-semibold">Supports:</p>
       <div class="flex flex-row flex-wrap items-center text-center">
