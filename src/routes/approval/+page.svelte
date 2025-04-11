@@ -9,7 +9,7 @@
   import type { ApprovalQueues } from "$lib/types/Approval";
   import type { Versions } from "$lib/types/Versions";
   import { appendURL } from "$lib/utils/url";
-  import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio } from "@svelte-fui/core";
+  import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio, Spinner, Accordion, AccordionItem, AccordionHeader, AccordionPanel } from "@svelte-fui/core";
     import { DismissFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
@@ -128,25 +128,65 @@
     showModal = true;
   }
 
-  let approvalModalDisplay = $state(true); 
+  let approvalModalDisplay = $state(false); 
   let approvalModalHeader = $state("Placeholder Header");
   let approvalModalBody = $state("Placeholder Body");
   let approvalModalType = $state<`edits` | `mods` | `modVersions`>(
     "mods",
   );
   let approvalModalModName = $state("");
+  let approvalModalModId = $state(NaN);
+  let approvalReason = $state("");
+  let approvalAction = $state("");
+  let approvalModalIsLoading = $state(false);
+  let approvalModalError = $state("");
 
   async function displayApprovalModal(
     type: `edits` | `mods` | `modVersions`,
     header: string,
     body: string,
-    modName: string
+    modName: string,
+    modId: number
   ) {
     approvalModalType = type;
     approvalModalHeader = header;
     approvalModalBody = body;
     approvalModalModName = modName;
+    approvalModalModId = modId;
     approvalModalDisplay = true;
+  }
+
+  async function doApproval() {
+    if (approvalAction == "" || isNaN(approvalModalModId)) return;
+    let data = {
+      action: approvalAction,
+      reason: approvalReason,
+    };
+    approvalModalIsLoading = true;
+    await axios
+      .post(
+        appendURL(
+          `api/approval/${encodeURIComponent(approvalModalType)}/${encodeURIComponent(approvalModalModId)}/approve`,
+        ),
+        data,
+        {
+          withCredentials: true,
+        },
+      )
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          return response.data;
+        } else {
+          approvalModalError = "An unknown error occurred."; 
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred, contact a developer!");
+        console.error(error);
+        approvalModalError = "An unknown error occurred.";
+        return null;
+      });
+    approvalModalIsLoading = false;
   }
 </script>
 
@@ -181,15 +221,16 @@
 
   {#if approvalQueues && selectedGame}
     {#if page == "edits"}
-      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []} {displayModal} />
+      <EditApproval edits={approvalQueues.edits ? approvalQueues.edits : []} {displayModal} {displayApprovalModal} />
     {:else if page == "mods"}
-      <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} {displayModal} />
+      <NewModsApproval mods={approvalQueues.mods ? approvalQueues.mods : []} {displayModal} {displayApprovalModal} />
     {:else if page == "versions"}
        <NewVersionsApproval
         modVersions={approvalQueues.modVersions
           ? approvalQueues.modVersions
           : []}
         {displayModal}
+        {displayApprovalModal}
       />
     {/if}
   {/if}
@@ -227,40 +268,55 @@
   </Dialog.Header>
 
   <Dialog.Body>
-    <div class="flex flex-col gap-4 pb-4">
-      <p>{approvalModalBody}</p>
-      <p class="text-sm text-neutral-foreground-4">
-        {#if approvalModalType == "edits"}
-          This edit will be applied to the mod, and the mod will be updated.
-        {:else}
-          Placeholder Text
-        {/if}
-      </p>
+    <div class="flex flex-col gap-4">
+      <div class="text-sm text-neutral-foreground-4">
+        {approvalModalBody}
+      </div>
     </div>
+    {#if approvalModalIsLoading}
+      <div class="flex flex-row justify-center gap-4 pb-4">
+        <Spinner />
+      </div>
+      <div class="flex flex-col gap-4 pb-4">
+        <Button disabled={true}>Loading...</Button>
+      </div>
+    {:else}
     <div class="flex flex-row gap-4 pb-4">
       <div class="flex flex-row justify-center gap-2 p-4">
-        <RadioGroup>
+        <RadioGroup bind:value={approvalAction}>
           <Label>Action</Label>
         {#if approvalModalType == "edits"}
-          <Radio>Approve</Radio>
-          <Radio>Reject</Radio>
+          <Radio value="approve">Approve</Radio>
+          <Radio value="deny">Reject</Radio>
         {:else}
-          <Radio>Verify</Radio>
-          <Radio>Unverified</Radio>
-          <Radio>Remove</Radio>
+          <Radio value="approve">Verify</Radio>
+          <Radio value="deny">Unverified</Radio>
+          <Radio value="remove">Remove</Radio>
         {/if}
         </RadioGroup>
       </div>
       <div class="flex flex-col justify-center gap-2 p-2">
         <Field>
           <Label>Reason</Label>
-          <Input />
+          <Input bind:value={approvalReason} />
           <FieldMessageInfo open>This will be shared with the authors of {approvalModalModName} & will be visible on the mod's page.</FieldMessageInfo>
         </Field>
+        <div class="flex flex-row justify-center gap-2">
+          <Button on:click={() => approvalReason += "Missing dependencies in manifest.json"}>Deps (Menifest)</Button>
+          <Button on:click={() => approvalReason += "Missing dependencies on BeatMods"}>Deps (BM)</Button>
+          <Button on:click={() => approvalReason += "Zip file is not formatted correctly"}>Bad Zip</Button>
+          <Button on:click={() => approvalReason += "Version in manifest.json and BeatMods do not match"}>Mismatched Version</Button>
+        </div>
       </div>
     </div>
     <div class="flex flex-col gap-4 pb-4">
-      <Button>Submit</Button>
+      <Button disabled={approvalAction == ""}>Submit</Button>
     </div>
+    {#if approvalModalError != ""}
+      <div class="flex flex-col gap-4 pb-4">
+        <p class="text-red-500">{approvalModalError}</p>
+      </div>
+    {/if}
+    {/if}
   </Dialog.Body>
 </Dialog.Root>

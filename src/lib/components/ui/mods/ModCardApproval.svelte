@@ -5,89 +5,21 @@
   import { CheckmarkNoteFilled, CheckmarkRegular, DismissRegular, LineDashesRegular, LineFilled } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
-  import { ApprovalAction, type DisplayModalFunction } from "$lib/types/Approval";
+  import { ApprovalAction, type DisplayApprovalModalFunction, type DisplayModalFunction } from "$lib/types/Approval";
   
 
   let {
     mod,
     displayModal,
+    displayApprovalModal,
   }: {
     mod: Mod;
     displayModal: DisplayModalFunction;
+    displayApprovalModal: DisplayApprovalModalFunction;
   } = $props();
 
   let loading = $state(false);
   let hide = $state(false);
-
-  let approvalClicks = $state(0);
-  let unverifyClicks = $state(0);
-  let denialClicks = $state(0);
-
-  function approve() {
-    approvalClicks += 1;
-    if (approvalClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Accept);
-    }
-  }
-
-  function unverify() {
-    unverifyClicks += 1;
-    if (unverifyClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Deny);
-    }
-  }
-
-  function deny() {
-    denialClicks += 1;
-    if (denialClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Remove);
-    }
-  }
-
-  function sendStatus(status: ApprovalAction) {
-    axios
-      .post(
-        appendURL(`api/approval/mod/${mod.id}/approve`),
-        {
-          action: status,
-        },
-        {
-          withCredentials: true,
-        },
-      )
-      .then((response) => {
-        if (response.status === 302 || response.status === 200) {
-          if (response.data !== null) {
-            //window.location.reload();
-            loading = false;
-            hide = true;
-          }
-        } else {
-        }
-      })
-      .catch((error) => {
-        let errorMessage = "Unknown error";
-        if (error.response) {
-          errorMessage = error.response.data.message;
-        } else if (error.request) {
-          errorMessage = "No response from server";
-        }
-        displayModal(
-          "Error",
-          [
-            {
-              header: "An error occurred. Check the console for more details.",
-              body: errorMessage,
-            },
-          ]
-        );
-        console.error("An error occurred, contact a developer!");
-        console.error(error);
-      });
-  }
 </script>
 
 {#snippet approvalButtons()}
@@ -118,66 +50,16 @@
     <div class="flex h-full w-14 flex-col gap-2">
       <Button
         class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-        onclick={approve}
+        onclick={() => {
+          displayApprovalModal(
+            `mods`,
+            `Approve ${mod.name}`,
+            "", //`Are you sure you want to approve ${mod.name}?`,
+            mod.name,
+            mod.id
+          );
+        }}
       >
-        <div class="flex flex-row gap-1">
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={approvalClicks > 0}
-          ></div>
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={approvalClicks > 1}
-          ></div>
-        </div>
-        <svg
-          viewBox="0 0 20 20"
-          class="aspect-square h-auto text-palette-green-foreground-3 pl-1"
-        >
-          <CheckmarkRegular />
-        </svg>
-      </Button>
-      <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-      onclick={unverify}
-    >
-      <div class="flex flex-row gap-1">
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={unverifyClicks > 0}
-        ></div>
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={unverifyClicks > 1}
-        ></div>
-      </div>
-      <svg
-        viewBox="0 0 20 20"
-        class="aspect-square h-auto text-palette-yellow-foreground-3 pl-1"
-      >
-        <LineFilled />
-      </svg>
-
-      </Button>
-      <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-        onclick={deny}
-      >
-        <div class="flex flex-row gap-1">
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={denialClicks > 0}
-          ></div>
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={denialClicks > 1}
-          ></div>
-        </div>
-        <svg
-          viewBox="0 0 19 19"
-          class="aspect-square h-auto text-palette-red-foreground-3 pl-1"
-        >
-          <DismissRegular />
-        </svg>
       </Button>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DisplayModalFunction, VersionApproval } from "$lib/types/Approval";
+  import type { DisplayApprovalModalFunction, DisplayModalFunction, VersionApproval } from "$lib/types/Approval";
   import axios from "axios";
   import ModVersionApprovalCard from "../mods/ModVersionApprovalCard.svelte";
   import type { SupportedGameVersion } from "$lib/types/Mods";
@@ -8,9 +8,11 @@
   let {
     modVersions,
     displayModal,
+    displayApprovalModal,
   }: {
     modVersions: VersionApproval[];
     displayModal: DisplayModalFunction;
+    displayApprovalModal: DisplayApprovalModalFunction;
   } = $props();
 
   let doneLoading = $state(false);
@@ -30,7 +32,7 @@
 {#if doneLoading}
   <div class="flex flex-col gap-4">
     {#each modVersions as modVersion}
-      <ModVersionApprovalCard versionApproval={modVersion} {gameVersions} {displayModal} />
+      <ModVersionApprovalCard versionApproval={modVersion} {gameVersions} {displayModal} {displayApprovalModal} />
     {/each}
   </div>
 {/if}

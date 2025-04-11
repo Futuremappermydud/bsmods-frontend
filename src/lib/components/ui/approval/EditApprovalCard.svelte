@@ -14,6 +14,7 @@
   import axios from "axios";
   import {
     ApprovalAction,
+    type DisplayApprovalModalFunction,
     type DisplayModalFunction,
     type EditApproval,
     type EditQueueDBObject,
@@ -29,10 +30,12 @@
     edit,
     gameVersions,
     displayModal, // this is going to go unused for now, since edits are a lot more complex than mods and mod versions
+    displayApprovalModal, // edits also dont need to use this atp
   }: {
     edit: EditApproval;
     gameVersions: SupportedGameVersion[];
     displayModal: DisplayModalFunction;
+    displayApprovalModal: DisplayApprovalModalFunction;
   } = $props();
 
   let loading = $state(false);

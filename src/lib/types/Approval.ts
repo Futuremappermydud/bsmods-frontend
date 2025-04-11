@@ -107,6 +107,14 @@ export type DisplayModalFunction = (
   body: { header: string; body: string }[],
 ) => void;
 
+export type DisplayApprovalModalFunction = (
+  type: `edits` | `mods` | `modVersions`,
+  header: string,
+  body: string,
+  modName: string,
+  modId: number
+) => void;
+
 export enum ApprovalAction {
   Accept = `accept`, // Verify/accept the mod/modVersion/edit, set its status to verified
   Deny = `deny`, // Reject the mod/modVersion, set its status to unverified, but do not remove it

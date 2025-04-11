@@ -7,6 +7,7 @@
   import axios from "axios";
   import {
     ApprovalAction,
+    type DisplayApprovalModalFunction,
     type DisplayModalFunction,
     type ModVersionDBObject,
     type VersionApproval,
@@ -16,71 +17,16 @@
     versionApproval,
     gameVersions,
     displayModal,
+    displayApprovalModal,
   }: {
     versionApproval: VersionApproval;
     gameVersions: SupportedGameVersion[];
     displayModal: DisplayModalFunction;
+    displayApprovalModal: DisplayApprovalModalFunction;
   } = $props();
 
   let loading = $state(false);
   let hide = $state(false);
-
-  let approvalClicks = $state(0);
-  let unverifyClicks = $state(0);
-  let denialClicks = $state(0);
-
-  function approve() {
-    approvalClicks += 1;
-    if (approvalClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Accept);
-    }
-  }
-
-  function unverify() {
-    unverifyClicks += 1;
-    if (unverifyClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Deny);
-    }
-  }
-
-  function deny() {
-    denialClicks += 1;
-    if (denialClicks > 1) {
-      loading = true;
-      sendStatus(ApprovalAction.Remove);
-    }
-  }
-
-  function sendStatus(status: ApprovalAction) {
-    axios
-      .post(
-        appendURL(
-          `api/approval/modVersion/${versionApproval.version.id}/approve`,
-        ),
-        {
-          action: status,
-        },
-        {
-          withCredentials: true,
-        },
-      )
-      .then((response) => {
-        if (response.status === 302 || response.status === 200) {
-          if (response.data !== null) {
-            //window.location.reload();
-            loading = false;
-            hide = true;
-          }
-        } else {
-        }
-      })
-      .catch((error) => {
-        console.error("An error occurred, contact a developer!");
-        console.error(error);
-      });
-  }
 </script>
 
 {#snippet approvalButtons()}
@@ -190,68 +136,16 @@
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
-      <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-        onclick={approve}
-      >
-        <div class="flex flex-row gap-1">
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={approvalClicks > 0}
-          ></div>
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={approvalClicks > 1}
-          ></div>
-        </div>
-        <svg
-          viewBox="0 0 20 20"
-          class="aspect-square h-auto text-palette-green-foreground-3 pl-1"
-        >
-          <CheckmarkRegular />
-        </svg>
-      </Button>
       <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-      onclick={unverify}
-    >
-      <div class="flex flex-row gap-1">
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={unverifyClicks > 0}
-        ></div>
-        <div
-          class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-          class:!opacity-80={unverifyClicks > 1}
-        ></div>
-      </div>
-      <svg
-        viewBox="0 0 20 20"
-        class="aspect-square h-auto text-palette-yellow-foreground-3 pl-1"
-      >
-        <LineFilled />
-      </svg>
-
-      </Button>
-      <Button
-        class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
-        onclick={deny}
-      >
-        <div class="flex flex-row gap-1">
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={denialClicks > 0}
-          ></div>
-          <div
-            class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-            class:!opacity-80={denialClicks > 1}
-          ></div>
-        </div>
-        <svg
-          viewBox="0 0 19 19"
-          class="aspect-square h-auto text-palette-red-foreground-3 pl-1"
-        >
-          <DismissRegular />
-        </svg>
+      onclick={() => {
+        displayApprovalModal(
+          `modVersions`,
+          `Approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}`,
+          ``,//`Are you sure you want to approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}?`,
+          versionApproval.mod.name,
+          versionApproval.version.id
+        )
+      }}>
       </Button>
     </div>
   </div>
