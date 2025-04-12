@@ -2,8 +2,8 @@
   import type { Mod, ModVersion } from "$lib/types/Mods";
   import { Status } from "$lib/types/Status";
   import { appendURL } from "$lib/utils/url";
-  import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Label, Link, Spinner, Tooltip } from "@svelte-fui/core";
-  import { ArrowDownloadRegular, InfoFilled, WarningFilled } from "@svelte-fui/icons";
+  import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Label, Link, Spinner, Dropdown, InputSkin } from "@svelte-fui/core";
+  import { ArrowDownloadRegular, DismissRegular, InfoFilled, WarningFilled } from "@svelte-fui/icons";
   import { numify } from "numify";
   import axios from "axios";
 
@@ -54,6 +54,59 @@
     } else {
       depObjsLoading = false;
     }
+  }
+
+  let isEditMode = $state(false);
+  let editVersionToAdd: any = $state(null);
+  let gameVersions: any[] = $state([]);
+  function toggleEditMode() {
+    isEditMode = !isEditMode;
+    if (gameVersions.length === 0) {
+      axios
+        .get(appendURL(`api/versions`))
+        .then((response) => {
+          if (response.status === 200 && response.data && response.data.versions) {
+            gameVersions = response.data.versions as any[];
+          }
+        });
+    }
+  }
+
+  function updateVersions(add:boolean, id:number) {
+    if (add) {
+      if (editVersionToAdd) {
+        let versionToAdd = gameVersions.find((v) => v.id === id);
+        if (!versionToAdd) return;
+        if (versionToAdd.id === version.id) return;
+        if (version.supportedGameVersions.find((v) => v.id === versionToAdd.id)) return;
+        version.supportedGameVersions.push(editVersionToAdd);
+        editVersionToAdd = null;
+      }
+    } else {
+      version.supportedGameVersions = version.supportedGameVersions.filter((v) => v.id !== id);
+    }
+  }
+
+  function submitEdit() {
+    axios
+      .post(appendURL(`api/modVersions/${version.id}/edit`), {
+        withCredentials: true,
+        data: {
+          supportedGameVersions: version.supportedGameVersions.map((v) => v.id),
+        },
+      })
+      .then((response) => {
+        if (response.status === 302 || response.status === 200) {
+          if (response.data !== null) {
+            window.location.reload();
+          }
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred, contact a developer!");
+        console.error(error);
+      });
   }
 </script>
 
@@ -127,11 +180,48 @@
           <AccordionPanel class="pb-2">
             <div class="flex flex-row flex-wrap items-center text-center">
               {#each version.supportedGameVersions as supportedGameVersion, i}
-                <p class="m-1 rounded-md bg-neutral-background-3 p-1 text-sm">
-                  {supportedGameVersion.version}
-                </p>
+                <div class="m-1 rounded-md bg-neutral-background-3 p-1 text-sm">
+                  <p>
+                    {supportedGameVersion.version} 
+                    {#if isEditMode}
+                      <Button class="p-0 m-0 w-auto h-auto text-sm" appearance="transparent" on:click={() => {
+                        updateVersions(false, supportedGameVersion.id);
+                      }}>
+                        <svg viewBox="0 0 20 20" class="h-4 w-4 text-neutral-foreground-2 md:w-4">
+                          <DismissRegular />
+                        </svg>
+                      </Button>
+                    {/if}
+                  </p>
+                </div>
               {/each}
             </div>
+            {#if isEditMode}
+            <!-- ive lost patience, its just gonna have to look weird.-->
+            <div class="flex flex-row justify-center gap-2 pt-1">
+            <Dropdown.Root bind:value={editVersionToAdd}>
+              <Dropdown.Trigger let:data>
+                <InputSkin class="min-w-[100px]">
+                  {#if data}
+                    <span>{data.version}</span>
+                  {:else}
+                    <span>Select a version</span>
+                  {/if}
+                  <Dropdown.Arrow />
+                </InputSkin>
+              </Dropdown.Trigger>
+              <Dropdown.Menu>
+                {#each gameVersions as version}
+                  <Dropdown.Item value={version} data={version}>{version.version}</Dropdown.Item>
+                {/each}
+              </Dropdown.Menu>
+            </Dropdown.Root>
+            <Button on:click={() => {
+              updateVersions(true, editVersionToAdd.id);
+              editVersionToAdd = null;
+            }}>Add</Button>
+            </div>
+            {/if}
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="deps" class="m-0 p-0">
@@ -146,15 +236,18 @@
                 </Spinner>
               </div>
             {:else}
-            {#if version.dependencies.length > 0}
-              <div class="flex flex-row flex-wrap gap-2 pt-1">
-                {#each depObjs as depObj}
-                  <Link href="/mods/{depObj.mod.id}" appearance="subtle"><p class="rounded-md p-1 bg-neutral-background-3 text-sm">{depObj.mod.name} v{depObj.modVersion.modVersion}</p></Link>
-                {/each}
-              </div>
-            {:else}
-              <p>No dependencies</p>
-            {/if}
+              {#if version.dependencies.length > 0}
+                <div class="flex flex-row flex-wrap gap-2 pt-1">
+                  {#each depObjs as depObj}
+                    <Link href="/mods/{depObj.mod.id}" appearance="subtle"><p class="rounded-md p-1 {depObj.modVersion.status !== Status.Verified || depObj.mod.status !== Status.Verified ? `bg-orange-950` : `bg-neutral-background-3`} text-sm">{depObj.mod.name} v{depObj.modVersion.modVersion}</p></Link>
+                  {/each}
+                </div>
+              {:else}
+                <p>No dependencies</p>
+              {/if}
+              {#if isEditMode}
+                <p>Dependency editing pending...</p>
+              {/if}
             {/if}
           </AccordionPanel>
         </AccordionItem>
@@ -200,13 +293,17 @@
     </div>
   </div>
   <div class="flex flex-row justify-end gap-2">
-    <Button>Edit</Button>
+    <Button on:click={toggleEditMode}>Edit</Button>
+    {#if isEditMode}
+      <Button>Submit Edit</Button>
+    {:else}
     <Button class=""
       onclick={() => {
         window.open(appendURL(`cdn/mod/${version.zipHash}.zip`));
       }}>
       Download ({(version.fileSize /1024 > 1024 ? `${Math.round(version.fileSize/1024/1024)}MB` : (`${Math.round(version.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(version.fileSize/1024)}KB`))})
     </Button>
+    {/if}
   </div>
 </div>
 

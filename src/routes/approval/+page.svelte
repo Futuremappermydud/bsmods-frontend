@@ -8,6 +8,7 @@
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import type { ApprovalQueues } from "$lib/types/Approval";
   import type { Versions } from "$lib/types/Versions";
+    import { sendSubmit } from "$lib/utils/api";
   import { appendURL } from "$lib/utils/url";
   import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio, Spinner, Accordion, AccordionItem, AccordionHeader, AccordionPanel } from "@svelte-fui/core";
     import { DismissFilled } from "@svelte-fui/icons";
@@ -139,7 +140,8 @@
   let approvalReason = $state("");
   let approvalAction = $state("");
   let approvalModalIsLoading = $state(false);
-  let approvalModalError = $state("");
+  let approvalModalIsError = $state(false);
+  let approvalModalMessage = $state("");
 
   async function displayApprovalModal(
     type: `edits` | `mods` | `modVersions`,
@@ -175,15 +177,27 @@
       )
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
-          return response.data;
+          approvalModalMessage = response.data.message;
+          approvalModalIsError = false;
         } else {
-          approvalModalError = "An unknown error occurred."; 
+          let message = response.data.message;
+          if (message) {
+            approvalModalMessage = message;
+          } else {
+            approvalModalMessage = "An unknown error occurred.";
+          }
+          approvalModalIsError = true;
         }
       })
       .catch((error) => {
         console.error("An error occurred, contact a developer!");
         console.error(error);
-        approvalModalError = "An unknown error occurred.";
+        if (error.response?.data && `message` in error.response.data) {
+          approvalModalMessage = error.response.data.message;
+        } else {
+          approvalModalMessage = "Failed to execute action. Check logs for more information.";
+        }
+        approvalModalIsError = true;
         return null;
       });
     approvalModalIsLoading = false;
@@ -310,11 +324,15 @@
       </div>
     </div>
     <div class="flex flex-col gap-4 pb-4">
-      <Button disabled={approvalAction == ""}>Submit</Button>
+      <Button disabled={approvalAction == "" && !approvalModalIsError} on:click={doApproval}>Submit</Button>
     </div>
-    {#if approvalModalError != ""}
+    {#if approvalModalMessage != ""}
       <div class="flex flex-col gap-4 pb-4">
-        <p class="text-red-500">{approvalModalError}</p>
+        {#if approvalModalIsError}
+          <p class="text-red-500">{approvalModalMessage}</p>
+        {:else}
+          <p class="text-green-500">{approvalModalMessage}</p>
+        {/if}
       </div>
     {/if}
     {/if}
