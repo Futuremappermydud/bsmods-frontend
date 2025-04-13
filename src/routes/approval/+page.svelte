@@ -132,8 +132,8 @@
   let approvalModalDisplay = $state(false); 
   let approvalModalHeader = $state("Placeholder Header");
   let approvalModalBody = $state("Placeholder Body");
-  let approvalModalType = $state<`edits` | `mods` | `modVersions`>(
-    "mods",
+  let approvalModalType = $state<`edit` | `mod` | `modVersion`>(
+    "mod",
   );
   let approvalModalModName = $state("");
   let approvalModalModId = $state(NaN);
@@ -142,13 +142,15 @@
   let approvalModalIsLoading = $state(false);
   let approvalModalIsError = $state(false);
   let approvalModalMessage = $state("");
+  let lastHideCardFunction = $state(() => {});
 
   async function displayApprovalModal(
-    type: `edits` | `mods` | `modVersions`,
+    type: `edit` | `mod` | `modVersion`,
     header: string,
     body: string,
     modName: string,
-    modId: number
+    modId: number,
+    hideCard: () => void,
   ) {
     approvalModalType = type;
     approvalModalHeader = header;
@@ -156,6 +158,7 @@
     approvalModalModName = modName;
     approvalModalModId = modId;
     approvalModalDisplay = true;
+    lastHideCardFunction = hideCard;
   }
 
   async function doApproval() {
@@ -179,6 +182,7 @@
         if (response.status === 302 || response.status === 200) {
           approvalModalMessage = response.data.message;
           approvalModalIsError = false;
+          lastHideCardFunction();
         } else {
           let message = response.data.message;
           if (message) {
@@ -299,7 +303,7 @@
       <div class="flex flex-row justify-center gap-2 p-4">
         <RadioGroup bind:value={approvalAction}>
           <Label>Action</Label>
-        {#if approvalModalType == "edits"}
+        {#if approvalModalType == "edit"}
           <Radio value="approve">Approve</Radio>
           <Radio value="deny">Reject</Radio>
         {:else}

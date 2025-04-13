@@ -108,11 +108,12 @@ export type DisplayModalFunction = (
 ) => void;
 
 export type DisplayApprovalModalFunction = (
-  type: `edits` | `mods` | `modVersions`,
+  type: `edit` | `mod` | `modVersion`,
   header: string,
   body: string,
   modName: string,
-  modId: number
+  modId: number,
+  hideCard: () => void,
 ) => void;
 
 export enum ApprovalAction {

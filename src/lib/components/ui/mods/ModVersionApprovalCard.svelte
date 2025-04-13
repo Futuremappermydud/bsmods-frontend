@@ -139,11 +139,14 @@
       <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
       onclick={() => {
         displayApprovalModal(
-          `modVersions`,
+          `modVersion`,
           `Approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}`,
           ``,//`Are you sure you want to approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}?`,
           versionApproval.mod.name,
-          versionApproval.version.id
+          versionApproval.version.id,
+          () => {
+            hide = true;
+          }
         )
       }}>
       </Button>

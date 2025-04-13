@@ -52,11 +52,14 @@
         class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={() => {
           displayApprovalModal(
-            `mods`,
+            `mod`,
             `Approve ${mod.name}`,
             "", //`Are you sure you want to approve ${mod.name}?`,
             mod.name,
-            mod.id
+            mod.id,
+            () => {
+              hide = true;
+            }
           );
         }}
       >

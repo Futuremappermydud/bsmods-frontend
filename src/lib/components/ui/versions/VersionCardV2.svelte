@@ -59,8 +59,12 @@
   let isEditMode = $state(false);
   let editVersionToAdd: any = $state(null);
   let gameVersions: any[] = $state([]);
+  let responseMessage = $state("");
+  let responseMessageIsGood = $state(false);
   function toggleEditMode() {
     isEditMode = !isEditMode;
+    responseMessage = "";
+    responseMessageIsGood = false;
     if (gameVersions.length === 0) {
       axios
         .get(appendURL(`api/versions`))
@@ -89,23 +93,32 @@
 
   function submitEdit() {
     axios
-      .post(appendURL(`api/modVersions/${version.id}/edit`), {
-        withCredentials: true,
-        data: {
-          supportedGameVersions: version.supportedGameVersions.map((v) => v.id),
-        },
+      .patch(appendURL(`api/modVersion/${version.id}`), {
+          supportedGameVersionIds: version.supportedGameVersions.map((v) => v.id),
+        }, {
+          withCredentials: true,
       })
       .then((response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
-            window.location.reload();
+            //window.location.reload();
+            responseMessage = response.data.message;
+            responseMessageIsGood = true;
+            isEditMode = false;
           }
-        } else {
         }
       })
       .catch((error) => {
         console.error("An error occurred, contact a developer!");
         console.error(error);
+        responseMessageIsGood = false;
+        if (error.response) {
+          if (error.response.data && error.response.data.message) {
+            responseMessage = error.response.data.message;
+          }
+        } else {
+          responseMessage = "An unknown error occurred.";
+        }
       });
   }
 </script>
@@ -258,7 +271,7 @@
               {#if version.dependencies.length > 0}
                 Dependency IDs: {version.dependencies.join(`, `)}<br>
               {/if}
-              Uploaded by: {version.author.username} (ID: ${version.author.id})<br>
+              Uploaded by: {version.author.username} (ID: {version.author.id})<br>
               Zip Hash: {version.zipHash}<br>
               Uploaded at: {new Date(version.createdAt).toLocaleString()}<br>
               Last Updated at: {new Date(version.updatedAt).toLocaleString()}<br></p>
@@ -292,10 +305,15 @@
       -->
     </div>
   </div>
+  <div class="flex flex-col gap-2 pt-2">
+    {#if responseMessage !== ""}
+      <p class={responseMessageIsGood ? `text-green-500` : `text-red-500`}>{responseMessage}</p>
+    {/if}
+  </div>
   <div class="flex flex-row justify-end gap-2">
     <Button on:click={toggleEditMode}>Edit</Button>
     {#if isEditMode}
-      <Button>Submit Edit</Button>
+      <Button on:click={submitEdit}>Submit Edit</Button>
     {:else}
     <Button class=""
       onclick={() => {
