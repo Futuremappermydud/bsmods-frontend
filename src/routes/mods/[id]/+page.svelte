@@ -66,6 +66,13 @@
     return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName);
   });
 
+  let isAllowedToEdit = $derived.by(() => {
+    if (!mod) return false;
+    if (userIsApprover) return true;
+    if (isMadeByUser) return true;
+    return false;
+  });
+
   let denialClicks = $state(0);
   let loadingDenial = $state(false);
 
@@ -193,7 +200,7 @@
     {:else}
       <ModCardEditable
         mod={mod?.info}
-        {isMadeByUser}
+        isMadeByUser={isAllowedToEdit}
         bind:editing
         bind:modName
         bind:summary
