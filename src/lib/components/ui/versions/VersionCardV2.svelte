@@ -311,7 +311,9 @@
     {/if}
   </div>
   <div class="flex flex-row justify-end gap-2">
-    <Button on:click={toggleEditMode}>Edit</Button>
+    {#if isApprover || isAuthor}
+      <Button on:click={toggleEditMode}>Edit</Button>
+    {/if}
     {#if isEditMode}
       <Button on:click={submitEdit}>Submit Edit</Button>
     {:else}
