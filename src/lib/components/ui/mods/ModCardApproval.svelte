@@ -2,7 +2,7 @@
   import type { Mod } from "$lib/types/Mods";
   import { Button, Link, Spinner } from "@svelte-fui/core";
   import ModCardBase from "./ModCardBase.svelte";
-  import { CheckmarkNoteFilled, CheckmarkRegular, DismissRegular, LineDashesRegular, LineFilled } from "@svelte-fui/icons";
+  import { CheckmarkNoteFilled, CheckmarkRegular, ChevronCircleRightRegular, DismissRegular, LineDashesRegular, LineFilled } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
   import { ApprovalAction, type DisplayApprovalModalFunction, type DisplayModalFunction } from "$lib/types/Approval";
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
-      <Button
+      <Button appearance="subtle"
         class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
         onclick={() => {
           displayApprovalModal(
@@ -63,6 +63,9 @@
           );
         }}
       >
+      <svg class="" viewBox="0 0 20 20" >
+        <ChevronCircleRightRegular />
+      </svg>
       </Button>
     </div>
   </div>

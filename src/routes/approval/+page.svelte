@@ -7,10 +7,11 @@
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import type { ApprovalQueues } from "$lib/types/Approval";
+    import { Status } from "$lib/types/Status";
   import type { Versions } from "$lib/types/Versions";
     import { sendSubmit } from "$lib/utils/api";
   import { appendURL } from "$lib/utils/url";
-  import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio, Spinner, Accordion, AccordionItem, AccordionHeader, AccordionPanel } from "@svelte-fui/core";
+  import { Label, Switch, Dialog, Button, Field, Input, FieldMessageInfo, RadioGroup, Radio, Spinner, Accordion, AccordionItem, AccordionHeader, AccordionPanel, Tooltip } from "@svelte-fui/core";
     import { DismissFilled } from "@svelte-fui/icons";
   import axios from "axios";
 
@@ -136,7 +137,7 @@
     "mod",
   );
   let approvalModalModName = $state("");
-  let approvalModalModId = $state(NaN);
+  let approvalModalId = $state(NaN);
   let approvalReason = $state("");
   let approvalAction = $state("");
   let approvalModalIsLoading = $state(false);
@@ -156,13 +157,13 @@
     approvalModalHeader = header;
     approvalModalBody = body;
     approvalModalModName = modName;
-    approvalModalModId = modId;
+    approvalModalId = modId;
     approvalModalDisplay = true;
     lastHideCardFunction = hideCard;
   }
 
   async function doApproval() {
-    if (approvalAction == "" || isNaN(approvalModalModId)) return;
+    if (approvalAction == "" || isNaN(approvalModalId)) return;
     let data = {
       action: approvalAction,
       reason: approvalReason,
@@ -171,7 +172,7 @@
     await axios
       .post(
         appendURL(
-          `api/approval/${encodeURIComponent(approvalModalType)}/${encodeURIComponent(approvalModalModId)}/approve`,
+          `api/approval/${encodeURIComponent(approvalModalType)}/${encodeURIComponent(approvalModalId)}/approve`,
         ),
         data,
         {
@@ -183,6 +184,21 @@
           approvalModalMessage = response.data.message;
           approvalModalIsError = false;
           lastHideCardFunction();
+
+          if (approvalModalType == `modVersion`) {
+            let mver = approvalQueues?.modVersions?.find((mv) => mv.version.id == approvalModalId);
+            if (mver && mver?.mod.status !== Status.Verified) {
+             displayApprovalModal(
+              `mod`,
+              `Approve Parent Mod?`,
+              `${mver.mod.name} is not verified. Would you like to approve it as well? If this mod is not verified, any versions of it will not be visible to users. You can find this mod on the "New Mods" page if you do not wish to verify it at this time.`,
+              mver.mod.name,
+              mver.mod.id,
+              () => {}, // this card will not be visible since this should only show up on the mod version page.
+            ); 
+            }
+          }
+
         } else {
           let message = response.data.message;
           if (message) {
@@ -290,6 +306,25 @@
       <div class="text-sm text-neutral-foreground-4">
         {approvalModalBody}
       </div>
+      <Accordion collapsible={true} class="">
+        <AccordionItem value="details">
+          <AccordionHeader>
+            <Button class="px-1 py-0" appearance="subtle">Approval Information</Button>
+          </AccordionHeader>
+          <AccordionPanel>
+            <div class="flex flex-col gap-2">
+              <p>There are 3 actions that can be taken for a Mod or a ModVersion.</p>
+              <ul>
+                <li><b>Approve</b>: Approves the Mod or ModVersion. This will make it visible to users. This action should be used for mods that fully comply with the approval guidelines.</li>
+                <li><b>Unverified</b>: Marks the Mod or ModVersion as unverified. Users will still be able to find these mods, but they will not be visible in the main mod list. This action should be used for mods that are either superseded by newer versions, mods that are uploaded for versions no longer supported by approvers, mods that do not fully comply with the approval guidelines, or mods that are not compatible with all other verified mods. Mods in this list should not receive support, but should be preserved for those who might need to run a older version of a mod or game.</li>
+                <li><b>Remove</b>: Removes the Mod or ModVersion from the approval queue. This will not affect the visibility of the Mod or ModVersion. This action should be used for mods that either do not follow the guidelines at all (e.g. incorrectly formatted zip file, manifest is completely missing), are not legitimate mods.</li>
+              </ul>
+              <br>
+              
+            </div>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
     </div>
     {#if approvalModalIsLoading}
       <div class="flex flex-row justify-center gap-4 pb-4">
@@ -304,10 +339,10 @@
         <RadioGroup bind:value={approvalAction}>
           <Label>Action</Label>
         {#if approvalModalType == "edit"}
-          <Radio value="approve">Approve</Radio>
+          <Radio value="accept">Approve</Radio>
           <Radio value="deny">Reject</Radio>
         {:else}
-          <Radio value="approve">Verify</Radio>
+          <Radio value="accept">Verify</Radio>
           <Radio value="deny">Unverified</Radio>
           <Radio value="remove">Remove</Radio>
         {/if}
@@ -320,7 +355,7 @@
           <FieldMessageInfo open>This will be shared with the authors of {approvalModalModName} & will be visible on the mod's page.</FieldMessageInfo>
         </Field>
         <div class="flex flex-row justify-center gap-2">
-          <Button on:click={() => approvalReason += "Missing dependencies in manifest.json"}>Deps (Menifest)</Button>
+          <Button on:click={() => approvalReason += "Missing dependencies in manifest.json"}>Deps ({Math.random() * 10 % 2 == 1 ? `wo` : ``}manifest)</Button>
           <Button on:click={() => approvalReason += "Missing dependencies on BeatMods"}>Deps (BM)</Button>
           <Button on:click={() => approvalReason += "Zip file is not formatted correctly"}>Bad Zip</Button>
           <Button on:click={() => approvalReason += "Version in manifest.json and BeatMods do not match"}>Mismatched Version</Button>
@@ -342,3 +377,19 @@
     {/if}
   </Dialog.Body>
 </Dialog.Root>
+
+<style>
+    :global(.fui-accordion-header-button) {
+    margin: 0 !important;
+    padding: 0 !important; 
+    min-height: 0 !important;
+    font-weight: 600 !important; /* font-semibold */
+  }
+
+  :global(.fui-accordion-header-expand-icon) {
+    margin: 0 !important;
+    padding: 0 !important; 
+    width: 0 !important;
+    height: 0 !important;
+  }
+</style>

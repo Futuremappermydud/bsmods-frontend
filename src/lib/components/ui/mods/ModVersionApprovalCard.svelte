@@ -2,7 +2,7 @@
   import type { Mod, SupportedGameVersion } from "$lib/types/Mods";
   import { Button, Link, Spinner } from "@svelte-fui/core";
   import ModCardBase from "./ModCardBase.svelte";
-  import { CheckmarkRegular, DismissRegular, LineFilled } from "@svelte-fui/icons";
+  import { CheckmarkRegular, ChevronCircleRightFilled, ChevronCircleRightRegular, DismissRegular, LineFilled } from "@svelte-fui/icons";
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
   import {
@@ -136,7 +136,7 @@
       </div>
     </div>
     <div class="flex h-full w-14 flex-col gap-2">
-      <Button class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
+      <Button appearance="subtle" class="flex aspect-square h-8 flex-1 flex-grow flex-row gap-0 p-1"
       onclick={() => {
         displayApprovalModal(
           `modVersion`,
@@ -149,6 +149,9 @@
           }
         )
       }}>
+      <svg class="" viewBox="0 0 20 20" >
+        <ChevronCircleRightRegular />
+      </svg>
       </Button>
     </div>
   </div>
