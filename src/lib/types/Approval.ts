@@ -111,8 +111,8 @@ export type DisplayApprovalModalFunction = (
   type: `edit` | `mod` | `modVersion`,
   header: string,
   body: string,
-  modName: string,
-  modId: number,
+  mod: Mod,
+  id: number,
   hideCard: () => void,
 ) => void;
 

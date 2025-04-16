@@ -4,6 +4,7 @@
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
   import type { IndividualModData, ModData } from "$lib/types/Mods";
   import {
+      App,
     Button,
     Field,
     FieldMessageError,
@@ -21,12 +22,15 @@
   import { untrack } from "svelte";
   import { Categories, convertCategories } from "$lib/types/Categories";
   import { sendRevoke, sendSaveEdit, sendSubmit } from "$lib/utils/api";
-    import VersionCardV2 from "$lib/components/ui/versions/VersionCardV2.svelte";
+  import VersionCardV2 from "$lib/components/ui/versions/VersionCardV2.svelte";
+  import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
+  import ApprovalDialog from "$lib/components/ui/approval/ApprovalDialog.svelte";
 
   let { data }: { data: PageData } = $props();
 
   let mod: IndividualModData | undefined = $state();
   let editing = $state(false);
+  let approvalModal: { displayApprovalModal: DisplayApprovalModalFunction } & ApprovalDialog;
 
   let version = $state("");
 
@@ -215,40 +219,27 @@
           class:pointer-events-none={editing}
         >
           <div class="flex flex-col gap-4">
-            {#if userIsApprover && mod.info.status === "verified"}
-              <div
-                class="flex flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
-              >
+            {#if userIsApprover}
+              <div class="flex flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4">
                 <p class="text-sm font-semibold">
-                  This mod has already been <i>verified</i>!
+                  Mod Approval
                 </p>
-                <p
-                  class="w-max text-sm font-bold text-palette-red-foreground-1"
-                >
-                  Revoking verification can have dire consequences!
-                </p>
-                {#if loadingDenial}
-                  <div
-                    class="flex h-fit flex-row items-center justify-center gap-4"
-                  >
-                    <Spinner />
-                    <p>Loading...</p>
-                  </div>
-                {:else}
-                  <Button class="text-palette-red-foreground-1" onclick={deny}>
-                    <div class="flex flex-row gap-2">
-                      <div
-                        class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-                        class:!opacity-80={denialClicks > 0}
-                      ></div>
-                      <div
-                        class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-                        class:!opacity-80={denialClicks > 1}
-                      ></div>
-                    </div>
-                    Revoke Verification
-                  </Button>
-                {/if}
+                <Button class="text-palette-red-foreground-1" onclick={() => {
+                  if (!mod) {
+                    console.error("No mod found for approval modal!");
+                    return;
+                  }
+                  approvalModal.displayApprovalModal(
+                    "mod",
+                    `${mod?.info.name}`,
+                    ``,
+                    mod.info,
+                    mod.info.id,
+                    () => {},
+                  );
+                }}>
+                  Open Approval Panel
+                </Button>
               </div>
             {/if}
             {#if isMadeByUser && mod.info.status === "private"}
@@ -301,12 +292,13 @@
               />
             </div>
             {#each versions as version (version.id)}
-              {#if version.status == "verified" || userIsApprover || isMadeByUser}
+              {#if version.status == "verified" || /*version.status == "unverified" ||*/ userIsApprover || isMadeByUser}
                 <VersionCardV2
                   {version}
                   mod={mod.info}
                   isApprover={userIsApprover}
                   isAuthor={isMadeByUser}
+                  displayApprovalModal={approvalModal.displayApprovalModal}
                 />
               {/if}
             {/each}
@@ -356,6 +348,8 @@
     {/if}
   {/await}
 </div>
+
+<ApprovalDialog bind:this={approvalModal} />
 
 <style lang="postcss">
   :global(.fui-field:not(:has(.fui-text-area))) {

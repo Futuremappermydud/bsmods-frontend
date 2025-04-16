@@ -6,16 +6,18 @@
   import { ArrowDownloadRegular, DismissRegular, InfoFilled, WarningFilled } from "@svelte-fui/icons";
   import { numify } from "numify";
   import axios from "axios";
+    import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
 
   let {
     version,
     mod,
     isAuthor,
     isApprover,
-  }: { version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean } =
+    displayApprovalModal,
+  }: { version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean, displayApprovalModal: DisplayApprovalModalFunction } =
     $props();
 
-  let accordianValue = $state<string>('gv');
+  let accordionValue = $state<string>('gv');
 
   // #region approval
   function sendSubmit() {
@@ -187,9 +189,9 @@
     </div>
     <!-- #endregion -->
     <div>
-      <Accordion collapsible={true} bind:value={accordianValue}>
+      <Accordion collapsible={true} bind:value={accordionValue}>
         <AccordionItem value="gv" class="m-0 p-0">
-          <AccordionHeader class="m-0 p-0 font-semibold">Supported Game Versions</AccordionHeader>
+          <AccordionHeader class="m-0 p-0 font-semibold">{accordionValue == `gv` ? `-` : `+`} Supported Game Versions</AccordionHeader>
           <AccordionPanel class="pb-2">
             <div class="flex flex-row flex-wrap items-center text-center">
               {#each version.supportedGameVersions as supportedGameVersion, i}
@@ -240,7 +242,7 @@
         <AccordionItem value="deps" class="m-0 p-0">
           <AccordionHeader class="m-0 p-0 font-semibold" on:click={() => {
             getDeps();
-          }}>Dependencies</AccordionHeader>
+          }}>{accordionValue == `deps` ? `-` : `+`} Dependencies</AccordionHeader>
           <AccordionPanel class="pb-2">
             {#if depObjsLoading}
               <div class="flex flex-row justify-center gap-2">
@@ -264,8 +266,8 @@
             {/if}
           </AccordionPanel>
         </AccordionItem>
-        <AccordionItem>
-          <AccordionHeader class="m-0 p-0 font-semibold">More Information</AccordionHeader>
+        <AccordionItem value="info">
+          <AccordionHeader class="m-0 p-0 font-semibold">{accordionValue == `info` ? `-` : `+`} More Information</AccordionHeader>
           <AccordionPanel class="pb-2">
             <p> ID: {version.id}<br>
               {#if version.dependencies.length > 0}
@@ -311,6 +313,11 @@
     {/if}
   </div>
   <div class="flex flex-row justify-end gap-2">
+    {#if isApprover}
+      <Button on:click={() => {
+        displayApprovalModal(`modVersion`, `Approve ${mod.name} v${version.modVersion}`, ``, mod, version.id, () => {});
+      }}>Approval</Button>
+    {/if}
     {#if isApprover || isAuthor}
       <Button on:click={toggleEditMode}>Edit</Button>
     {/if}

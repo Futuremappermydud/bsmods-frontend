@@ -142,7 +142,7 @@
           `modVersion`,
           `Approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}`,
           ``,//`Are you sure you want to approve ${versionApproval.mod.name} ${versionApproval.version.modVersion}?`,
-          versionApproval.mod.name,
+          versionApproval.mod,
           versionApproval.version.id,
           () => {
             hide = true;

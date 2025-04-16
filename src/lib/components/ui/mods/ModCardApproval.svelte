@@ -55,7 +55,7 @@
             `mod`,
             `Approve ${mod.name}`,
             "", //`Are you sure you want to approve ${mod.name}?`,
-            mod.name,
+            mod,
             mod.id,
             () => {
               hide = true;
