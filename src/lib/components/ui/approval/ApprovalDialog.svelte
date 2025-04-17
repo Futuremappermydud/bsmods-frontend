@@ -65,7 +65,7 @@
             if (approvalModalMod && approvalModalMod.status !== Status.Verified) {
              displayApprovalModal(
               `mod`,
-              `Approve Parent Mod?`,
+              `Approve Parent Project?`,
               `${approvalModalMod.name} is not verified. Would you like to approve it as well? If this mod is not verified, any versions of it will not be visible to users. You can find this mod on the "New Mods" page if you do not wish to verify it at this time.`,
               approvalModalMod,
               approvalModalMod.id,
@@ -126,11 +126,12 @@
             </AccordionHeader>
             <AccordionPanel>
               <div class="flex flex-col gap-2">
-                <p>There are 3 actions that can be taken for a Project or a Version.</p>
+                <p>There are 4 actions that can be taken for a Project or a Version.</p>
                 <ul>
-                  <li><b>Approve</b>: Approves the Project or Version. This will make it visible to users. This action should be used for mods that fully comply with the approval guidelines. The resulting status will be <code>{Status.Verified}</code>.</li>
-                  <li><b>Unverified</b>: Marks the Project or Version as unverified. Users will still be able to find these mods, but they will not be visible in the main mod list. This action should be used for mods that are either superseded by newer versions, mods that are uploaded for versions no longer supported by approvers, mods that do not fully comply with the approval guidelines, or mods that are not compatible with all other verified mods. Mods in this list should not receive support, but should be preserved for those who might need to run a older version of a mod or game. The resulting status will be <code>{Status.Unverified}</code>.</li>
+                  <li><b>Verify</b>: Approves the project or version. This will make it visible to all users. This action should be used for mods that fully comply with the approval guidelines. The resulting status will be <code>{Status.Verified}</code>.</li>
+                  <li><b>Unverified</b>: Marks the project or version as unverified. Users will still be able to find these mods, but they will not be visible in the main mod list. This action should be used for mods that are either superseded by newer versions, mods that are uploaded for versions no longer supported by approvers, mods that do not fully comply with the approval guidelines, or mods that are not compatible with all other verified mods. Mods in this list should not receive support, but should be preserved for those who might need to run a older version of a mod or game. The resulting status will be <code>{Status.Unverified}</code>.</li>
                   <li><b>Remove</b>: Denies the project or version and marks it available for removal. The version will only be visible to the author of the project & approvers. This action should be used for mods that either do not follow the guidelines at all (e.g. incorrectly formatted zip file, manifest is completely missing) or are not legitimate mods. The resulting status will be <code>{Status.Removed}</code>.</li>
+                  <li><b>Restore</b>: Resets the status of the project or version to <code>{Status.Pending}</code>.</li>
                 </ul>
                 <br>
               </div>
@@ -157,6 +158,7 @@
             <Radio value="accept">Verify</Radio>
             <Radio value="deny">Unverified</Radio>
             <Radio value="remove">Remove</Radio>
+            <Radio value="restore">Restore</Radio>
           {/if}
           </RadioGroup>
         </div>
