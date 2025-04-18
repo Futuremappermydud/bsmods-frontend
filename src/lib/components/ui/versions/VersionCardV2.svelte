@@ -290,18 +290,33 @@
             {/if}
           </AccordionPanel>
         </AccordionItem>
+        {#if isApprover || isAuthor} <!-- temp limit since this is a bit of a wip rn -->
+        <AccordionItem value="history">
+          <AccordionHeader class="m-0 p-0 font-semibold">{accordionValue == `history` ? `-` : `+`} Status History</AccordionHeader>
+          <AccordionPanel class="pb-2">
+            <div class="flex flex-col gap-1 pt-1">
+              {#each version.statusHistory as history}
+                <p class="rounded-md p-1 {history.status !== Status.Verified ? `bg-orange-950` : `bg-neutral-background-3`} text-sm">{history.status} by {history.userId} at {new Date(history.setAt).toLocaleString()}</p>
+              {/each}
+            </div>
+          </AccordionPanel>
+        </AccordionItem>
+        {/if}
         <AccordionItem value="info">
           <AccordionHeader class="m-0 p-0 font-semibold">{accordionValue == `info` ? `-` : `+`} More Information</AccordionHeader>
           <AccordionPanel class="pb-2">
             <div class="flex flex-row flex-wrap gap-1 pt-1">
-              <p class="p-1 bg-neutral-background-3 rounded-md">ID | {version.id}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">ID: {version.id}</p>
               {#if version.dependencies.length > 0}
-                <p class="p-1 bg-neutral-background-3 rounded-md">Dependency IDs | {version.dependencies.join(`, `)}</p>
+                <p class="p-1 bg-neutral-background-3 rounded-md">Dependency IDs: {version.dependencies.join(`, `)}</p>
               {/if}
-              <p class="p-1 bg-neutral-background-3 rounded-md">Uploaded by | {version.author.username} (ID: {version.author.id})</p>
-              <p class="p-1 bg-neutral-background-3 rounded-md">Zip Hash | {version.zipHash}</p>
-              <p class="p-1 bg-neutral-background-3 rounded-md">Upload Date | {new Date(version.createdAt).toLocaleString()}</p>
-              <p class="p-1 bg-neutral-background-3 rounded-md">Last Updated | {new Date(version.updatedAt).toLocaleString()}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Uploaded by: {version.author.username} (ID: {version.author.id})</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Hash: {version.zipHash}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Upload Date: {new Date(version.createdAt).toLocaleString()}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Approved by: {version.lastApprovedById}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Last Updated by: {version.lastUpdatedById}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Last Updated: {new Date(version.updatedAt).toLocaleString()}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">File Size: {version.fileSize} bytes</p>
             </div>
           </AccordionPanel>
         </AccordionItem>
