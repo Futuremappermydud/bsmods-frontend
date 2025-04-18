@@ -25,6 +25,7 @@
   import VersionCardV2 from "$lib/components/ui/versions/VersionCardV2.svelte";
   import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
   import ApprovalDialog from "$lib/components/ui/approval/ApprovalDialog.svelte";
+  import { insertSpaces } from "$lib/utils/string";
 
   let { data }: { data: PageData } = $props();
 
@@ -294,6 +295,7 @@
             {#each versions as version (version.id)}
               {#if version.status == "verified" || /*version.status == "unverified" ||*/ userIsApprover || isMadeByUser}
                 <VersionCardV2
+                  id={version.id.toString()}
                   {version}
                   mod={mod.info}
                   isApprover={userIsApprover}
@@ -327,9 +329,28 @@
                 </div>
               </div>
             {:else}
-              <h2 class="text-lg font-semibold">
-                More Info <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">Here!</Link>
-              </h2>
+              <div class="flex flex-row justify-evenly gap-2">
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">More Info:</p>
+                  <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">Source Control</Link>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Category:</p>
+                  <p class="silly-capitalize">{mod.info.category}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Game:</p>
+                  <p class="silly-capitalize">{insertSpaces(mod.info.gameName)}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Status:</p>
+                  <p class="silly-capitalize">{mod.info.status}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Created at:</p>
+                  <p class="silly-capitalize">{new Date(mod.info.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
             {/if}
           </div>
           <div

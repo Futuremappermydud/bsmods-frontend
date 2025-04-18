@@ -2,20 +2,34 @@
   import type { Mod, ModVersion } from "$lib/types/Mods";
   import { Status } from "$lib/types/Status";
   import { appendURL } from "$lib/utils/url";
-  import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Label, Link, Spinner, Dropdown, InputSkin } from "@svelte-fui/core";
-  import { ArrowDownloadRegular, DismissRegular, InfoFilled, WarningFilled } from "@svelte-fui/icons";
+  import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Label, Link, Spinner, Dropdown, InputSkin, Tooltip } from "@svelte-fui/core";
+  import { ArrowDownloadRegular, DismissRegular, InfoFilled, LinkRegular, WarningFilled } from "@svelte-fui/icons";
   import { numify } from "numify";
   import axios from "axios";
     import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
+    import { onMount, tick } from "svelte";
 
   let {
+    id,
     version,
     mod,
     isAuthor,
     isApprover,
     displayApprovalModal,
-  }: { version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean, displayApprovalModal: DisplayApprovalModalFunction } =
+  }: { id?:string, version: ModVersion; mod: Mod; isAuthor: boolean; isApprover: boolean, displayApprovalModal: DisplayApprovalModalFunction } =
     $props();
+
+  onMount(async () => {
+    await tick();
+    if (id) {
+      if (window.location.hash === `#${id}`) {
+        let e = document.getElementById(document.location.hash.slice(1));
+        if (e) {
+          e.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+  });
 
   let accordionValue = $state<string>('gv');
 
@@ -126,7 +140,8 @@
 </script>
 
 <div
-  class="relative flex flex-col gap-1 rounded-xl bg-neutral-background-2 p-4 shadow-4"
+  class="relative flex flex-col gap-1 rounded-xl bg-neutral-background-2 p-4 shadow-4 {window.location.hash === `#${id}` ? `border-2 border-blue-500` : ``}"
+  id={id}
 >
   <!-- #region top bar-->
   <div class="flex flex-col gap-2">
@@ -136,6 +151,15 @@
         {mod.name} v{version.modVersion}
       </p>
 
+      <Tooltip content="Copy Link">
+        <Button class="p-1 m-0" appearance="subtle" onclick={() => {
+          navigator.clipboard.writeText(appendURL(`mod/${mod.id}#${id}`));
+        }}>
+          <svg viewBox="0 0 20 20" class="h-5 w-5 text-neutral-foreground-2 md:w-4">
+            <LinkRegular />
+          </svg>
+        </Button>
+      </Tooltip>
       <div
         class="flex flex-row items-center gap-1 rounded-md bg-neutral-background-3 py-1 px-1 pr-2"
       >
@@ -269,14 +293,16 @@
         <AccordionItem value="info">
           <AccordionHeader class="m-0 p-0 font-semibold">{accordionValue == `info` ? `-` : `+`} More Information</AccordionHeader>
           <AccordionPanel class="pb-2">
-            <p> ID: {version.id}<br>
+            <div class="flex flex-row flex-wrap gap-1 pt-1">
+              <p class="p-1 bg-neutral-background-3 rounded-md">ID | {version.id}</p>
               {#if version.dependencies.length > 0}
-                Dependency IDs: {version.dependencies.join(`, `)}<br>
+                <p class="p-1 bg-neutral-background-3 rounded-md">Dependency IDs | {version.dependencies.join(`, `)}</p>
               {/if}
-              Uploaded by: {version.author.username} (ID: {version.author.id})<br>
-              Zip Hash: {version.zipHash}<br>
-              Uploaded at: {new Date(version.createdAt).toLocaleString()}<br>
-              Last Updated at: {new Date(version.updatedAt).toLocaleString()}<br></p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Uploaded by | {version.author.username} (ID: {version.author.id})</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Zip Hash | {version.zipHash}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Upload Date | {new Date(version.createdAt).toLocaleString()}</p>
+              <p class="p-1 bg-neutral-background-3 rounded-md">Last Updated | {new Date(version.updatedAt).toLocaleString()}</p>
+            </div>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
