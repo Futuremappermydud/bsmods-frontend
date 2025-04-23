@@ -7,6 +7,7 @@ export enum UserRoles {
   Approver = `approver`,
   LargeFiles = `largefiles`,
   Banned = `banned`,
+  GameManager = `gamemanager`,
 }
 
 export interface UserRolesObject {

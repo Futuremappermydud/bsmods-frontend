@@ -332,7 +332,7 @@
               <div class="flex flex-row justify-evenly gap-2">
                 <div class="flex flex-col gap-1 justify-center align-middle">
                   <p class="text-sm font-semibold">More Info:</p>
-                  <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">Source Control</Link>
+                  <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">{mod.info.gitUrl.includes(`github.com`) ? `Source Control` : `Website`}</Link>
                 </div>
                 <div class="flex flex-col gap-1 justify-center align-middle">
                   <p class="text-sm font-semibold">Category:</p>
