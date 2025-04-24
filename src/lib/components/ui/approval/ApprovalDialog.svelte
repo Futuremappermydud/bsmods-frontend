@@ -19,6 +19,7 @@
   let approvalModalIsLoading = $state(false);
   let approvalModalIsError = $state(false);
   let approvalModalMessage = $state("");
+  let approvalModalIsInteractable = $state(true);
   let lastHideCardFunction = $state(() => {});
 
   export async function displayApprovalModal(
@@ -61,7 +62,7 @@
           approvalModalIsError = false;
           lastHideCardFunction();
 
-          if (approvalModalType == `modVersion`) {;
+          if (approvalModalType == `modVersion`) {
             if (approvalModalMod && approvalModalMod.status !== Status.Verified) {
              displayApprovalModal(
               `mod`,
@@ -72,6 +73,23 @@
               () => {}, // this card will not be visible since this should only show up on the mod version page.
             ); 
             }
+          } else {
+            // disable & close card after 3 seconds
+            approvalModalIsInteractable = false;
+            setTimeout(() => {
+              approvalModalDisplay = false;
+              approvalModalIsLoading = false;
+              approvalModalIsError = false;
+              approvalModalMessage = "";
+              approvalModalBody = "";
+              approvalModalHeader = "";
+              approvalModalType = "mod";
+              approvalModalMod = undefined;
+              approvalModalId = NaN;
+              approvalReason = "";
+              approvalAction = "";
+              approvalModalIsInteractable = true;
+            }, 3000);
           }
 
         } else {
@@ -149,7 +167,7 @@
       {:else}
       <div class="flex flex-row gap-4 pb-4">
         <div class="flex flex-row justify-center gap-2 p-4">
-          <RadioGroup bind:value={approvalAction}>
+          <RadioGroup bind:value={approvalAction} disabled={!approvalModalIsInteractable}>
             <Label>Action</Label>
           {#if approvalModalType == "edit"}
             <Radio value="accept">Approve</Radio>
@@ -165,7 +183,7 @@
         <div class="flex flex-col justify-center gap-2 p-2">
           <Field>
             <Label>Reason</Label>
-            <Input bind:value={approvalReason} />
+            <Input bind:value={approvalReason} disabled={!approvalModalIsInteractable} />
             <FieldMessageInfo open>This will be shared with the authors of {approvalModalMod?.name} & will be visible on the mod's page.</FieldMessageInfo>
           </Field>
           <div class="flex flex-row justify-center gap-2">
@@ -177,7 +195,7 @@
         </div>
       </div>
       <div class="flex flex-col gap-4 pb-4">
-        <Button disabled={approvalAction == "" && !approvalModalIsError} on:click={doApproval}>Submit</Button>
+        <Button disabled={(approvalAction == "" && !approvalModalIsError) || !approvalModalIsInteractable} on:click={doApproval}>Submit</Button>
       </div>
       {#if approvalModalMessage != ""}
         <div class="flex flex-col gap-4 pb-4">
