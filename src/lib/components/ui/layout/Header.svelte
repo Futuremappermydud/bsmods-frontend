@@ -2,6 +2,7 @@
   import { Button, Divider, Menu } from "@svelte-fui/core";
   import { page } from "$app/stores";
   import {
+    AddRegular,
     ArrowUploadRegular,
     ColorLineRegular,
     NavigationRegular,
@@ -73,24 +74,24 @@
 
 {#snippet rightItems()}
   {#if userData.hasAttempted}
-    {#if userData.authenticated && userData.roles && (checkUserAnyGame(userData.roles, UserRoles.Admin) || checkUserAnyGame(userData.roles, UserRoles.Approver))}
-      <a class="contents" href="/admin">
+    {#if userData.authenticated && userData.roles && (checkUserAnyGame(userData.roles, UserRoles.Admin) || checkUserAnyGame(userData.roles, UserRoles.Approver) || checkUserAnyGame(userData.roles, UserRoles.GameManager))}
+      <a class="contents" href="/admin" title="Admin">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
           <SettingsRegular />
         </svg>
       </a>
     {/if}
     {#if userData.authenticated && userData.roles && checkUserAnyGame(userData.roles, UserRoles.Approver)}
-      <a class="contents" href="/approval">
+      <a class="contents" href="/approval" title="Approvals">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
           <ColorLineRegular />
         </svg>
       </a>
     {/if}
     {#if userData.authenticated}
-      <a class="contents" href="/upload">
+      <a class="contents" href="/upload" title="Create a New Mod">
         <svg class="h-6 w-6" viewBox="0 0 20 20">
-          <ArrowUploadRegular />
+          <AddRegular />
         </svg>
       </a>
     {/if}

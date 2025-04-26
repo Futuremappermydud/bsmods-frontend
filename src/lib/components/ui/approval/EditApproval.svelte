@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { EditApproval } from "$lib/types/Approval";
+  import type { DisplayApprovalModalFunction, DisplayModalFunction, EditApproval } from "$lib/types/Approval";
   import axios from "axios";
   import type { SupportedGameVersion } from "$lib/types/Mods";
   import { appendURL } from "$lib/utils/url";
@@ -7,8 +7,12 @@
 
   let {
     edits,
+    displayModal,
+    displayApprovalModal,
   }: {
     edits: EditApproval[];
+    displayModal: DisplayModalFunction;
+    displayApprovalModal: DisplayApprovalModalFunction
   } = $props();
 
   let doneLoading = $state(false);
@@ -28,7 +32,7 @@
 {#if doneLoading}
   <div class="flex flex-col gap-4">
     {#each edits as edit}
-      <EditApprovalCard {edit} {gameVersions} />
+      <EditApprovalCard {edit} {gameVersions} {displayModal} {displayApprovalModal}/>
     {/each}
   </div>
 {/if}

@@ -1,3 +1,4 @@
+import { string } from "zod";
 import type { Status } from "./Status";
 
 export interface ModAuthor {
@@ -27,6 +28,13 @@ export interface ModDependency {
   id: number;
 }
 
+export interface StatusHistory {
+  status: Status;
+  reason: string;
+  userId: number;
+  setAt: Date;
+}
+
 export interface ModVersion {
   id: number;
   modId: number;
@@ -40,6 +48,9 @@ export interface ModVersion {
   downloadCount: number;
   supportedGameVersions: SupportedGameVersion[];
   fileSize: number;
+  lastUpdatedById: number;
+  lastApprovedById: number;
+  statusHistory: StatusHistory[];
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +68,7 @@ export interface Mod {
   gitUrl: string;
   lastApprovedById: number;
   lastUpdatedById: number;
+  statusHistory: StatusHistory[];
   createdAt: string;
   updatedAt: string;
 }

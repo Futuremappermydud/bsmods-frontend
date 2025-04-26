@@ -4,6 +4,7 @@
   import VersionCard from "$lib/components/ui/versions/VersionCard.svelte";
   import type { IndividualModData, ModData } from "$lib/types/Mods";
   import {
+      App,
     Button,
     Field,
     FieldMessageError,
@@ -21,11 +22,16 @@
   import { untrack } from "svelte";
   import { Categories, convertCategories } from "$lib/types/Categories";
   import { sendRevoke, sendSaveEdit, sendSubmit } from "$lib/utils/api";
+  import VersionCardV2 from "$lib/components/ui/versions/VersionCardV2.svelte";
+  import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
+  import ApprovalDialog from "$lib/components/ui/approval/ApprovalDialog.svelte";
+  import { insertSpaces } from "$lib/utils/string";
 
   let { data }: { data: PageData } = $props();
 
   let mod: IndividualModData | undefined = $state();
   let editing = $state(false);
+  let approvalModal: { displayApprovalModal: DisplayApprovalModalFunction } & ApprovalDialog;
 
   let version = $state("");
 
@@ -63,6 +69,13 @@
     if (!mod) return false;
     if (!data.roles) return false;
     return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName);
+  });
+
+  let isAllowedToEdit = $derived.by(() => {
+    if (!mod) return false;
+    if (userIsApprover) return true;
+    if (isMadeByUser) return true;
+    return false;
   });
 
   let denialClicks = $state(0);
@@ -192,7 +205,7 @@
     {:else}
       <ModCardEditable
         mod={mod?.info}
-        {isMadeByUser}
+        isMadeByUser={isAllowedToEdit}
         bind:editing
         bind:modName
         bind:summary
@@ -207,40 +220,27 @@
           class:pointer-events-none={editing}
         >
           <div class="flex flex-col gap-4">
-            {#if userIsApprover && mod.info.status === "verified"}
-              <div
-                class="flex flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4"
-              >
+            {#if userIsApprover}
+              <div class="flex flex-col items-center gap-2 rounded-xl bg-neutral-background-2 p-4 shadow-4">
                 <p class="text-sm font-semibold">
-                  This mod has already been <i>verified</i>!
+                  Mod Approval
                 </p>
-                <p
-                  class="w-max text-sm font-bold text-palette-red-foreground-1"
-                >
-                  Revoking verification can have dire consequences!
-                </p>
-                {#if loadingDenial}
-                  <div
-                    class="flex h-fit flex-row items-center justify-center gap-4"
-                  >
-                    <Spinner />
-                    <p>Loading...</p>
-                  </div>
-                {:else}
-                  <Button class="text-palette-red-foreground-1" onclick={deny}>
-                    <div class="flex flex-row gap-2">
-                      <div
-                        class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-                        class:!opacity-80={denialClicks > 0}
-                      ></div>
-                      <div
-                        class="h-2 w-2 rounded-circular bg-neutral-foreground-3 opacity-20"
-                        class:!opacity-80={denialClicks > 1}
-                      ></div>
-                    </div>
-                    Revoke Verification
-                  </Button>
-                {/if}
+                <Button class="text-palette-red-foreground-1" onclick={() => {
+                  if (!mod) {
+                    console.error("No mod found for approval modal!");
+                    return;
+                  }
+                  approvalModal.displayApprovalModal(
+                    "mod",
+                    `${mod?.info.name}`,
+                    ``,
+                    mod.info,
+                    mod.info.id,
+                    () => {},
+                  );
+                }}>
+                  Open Approval Panel
+                </Button>
               </div>
             {/if}
             {#if isMadeByUser && mod.info.status === "private"}
@@ -293,12 +293,14 @@
               />
             </div>
             {#each versions as version (version.id)}
-              {#if version.status == "verified" || userIsApprover || isMadeByUser}
-                <VersionCard
+              {#if version.status == "verified" || /*version.status == "unverified" ||*/ userIsApprover || isMadeByUser}
+                <VersionCardV2
+                  id={version.id.toString()}
                   {version}
                   mod={mod.info}
                   isApprover={userIsApprover}
                   isAuthor={isMadeByUser}
+                  displayApprovalModal={approvalModal.displayApprovalModal}
                 />
               {/if}
             {/each}
@@ -327,9 +329,28 @@
                 </div>
               </div>
             {:else}
-              <h2 class="text-lg font-semibold">
-                More Info <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">Here!</Link>
-              </h2>
+              <div class="flex flex-row justify-evenly gap-2">
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">More Info:</p>
+                  <Link href={mod.info.gitUrl} target="=_blank" rel="no-referrer">{mod.info.gitUrl.includes(`github.com`) ? `Source Control` : `Website`}</Link>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Category:</p>
+                  <p class="silly-capitalize">{mod.info.category}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Game:</p>
+                  <p class="silly-capitalize">{insertSpaces(mod.info.gameName)}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Status:</p>
+                  <p class="silly-capitalize">{mod.info.status}</p>
+                </div>
+                <div class="flex flex-col gap-1 justify-center align-middle">
+                  <p class="text-sm font-semibold">Created at:</p>
+                  <p class="silly-capitalize">{new Date(mod.info.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
             {/if}
           </div>
           <div
@@ -348,6 +369,8 @@
     {/if}
   {/await}
 </div>
+
+<ApprovalDialog bind:this={approvalModal} />
 
 <style lang="postcss">
   :global(.fui-field:not(:has(.fui-text-area))) {

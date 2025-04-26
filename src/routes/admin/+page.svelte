@@ -19,7 +19,7 @@
     });
 
     let isAuthorized = $derived.by(() => {
-        if (!data || !data.roles) return false;
+        //if (!data || !data.roles) return false;
 
         if (isAdmin || isApprover) {
             return true;
@@ -48,6 +48,16 @@
         }
     });
 
+    let isGameManager = $derived.by(() => {
+        if (!data || !data.roles) return false;
+
+        if (checkUserAnyGame(data.roles, UserRoles.GameManager)) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
     let page = $state("users");
 </script>
 
@@ -65,7 +75,7 @@
             {#if isApprover}
                 <Tab value="users">User Management</Tab>
             {/if}
-            {#if isAdmin}
+            {#if isGameManager}
                 <Tab value="gv">Game Version Management</Tab>
             {/if}
         </TabList>

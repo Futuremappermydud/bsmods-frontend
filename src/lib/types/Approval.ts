@@ -101,3 +101,24 @@ export interface ApprovalQueues {
   modVersions: VersionApproval[] | undefined;
   edits: EditApproval[] | undefined;
 }
+
+export type DisplayModalFunction = (
+  header: string,
+  body: { header: string; body: string }[],
+) => void;
+
+export type DisplayApprovalModalFunction = (
+  type: `edit` | `mod` | `modVersion`,
+  header: string,
+  body: string,
+  mod: Mod,
+  id: number,
+  hideCard: () => void,
+) => void;
+
+export enum ApprovalAction {
+  Accept = `accept`, // Verify/accept the mod/modVersion/edit, set its status to verified
+  Deny = `deny`, // Reject the mod/modVersion, set its status to unverified, but do not remove it
+  Remove = `remove`, // Remove the mod/modVersion from the database, set its status to removed
+  Restore = `restore`, // Restore the mod/modVersion if it was previously removed
+}
