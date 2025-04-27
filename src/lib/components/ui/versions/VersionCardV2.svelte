@@ -153,7 +153,7 @@
 
       <Tooltip content="Copy Link">
         <Button class="p-1 m-0" appearance="subtle" onclick={() => {
-          navigator.clipboard.writeText(appendURL(`mod/${mod.id}#${id}`));
+          navigator.clipboard.writeText(appendURL(`mods/${mod.id}#${id}`));
         }}>
           <svg viewBox="0 0 20 20" class="h-5 w-5 text-neutral-foreground-2 md:w-4">
             <LinkRegular />
