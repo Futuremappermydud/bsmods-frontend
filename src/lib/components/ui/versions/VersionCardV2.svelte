@@ -31,6 +31,10 @@
     }
   });
 
+  function getFileSizeString() {
+    return version.fileSize /1024 > 1024 ? `${Math.round(version.fileSize/1024/1024)}MB` : (`${Math.round(version.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(version.fileSize/1024)}KB`);
+  }
+
   let accordionValue = $state<string>('gv');
 
   // #region approval
@@ -361,6 +365,9 @@
     {/if}
     {#if isApprover || isAuthor}
       <Button on:click={toggleEditMode}>Edit</Button>
+      {#if version.status === Status.Private}
+        <Button on:click={sendSubmit}>Submit</Button>
+      {/if}
     {/if}
     {#if isEditMode}
       <Button on:click={submitEdit}>Submit Edit</Button>
@@ -369,7 +376,7 @@
       onclick={() => {
         window.open(appendURL(`cdn/mod/${version.zipHash}.zip`));
       }}>
-      Download ({(version.fileSize /1024 > 1024 ? `${Math.round(version.fileSize/1024/1024)}MB` : (`${Math.round(version.fileSize/1024)}KB` === `NaNKB` ? `0KB` : `${Math.round(version.fileSize/1024)}KB`))})
+      Download{version.status === Status.Private ? `` : ` (${getFileSizeString()})`}
     </Button>
     {/if}
   </div>
