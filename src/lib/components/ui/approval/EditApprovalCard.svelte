@@ -213,14 +213,14 @@
                         for (let gv of editProp) {
                           let gameVersion = gameVersions.find((gvg) => gvg.id === gv);
                           if (gameVersion) {
-                            oldgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
+                            newgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
                           }
                         }
 
                         for (let gv of originalProp) {
                           let gameVersion = gameVersions.find((gvg) => gvg.id === gv);
                           if (gameVersion) {
-                            newgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
+                            oldgvArray.push(`${gameVersion.gameName} v${gameVersion.version}`);
                           }
                         }
 
