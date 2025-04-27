@@ -49,7 +49,7 @@
   let modNameScheme = z
     .string()
     .min(3, "Name must contain at least 3 character(s)")
-    .max(20, "Name must contain at most 20 character(s)");
+    .max(64, "Name must contain at most 64 character(s)");
   let gitUrlScheme = z
     .string()
     .min(8, "URL must contain at least 8 character(s)")
