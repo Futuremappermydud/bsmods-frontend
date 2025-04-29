@@ -38,6 +38,7 @@
   import { checkUserAnyGame, UserRoles } from "$lib/types/UserRoles";
   import type { AuthedUser } from "$lib/types/AuthedUser";
     import { ChevronDoubleDownFilled } from "@svelte-fui/icons";
+    import { Status } from "$lib/types/Status";
 
   let { data, text = $bindable() }: { userData: AuthedUser, data: PageData; text: string; } = $props();
 
@@ -151,6 +152,9 @@
           } else {
             tempRawAllowedVersions = tempRawDepAllVersions.filter((v) => {
               let valid = dependencyVersionScheme.safeParse(v.modVersion);
+              if (v.status === Status.Removed) {
+                return false;
+              }
               return valid.success;
             });
           }
