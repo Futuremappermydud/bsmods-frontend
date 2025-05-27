@@ -1,6 +1,6 @@
 import type { SemVer } from "semver";
 import type { Categories } from "./Categories";
-import type { ContentHash, Mod } from "./Mods";
+import type { ContentHash, Mod, StatusHistory } from "./Mods";
 import type { Platform } from "./Platform";
 import type { Status } from "./Status";
 import type { SupportedGames } from "./SupportedGames";
@@ -20,6 +20,7 @@ export interface ModVersionDBObject {
   lastApprovedById: number | null;
   lastUpdatedById: number;
   fileSize: number;
+  statusHistory: StatusHistory[];
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt: Date | null;
@@ -36,6 +37,7 @@ export interface ModDBObject {
   status: Status;
   iconFileName: string;
   gitUrl: string;
+  statusHistory: StatusHistory[];
   lastApprovedById: number | null;
   lastUpdatedById: number;
   readonly createdAt: Date;
