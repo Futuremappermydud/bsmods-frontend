@@ -4,8 +4,6 @@
   import ModVersionApprovalCard from "../mods/ModVersionApprovalCard.svelte";
   import type { SupportedGameVersion } from "$lib/types/Mods";
   import { appendURL } from "$lib/utils/url";
-  import { onMount } from "svelte";
-  import { Status } from "$lib/types/Status";
 
   let {
     modVersions,
@@ -28,38 +26,7 @@
     });
     doneLoading = true;
   }
-
-  onMount(() => {
-    //sort the modVerisons array by oldest submission
-    modVersions.sort((a, b) => {
-      let aStatuses = a.version.statusHistory.filter(
-        (status) =>
-          status.status === Status.Pending ||
-          status.status === Status.Unverified,
-      );
-      let bStatuses = b.version.statusHistory.filter(
-        (status) =>
-          status.status === Status.Pending ||
-          status.status === Status.Unverified,
-      );
-
-      let aDate;
-      let bDate;
-      if (aStatuses.length > 0) {
-        aDate = new Date(aStatuses[aStatuses.length - 1].setAt);
-      } else {
-        aDate = new Date(a.version.createdAt);
-      }
-      if (bStatuses.length > 0) {
-        bDate = new Date(bStatuses[bStatuses.length - 1].setAt);
-      } else {
-        bDate = new Date(b.version.createdAt);
-      }
-
-      return aDate.getTime() - bDate.getTime();
-    });
-    getVersions();
-  });
+  getVersions();
 </script>
 
 {#if doneLoading}
