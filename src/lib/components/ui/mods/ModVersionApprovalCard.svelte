@@ -12,6 +12,7 @@
     type ModVersionDBObject,
     type VersionApproval,
   } from "$lib/types/Approval";
+    import { Status } from "$lib/types/Status";
 
   let {
     versionApproval,
@@ -27,6 +28,20 @@
 
   let loading = $state(false);
   let hide = $state(false);
+
+  function getSortDate() {
+    let statuses = versionApproval.version.statusHistory.filter(
+      (status) =>
+        status.status === Status.Pending ||
+        status.status === Status.Unverified,
+    );
+
+    if (statuses.length > 0) {
+      return new Date(statuses[statuses.length - 1].setAt);
+    } else {
+      return new Date(versionApproval.version.createdAt);
+    }
+  }
 </script>
 
 {#snippet approvalButtons()}
@@ -159,7 +174,8 @@
 
 {#snippet info()}
   Mod ID: {versionApproval.mod.id}<br>
-  Version ID: {versionApproval.version.id}
+  Version ID: {versionApproval.version.id}<br>
+  Sort Date: {getSortDate().toLocaleDateString()} {getSortDate().toLocaleTimeString()}<br>
 {/snippet}
 
 {#if !hide}

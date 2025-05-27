@@ -8,6 +8,7 @@ import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
   import Tab from "$lib/components/ui/tablist/Tab.svelte";
   import TabList from "$lib/components/ui/tablist/TabList.svelte";
   import type { ApprovalQueues, DisplayApprovalModalFunction } from "$lib/types/Approval";
+    import type { StatusHistory } from "$lib/types/Mods";
     import { Status } from "$lib/types/Status";
   import type { Versions } from "$lib/types/Versions";
     import { sendSubmit } from "$lib/utils/api";
@@ -48,6 +49,34 @@ import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
     doShit();
   });
 
+  function compareObjWithHistory(a: {statusHistory: StatusHistory[], createdAt: string|Date }, b: typeof a) {
+      let aStatuses = a.statusHistory.filter(
+        (status) =>
+          status.status === Status.Pending ||
+          status.status === Status.Unverified,
+      );
+      let bStatuses = b.statusHistory.filter(
+        (status) =>
+          status.status === Status.Pending ||
+          status.status === Status.Unverified,
+      );
+
+      let aDate;
+      let bDate;
+      if (aStatuses.length > 0) {
+        aDate = new Date(aStatuses[aStatuses.length - 1].setAt);
+      } else {
+        aDate = new Date(a.createdAt);
+      }
+      if (bStatuses.length > 0) {
+        bDate = new Date(bStatuses[bStatuses.length - 1].setAt);
+      } else {
+        bDate = new Date(b.createdAt);
+      }
+
+      return aDate.getTime() - bDate.getTime();
+  }
+
   async function doShit() {
     if (!selectedGame) return;
     modSearchLoading = true;
@@ -58,6 +87,11 @@ import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
         getApprovalQueue(`edits`).then((data) => {
           if (data && data.edits) {
             approvalQueues.edits = data.edits;
+            approvalQueues.edits?.sort((a, b) => {
+              const aDate = new Date(a.edit.createdAt);
+              const bDate = new Date(b.edit.createdAt);
+              return aDate.getTime() - bDate.getTime();
+            });
             console.log(`Loaded ${approvalQueues.edits?.length} edits.`);
           } else {
             modSearchError = true;
@@ -68,6 +102,9 @@ import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
         getApprovalQueue(`mods`).then((data) => {
           if (data) {
             approvalQueues.mods = data.mods;
+            approvalQueues.mods?.sort((a, b) => {
+              return compareObjWithHistory(a, b);
+            });
             console.log(`Loaded ${approvalQueues.mods?.length} mods.`);
           } else {
             modSearchError = true;
@@ -85,6 +122,9 @@ import EditApproval from "$lib/components/ui/approval/EditApproval.svelte";
                 );
               }
             }
+            approvalQueues.modVersions?.sort((a, b) => {
+              return compareObjWithHistory(a.version, b.version);
+            });
             console.log(
               `Loaded ${approvalQueues.modVersions?.length} versions.`,
             );
