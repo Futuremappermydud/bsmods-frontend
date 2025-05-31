@@ -156,7 +156,7 @@
         <div class="w-full h-full prideflag">
           <span class="font-semibold w-full h-full flex flex-row items-center justify-center gap-1 bg-black/60">
             <Button appearance="subtle" on:click={() => (showPrideDialog = true)}>
-              <span class="text-white text-base">Happy pride month from the BSMG & BeatMods team.</span>
+              <span class="text-white text-base">Happy pride month from the BSMG team.</span>
             </Button>
           </span>
         </div>
@@ -164,7 +164,7 @@
 
       <Dialog.Root bind:open={showPrideDialog} type="modal">
         <Dialog.Header>
-          Happy pride month from the BSMG & BeatMods team.
+          Happy pride month from the BSMG team.
         </Dialog.Header>
         <Dialog.Body>
           We have kept this going for quite a while now; something that while exhausting at times, we also take great pride in. We are not a for profit corporate entity. We're just regular people all living our own lives and using our spare time to create these experiences and communities for you all to enjoy. We'd like to ask that you keep that in mind. 
