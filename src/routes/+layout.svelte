@@ -4,7 +4,7 @@
   import type { Snippet } from "svelte";
   import type { LayoutData } from "./$types";
 
-  import { App } from "@svelte-fui/core";
+  import { App, Button, Dialog } from "@svelte-fui/core";
   import { webLightTheme, webDarkTheme } from "@svelte-fui/themes";
   import "@svelte-fui/core/styles/root";
 
@@ -19,6 +19,9 @@
 
   let theme = $state(webLightTheme);
   let showCursor = $state(true);
+
+  let showPrideBanner = $state(false);
+  let showPrideDialog = $state(false);
 
   onMount(() => {
     function handler(schemeMedia: MediaQueryListEvent) {
@@ -42,6 +45,14 @@
 
     if (storedSettings.showCursor) {
       showCursor = storedSettings.showCursor === "true";
+    }
+
+    if (localStorage.getItem("showPride2025Banner") === "false") {
+      showPrideBanner = false;
+    } else {
+      if (new Date(Date.now()).getMonth() === 5) { // June
+        showPrideBanner = true;
+      }
     }
       
     return () => {
@@ -140,6 +151,54 @@
         isLight={theme.colorBackgroundOverlay !==
           webDarkTheme.colorBackgroundOverlay}
       />
+      {#if showPrideBanner}
+      <div class="w-auto h-12">
+        <div class="w-full h-full prideflag">
+          <span class="font-semibold w-full h-full flex flex-row items-center justify-center gap-1 bg-black/60">
+            <Button appearance="subtle" on:click={() => (showPrideDialog = true)}>
+              <span class="text-white text-base">Happy pride month from the BSMG team.</span>
+            </Button>
+          </span>
+        </div>
+      </div>
+
+      <Dialog.Root bind:open={showPrideDialog} type="modal">
+        <Dialog.Header>
+          Happy pride month from the BSMG team.
+        </Dialog.Header>
+        <Dialog.Body>
+          We have kept this going for quite a while now; something that while exhausting at times, we also take great pride in. We are not a for profit corporate entity. We're just regular people all living our own lives and using our spare time to create these experiences and communities for you all to enjoy. We'd like to ask that you keep that in mind. 
+          <br><br>
+          This community has shaped many of us, and since coming together, we have all grown as individuals. Whether you have formed a tight knit circle or are a member of a larger space, as a whole community, we have all made an impact on the lives of each other. Over the years, many of our numbers have stopped playing or creating but that does not detract from the impact they have had, nor from the impact those who have remained continue to make.
+          <br><br>
+          These tools, mods, levels and assets only exist due to the often thankless work of many individuals, with several backbones of our community identifying with an LGBTQ+ label. Without them, the modding landscape would likely look very different than it does today. A large chunk of the mods, services, and events that are so beloved by all would never have even existed if they had not become a part of our community.
+          <br><br>
+          By the same token, we have never shied away from our open support of our LGBTQ+ community members. We are honoured to have them here and fully intend to continue to make our little corner of the internet a safe space for everyone. Whether you have been here from the start, took a break, are a new player, ranked or casual, we would like to thank each and every one of you for being here and helping shape our community into what it is today.
+          <br><br>
+          From all of us here at BSMG, Happy Pride.
+        </Dialog.Body>
+
+        <Dialog.Actions class="justify-end">
+          <Button
+            appearance="subtle"
+            on:click={() => {
+              //showPrideBanner = false;
+              localStorage.setItem("showPride2025Banner", "false");
+              //showPrideDialog = false;
+              window.location.reload(); // Reload to remove fix the dialog breaking things
+            }}
+          >
+            Hide Banner & Don't Show Again
+          </Button>
+          <Button
+            appearance="primary"
+            on:click={() => {showPrideDialog = false}}
+          >
+            Close
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+      {/if}
 
       <main class="ml-4 mr-4 w-auto overflow-x-visible md:ml-10 md:mr-10">
         {@render children()}
@@ -194,7 +253,6 @@
   <path d="M108.2,73.3l295.3,0c19.6,0,35.6,15.6,35.6,35.2v294.9c0,19.6-15.9,35.2-35.6,35.2H108.6 c-20.8,0-35.6-15.6-35.6-35.2V108.6C73,88.9,88.5,73.3,108.2,73.3L108.2,73.3z" fill="#fff"/>
   <circle cx="243.33" cy="264" r="83.33"/>
 </svg>-->
-
 <style>
   svg {
     color: #c81414;
@@ -237,5 +295,9 @@
     padding-top: 1rem;
     height: 100%;
     box-sizing: border-box;
+  }
+
+  .prideflag {
+    background-image: linear-gradient(to right, rgb(237, 34, 36), rgb(243, 91, 34), rgb(249, 150, 33), rgb(245, 193, 30), rgb(241, 235, 27) 27%, rgb(241, 235, 27), rgb(241, 235, 27) 33%, rgb(99, 199, 32), rgb(12, 155, 73), rgb(33, 135, 141), rgb(57, 84, 165), rgb(97, 55, 155), rgb(147, 40, 142))
   }
 </style>
