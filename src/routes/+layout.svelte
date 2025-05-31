@@ -167,16 +167,15 @@
           Happy pride month from the BSMG & BeatMods team.
         </Dialog.Header>
         <Dialog.Body>
-          We've been going for quite a while, 7 years can and will tire anyone out. We're not a profit-grifting corporate entity. We're people, with our own lives. Creating experiences in our spare time for you all to enjoy, and we ask that you remember that.
-          <br>
-          <br>
-          This community has shaped many of us and how we've all individually grown as people. Whether you form a tightknit circle or are a member of a larger space, as a whole community, we've all made an impact on the lives of many. Many of us may have stopped playing or creating, but most of us have stuck around for the love of the game and each other.
-          <br>
-          <br>
-          These tools, mods, levels and assets only exist due to the thankless work of many, with backbones of our community identifying with an LGBTQ+ label. Without us, members of the LGBTQ+ community, you wouldn't be modding the game or having the experiences you pay nothing for.
-          <br>
-          <br>
-          Whether you're here from the start, took a break, a new player, ranked or casual, we'd like to thank all of you for shaping our community into what it is today and sticking with us.
+          We have kept this going for quite a while now; something that while exhausting at times, we also take great pride in. We are not a for profit corporate entity. We're just regular people all living our own lives and using our spare time to create these experiences and communities for you all to enjoy. We'd like to ask that you keep that in mind. 
+          <br><br>
+          This community has shaped many of us, and since coming together, we have all grown as individuals. Whether you have formed a tight knit circle or are a member of a larger space, as a whole community, we have all made an impact on the lives of each other. Over the years, many of our numbers have stopped playing or creating but that does not detract from the impact they have had, nor from the impact those who have remained continue to make.
+          <br><br>
+          These tools, mods, levels and assets only exist due to the often thankless work of many individuals, with several backbones of our community identifying with an LGBTQ+ label. Without them, the modding landscape would likely look very different than it does today. A large chunk of the mods, services, and events that are so beloved by all would never have even existed if they had not become a part of our community.
+          <br><br>
+          By the same token, we have never shied away from our open support of our LGBTQ+ community members. We are honoured to have them here and fully intend to continue to make our little corner of the internet a safe space for everyone. Whether you have been here from the start, took a break, are a new player, ranked or casual, we would like to thank each and every one of you for being here and helping shape our community into what it is today.
+          <br><br>
+          From all of us here at BSMG, Happy Pride.
         </Dialog.Body>
 
         <Dialog.Actions class="justify-end">
