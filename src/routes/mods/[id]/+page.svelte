@@ -26,6 +26,7 @@
   import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
   import ApprovalDialog from "$lib/components/ui/approval/ApprovalDialog.svelte";
   import { insertSpaces } from "$lib/utils/string";
+    import { Status } from "$lib/types/Status";
 
   let { data }: { data: PageData } = $props();
 
@@ -33,14 +34,43 @@
   let editing = $state(false);
   let approvalModal: { displayApprovalModal: DisplayApprovalModalFunction } & ApprovalDialog;
 
+  let isMadeByUser = $derived.by(() => {
+    if (!mod) return false;
+    return mod.info.authors.some((a) => a.id === data.userId);
+  });
+
+  let userIsApprover = $derived.by(() => {
+    if (!mod) return false;
+    if (!data.roles) return false;
+    return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName);
+  });
+
   let version = $state("");
+  let knownStatuses = $derived.by(() => {
+      if (!mod) return [Status.Verified];
+      if (!userIsApprover && !isMadeByUser) {
+        return [Status.Verified]
+      }
+      return Array.from(new Set([Status.Verified, ...mod.versions.map((v) => v.status)]));
+  });
+  let statuses = $state<string[]>(userIsApprover || isMadeByUser ? knownStatuses : [Status.Verified]);
+    
 
   let versions = $derived.by(() => {
+    console.log("Filtering versions for mod", data.id, "with version", version, "and statuses", statuses);
     if (!mod) return [];
-    if (version === "") return mod.versions;
-    return mod.versions.filter((v) =>
-      v.supportedGameVersions.some((g) => g.version === version),
-    );
+    //if (version === "") return mod.versions;
+    return mod.versions.filter((v) => {
+      if (version !== "") {
+        if(!v.supportedGameVersions.some((g) => g.version === version)) {
+          return false;
+        }
+      }
+      if (statuses.includes(v.status)) {
+        return true;
+      }
+      return false;
+    });
   });
 
   async function getMods() {
@@ -59,17 +89,6 @@
         console.error(error);
       });
   }
-
-  let isMadeByUser = $derived.by(() => {
-    if (!mod) return false;
-    return mod.info.authors.some((a) => a.id === data.userId);
-  });
-
-  let userIsApprover = $derived.by(() => {
-    if (!mod) return false;
-    if (!data.roles) return false;
-    return checkUser(data.roles, UserRoles.Approver, mod?.info.gameName);
-  });
 
   let isAllowedToEdit = $derived.by(() => {
     if (!mod) return false;
@@ -291,6 +310,27 @@
                 selectedGame={mod.info.gameName}
                 bind:selectedVersion={version}
               />
+              {#if userIsApprover || isMadeByUser}
+              <div class="flex flex-row flex-wrap gap-1 pt-4">
+                <p class="text-base pr-1">Status: </p>
+                {#each knownStatuses as status}
+                  <Button
+                    appearance={statuses.includes(status) ? "primary" : "subtle"}
+                    shape="circular"
+                    class="!text-xs !font-semibold !text-neutral-foreground-1"
+                    onclick={() => {
+                      if (statuses.includes(status)) {
+                        statuses = statuses.filter((s) => s !== status);
+                      } else {
+                        statuses = [...statuses, status];
+                      }
+                    }}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </Button>
+                {/each}
+              </div>
+              {/if}
             </div>
             {#each versions as version (version.id)}
               {#if version.status == "verified" || /*version.status == "unverified" ||*/ userIsApprover || isMadeByUser}
