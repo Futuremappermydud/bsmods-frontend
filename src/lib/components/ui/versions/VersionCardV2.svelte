@@ -254,9 +254,11 @@
                 </InputSkin>
               </Dropdown.Trigger>
               <Dropdown.Menu>
-                {#each gameVersions as version}
-                  <Dropdown.Item value={version} data={version}>{version.version}</Dropdown.Item>
-                {/each}
+                <div class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded">
+                  {#each gameVersions as version}
+                    <Dropdown.Item value={version} data={version}>{version.version}</Dropdown.Item>
+                  {/each}
+                </div>
               </Dropdown.Menu>
             </Dropdown.Root>
             <Button on:click={() => {
