@@ -368,7 +368,9 @@
     {#if isApprover || isAuthor}
       <Button on:click={toggleEditMode}>Edit</Button>
       {#if version.status === Status.Private}
-        <Button on:click={sendSubmit}>Submit</Button>
+        <span class="glow">
+          <Button on:click={sendSubmit}>Submit</Button>
+        </span>
       {/if}
     {/if}
     {#if isEditMode}
@@ -401,5 +403,19 @@
     padding: 0 !important; 
     width: 0 !important;
     height: 0 !important;
+  }
+
+  .glow {
+    border-radius: 100px;
+    animation: glow 1s infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px -3px #1D4ED8;
+    }
+    to {
+      box-shadow: 0 0 10px 8px #1D4ED8;
+    }
   }
 </style>
