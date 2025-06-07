@@ -26,7 +26,7 @@
   import type { DisplayApprovalModalFunction } from "$lib/types/Approval";
   import ApprovalDialog from "$lib/components/ui/approval/ApprovalDialog.svelte";
   import { insertSpaces } from "$lib/utils/string";
-    import { Status } from "$lib/types/Status";
+  import { Status } from "$lib/types/Status";
 
   let { data }: { data: PageData } = $props();
 
@@ -53,7 +53,7 @@
       }
       return Array.from(new Set([Status.Verified, ...mod.versions.map((v) => v.status)]));
   });
-  let statuses = $state<string[]>(userIsApprover || isMadeByUser ? knownStatuses : [Status.Verified]);
+  let statuses = $state<string[]>(Object.values(Status));   
     
 
   let versions = $derived.by(() => {
