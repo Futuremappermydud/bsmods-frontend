@@ -24,6 +24,8 @@
     AccordionItem,
     AccordionPanel,
     Icon,
+    Label,
+    Checkbox,
   } from "@svelte-fui/core";
   import ModCardBase from "$lib/components/ui/mods/ModCardBase.svelte";
   import GameVersionPicker from "$lib/components/ui/filtering/GameVersionPicker.svelte";
@@ -108,6 +110,7 @@
   let tempRawDepAllVersions: ModVersion[] = $state([]);
   let rawDeps: Dependency[] = $state([]);
   let tempRawAllowedVersions: ModVersion[] = $state([]);
+  let alsoSubmitForVerification = $state(false);
 
   let errorObj:any = $state(null);
 
@@ -340,7 +343,27 @@
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
             console.log(response);
-            window.location.href = "/mods/" + response.data.modVersion.modId;
+            if (alsoSubmitForVerification) {
+              axios.post(appendURL(`api/modversions/${response.data.modVersion.id}/submit`), {}, { withCredentials: true }).then((res) => {
+                if (res.status === 200) {
+                  window.location.href = "/mods/" + response.data.modVersion.modId;
+                } else {
+                  errorObj = res.data;
+                }
+              }).catch((error) => {
+                console.error("An error occurred, contact a developer!");
+                console.error(error);
+                if (error.response) {
+                  if (error.response.status && error.response.data) {
+                    console.error(error.response.status);
+                    console.error(error.response.data);
+                    errorObj = error.response.data;
+                  }
+                }
+              });
+            } else {
+              window.location.href = "/mods/" + response.data.modVersion.modId;
+            }
           }
         }
       })
@@ -696,6 +719,10 @@
     </Dialog.Body>
 
     <Dialog.Actions class="justify-end">
+			<Label class="flex flex-row items-center justify-center text-base pr-4">
+				<Checkbox  bind:value={alsoSubmitForVerification} />
+				<p>Submit After Upload</p>
+			</Label>
       <Button
         onclick={() => {
           submitDialog = false;
