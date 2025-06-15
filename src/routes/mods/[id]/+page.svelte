@@ -53,7 +53,7 @@
       }
       return Array.from(new Set([Status.Verified, ...mod.versions.map((v) => v.status)]));
   });
-  let statuses = $state<string[]>(Object.values(Status));   
+  let statuses = $state<string[]>(Object.values(Status).filter(s => s !== Status.Removed));   
     
 
   let versions = $derived.by(() => {
