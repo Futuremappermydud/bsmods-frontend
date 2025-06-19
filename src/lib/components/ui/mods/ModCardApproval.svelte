@@ -6,6 +6,7 @@
   import { appendURL } from "$lib/utils/url";
   import axios from "axios";
   import { ApprovalAction, type DisplayApprovalModalFunction, type DisplayModalFunction } from "$lib/types/Approval";
+    import { Status } from "$lib/types/Status";
   
 
   let {
@@ -20,6 +21,20 @@
 
   let loading = $state(false);
   let hide = $state(false);
+
+  function getSortDate() {
+    let statuses = mod.statusHistory.filter(
+      (status) =>
+        status.status === Status.Pending ||
+        status.status === Status.Unverified,
+    );
+
+    if (statuses.length > 0) {
+      return new Date(statuses[statuses.length - 1].setAt);
+    } else {
+      return new Date(mod.createdAt);
+    }
+  }
 </script>
 
 {#snippet approvalButtons()}
@@ -72,7 +87,8 @@
 {/snippet}
 
 {#snippet info()}
-  Mod ID: {mod.id}
+  Mod ID: {mod.id}<br>
+  Sort Date: {getSortDate().toLocaleString()}<br>
 {/snippet}
 
 {#if !hide}
