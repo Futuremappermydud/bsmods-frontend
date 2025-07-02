@@ -50,8 +50,10 @@
     if (localStorage.getItem("showPride2025Banner") === "false") {
       showPrideBanner = false;
     } else {
-      if (new Date(Date.now()).getMonth() === 5 || true) { // June
+      if (new Date(Date.now()).getMonth() === 5) { // June
         showPrideBanner = true;
+      } else {
+        showPrideBanner = false;
       }
     }
       
