@@ -33,7 +33,7 @@
     function handleRoleEdit() {
         let url = isAdd ? `/api/admin/users/addRole` : `/api/admin/users/removeRole`;
         axios.post(appendURL(url), {
-            userId: selectedUser.id,
+            userId: selectedUser?.id,
             gameName: gameString && gameString !== "" ? gameString : undefined,
             role: roleString
         }, {
@@ -147,7 +147,7 @@
 <style>
     table {
         width: 80%;
-        border: #2c2c2c solid 1px;
+        border: #2c2c2c80 solid 1px;
     }
 
     tr, td {
@@ -155,7 +155,7 @@
     }
 
     thead {
-        background-color: #505050;
+        background-color: #50505080;
         font-weight: bold;
     }
 
@@ -164,6 +164,6 @@
     }
 
     tr:nth-child(even) {
-        background-color: #2c2c2c;
+        background-color: #2c2c2c40;
     }
 </style>

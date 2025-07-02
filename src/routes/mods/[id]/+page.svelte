@@ -317,7 +317,7 @@
                   <Button
                     appearance={statuses.includes(status) ? "primary" : "subtle"}
                     shape="circular"
-                    class="!text-xs !font-semibold !text-neutral-foreground-1"
+                    class="!text-xs !font-semibold"
                     onclick={() => {
                       if (statuses.includes(status)) {
                         statuses = statuses.filter((s) => s !== status);

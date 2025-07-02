@@ -177,23 +177,23 @@
 
       <!-- design is my passion - please revisit these colors, theyre fucked  -->
       {#if version.status === Status.Verified}
-        <p class="silly-capitalize rounded-md bg-green-700 p-1 text-sm">
+        <p class="silly-capitalize rounded-md bg-green-500 dark:bg-green-700 p-1 text-sm">
           {version.status}
         </p>
       {:else if version.status === Status.Pending}
-        <p class="silly-capitalize rounded-md bg-purple-700 p-1 text-sm">
+        <p class="silly-capitalize rounded-md bg-purple-500 dark:bg-purple-700 p-1 text-sm">
           {version.status}
         </p>
       {:else if version.status === Status.Unverified}
-        <p class="silly-capitalize rounded-md bg-orange-700 p-1 text-sm">
+        <p class="silly-capitalize rounded-md bg-orange-500 dark:bg-orange-700 p-1 text-sm">
           {version.status}
         </p>
       {:else if version.status === Status.Private}
-        <p class="silly-capitalize rounded-md bg-blue-700 p-1 text-sm">
+        <p class="silly-capitalize rounded-md bg-blue-500 dark:bg-blue-700 p-1 text-sm">
           {version.status}
         </p>
       {:else if version.status === Status.Removed}
-        <p class="silly-capitalize rounded-md bg-red-700 p-1 text-sm">
+        <p class="silly-capitalize rounded-md bg-red-500 dark:bg-red-700 p-1 text-sm">
           {version.status}
         </p>
       {/if}
@@ -284,7 +284,7 @@
               {#if version.dependencies.length > 0}
                 <div class="flex flex-row flex-wrap gap-2 pt-1">
                   {#each depObjs as depObj}
-                    <Link href="/mods/{depObj.mod.id}" appearance="subtle"><p class="rounded-md p-1 {depObj.modVersion.status !== Status.Verified || depObj.mod.status !== Status.Verified ? `bg-orange-950` : `bg-neutral-background-3`} text-sm">{depObj.mod.name} v{depObj.modVersion.modVersion}</p></Link>
+                    <Link href="/mods/{depObj.mod.id}" appearance="subtle"><p class="rounded-md p-1 {depObj.modVersion.status !== Status.Verified || depObj.mod.status !== Status.Verified ? `bg-orange-200 dark:bg-orange-950` : `bg-neutral-background-3`} text-sm">{depObj.mod.name} v{depObj.modVersion.modVersion}</p></Link>
                   {/each}
                 </div>
               {:else}
