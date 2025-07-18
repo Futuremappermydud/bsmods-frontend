@@ -151,7 +151,13 @@
             pageSize={perPage}
             bind:currentPage={page}
             limit={1}
-            onSetPage={(e: number) => (page = e)}
+            onSetPage={(e: number) => {
+              page = e;
+              window.scrollTo({
+                top: 0, // specific id not needed imo since going to the top is fine
+                behavior: "smooth",
+              });
+            }}
           />
         {/if}
       {/if}
