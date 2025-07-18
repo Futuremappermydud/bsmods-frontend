@@ -8,6 +8,8 @@
   import { MediaQuery } from "svelte/reactivity";
   import { appendURL } from "$lib/utils/url";
   import Pagination from "$lib/components/ui/pagination/pagination.svelte";
+  import { Dropdown, InputSkin, Label } from "@svelte-fui/core";
+  import { onMount } from "svelte";
 
   //state
   let modSearchError = $state(false);
@@ -94,21 +96,59 @@
 
   let isDesktop = new MediaQuery("min-width: 900px");
   let isNotInsanelyStupidTiny = new MediaQuery("min-width: 450px");
+
+  let viewStyle: "grid" | "list" = $state("list");
+  onMount(() => {
+    let storedViewStyle = localStorage.getItem("modViewStyle");
+    if (storedViewStyle === "grid" || storedViewStyle === "list") {
+      viewStyle = storedViewStyle as "grid" | "list";
+    }
+    else {
+      viewStyle = "list";
+    }
+  });
+
+  $effect(() => {
+    localStorage.setItem("modViewStyle", viewStyle); // yes this is stupid to put it here, please move it somewhere else if you know where
+  });
 </script>
 
 <div class="flex flex-col gap-4" class:!flex-row={isDesktop.current}>
-  <FilterView
-    bind:search
-    bind:selectedGame
-    bind:selectedVersion
-    required={true}
-    hasDivider={isDesktop.current}
-    on:change={() => {
-      selectedVersion = null;
-      modSearchError = false;
-      modSearchLoading = false;
-    }}
-  />
+  <div class="left-side flex flex-col gap-4">
+    <FilterView
+      bind:search
+      bind:selectedGame
+      bind:selectedVersion
+      required={true}
+      hasDivider={isDesktop.current}
+      on:change={() => {
+        selectedVersion = null;
+        modSearchError = false;
+        modSearchLoading = false;
+      }}
+    />
+    {#if isNotInsanelyStupidTiny.current}
+      <div class="flex flex-col gap-2 items-center justify-between bg-neutral-background-2 p-2 rounded-lg mr-4">
+        <Dropdown.Root bind:value={viewStyle}>
+          <Dropdown.Trigger class="flex w-full items-center justify-center gap-2" let:value>
+            <Label>View:</Label>
+					  <InputSkin class="min-w-[192px]">
+						  {#if value == "grid"}
+                <span>Grid View</span>
+              {:else}
+                <span>List View</span>
+              {/if}
+							<Dropdown.Arrow />
+						</InputSkin>
+          </Dropdown.Trigger>
+          <Dropdown.Menu>
+            <Dropdown.Item value="list">List View</Dropdown.Item>
+            <Dropdown.Item value="grid">Grid View</Dropdown.Item>
+          </Dropdown.Menu>
+			  </Dropdown.Root>
+      </div>
+    {/if}
+  </div>
   <div class="right-side mod-list flex-2">
     {#if !isNotInsanelyStupidTiny.current}
       <div
@@ -142,9 +182,19 @@
       {:else if modSearchError}
         <p>There was an error loading mods</p>
       {:else}
-        {#each slicedMods as mod}
-          <ModCardList {mod} />
-        {/each}
+        <!-- Mod Cards & Tiles -->
+        {#if viewStyle === "list" || !isNotInsanelyStupidTiny.current}
+          {#each slicedMods as mod}
+            <ModCardList {mod} type="list" />
+          {/each}
+        {:else}
+          <div class="flex flex-row gap-4 flex-wrap justify-evenly">
+          {#each slicedMods as mod}
+            <ModCardList {mod} type="card" />
+          {/each}
+          </div>
+        {/if}
+        <!-- Pagination stuff -->
         {#if searchedMods.length > perPage}
           <Pagination
             totalItems={searchedMods.length}

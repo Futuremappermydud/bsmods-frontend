@@ -11,11 +11,14 @@
   } from "@svelte-fui/icons";
   import { MediaQuery } from "svelte/reactivity";
   import { getRelativeTimeString } from "$lib/utils/time";
+    import ModTile from "./ModTile.svelte";
 
   let {
     mod,
+    type = "list"
   }: {
     mod: ModData;
+    type?: "list" | "card";
   } = $props();
 
   let isNotInsanelyStupidTiny = new MediaQuery("min-width: 450px");
@@ -65,4 +68,9 @@
   {/if}
 {/snippet}
 
-<ModCardBase mod={mod.mod} latestSize={undefined} author={mod.mod.authors} slot={rightItems} />
+{#if type === "list"}
+  <ModCardBase mod={mod.mod} latestSize={undefined} author={mod.mod.authors} slot={rightItems} />
+{:else}
+  <ModTile mod={mod.mod} version={mod.latest} />
+{/if}
+
