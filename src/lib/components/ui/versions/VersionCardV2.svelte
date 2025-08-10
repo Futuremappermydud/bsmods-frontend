@@ -87,7 +87,7 @@
     responseMessageIsGood = false;
     if (gameVersions.length === 0) {
       axios
-        .get(appendURL(`api/versions`))
+        .get(appendURL(`api/versions?gameName=${mod.gameName}`))
         .then((response) => {
           if (response.status === 200 && response.data && response.data.versions) {
             gameVersions = response.data.versions as any[];
