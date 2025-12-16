@@ -435,6 +435,22 @@
     importGameVersionsFromOtherVersion();
   }
 
+  let importableVersions: Map<string, ModVersion> = $derived.by(() => {
+    if (!mod) {
+      return new Map<string, ModVersion>();
+    }
+    let map = new Map<string, ModVersion>();
+    let publicVersions = mod.versions.filter((v) => v.status !== Status.Removed);
+    let removedVersions = mod.versions.filter((v) => v.status === Status.Removed);
+    for (let v of publicVersions) {
+      map.set(v.modVersion, v);
+    }
+    for (let v of removedVersions) {
+      map.set(`${v.modVersion} (Removed)`, v);
+    }
+    return map;
+  });
+
   let disableImportButton = $derived.by(() => {
     if (!selectedVersion) {
       return true;
@@ -497,8 +513,8 @@
             <Dropdown.Menu>
               {#if mod}
               <div class="flex max-h-[400px] min-h-[150px] flex-col overflow-scroll rounded">
-                {#each mod.versions as item}
-                  <Dropdown.Item value={item} data={item}>{`${item.modVersion}`}</Dropdown.Item>
+                {#each importableVersions as item}
+                  <Dropdown.Item value={item[1]} data={item[1]}>{item[0]}</Dropdown.Item>
                 {/each}
               </div>
               {/if}
