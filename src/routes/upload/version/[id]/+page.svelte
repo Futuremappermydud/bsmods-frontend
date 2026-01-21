@@ -312,7 +312,7 @@
     tempRawDepAllVersions = [];
   }
 
-  function upload() {
+  async function upload() {
     console.log("Uploading... pray");
 
     let formData = new FormData();
@@ -335,16 +335,17 @@
       formData.append("file", modZip);
     }
 
-    axios
+    await axios
       .post(appendURL(`api/mods/${mod?.info.id}/upload`), formData, {
         withCredentials: true,
       })
-      .then((response) => {
+      .then(async (response) => {
         if (response.status === 302 || response.status === 200) {
           if (response.data !== null) {
             console.log(response);
             if (alsoSubmitForVerification) {
-              axios.post(appendURL(`api/modversions/${response.data.modVersion.id}/submit`), {}, { withCredentials: true }).then((res) => {
+              console.log("Submitting for verification...");
+              await axios.post(appendURL(`api/modversions/${response.data.modVersion.id}/submit`), {}, { withCredentials: true }).then(async (res) => {
                 if (res.status === 200) {
                   window.location.href = "/mods/" + response.data.modVersion.modId;
                 } else {
@@ -379,6 +380,8 @@
         }
       });
   }
+
+  
 
   async function importDepenenciesFromOtherVersion() {
     // this will unfortuntnaly be ineffiecint, but fuck it wii ball
@@ -736,7 +739,7 @@
 
     <Dialog.Actions class="justify-end">
 			<Label class="flex flex-row items-center justify-center text-base pr-4">
-				<Checkbox  bind:value={alsoSubmitForVerification} />
+				<Checkbox bind:checked={alsoSubmitForVerification} />
 				<p>Submit After Upload</p>
 			</Label>
       <Button
