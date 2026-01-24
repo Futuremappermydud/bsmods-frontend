@@ -51,7 +51,7 @@
             <ArrowSyncRegular />
           </svg>
           <span class="text-xs text-neutral-foreground-2 md:text-base"
-            >{getRelativeTimeString(new Date(mod.mod.updatedAt))}</span
+            >{getRelativeTimeString(new Date(mod.latest.updatedAt))}</span
           >
         </div>
         <div class="flex w-fit flex-row gap-2">
