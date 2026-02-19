@@ -37,6 +37,7 @@
     approvalModalId = id;
     approvalModalDisplay = true;
     lastHideCardFunction = hideCard;
+    approvalReason = "";
   }
 
   async function doApproval() {
