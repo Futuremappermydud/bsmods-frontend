@@ -302,7 +302,8 @@
           <AccordionPanel class="pb-2">
             <div class="flex flex-col gap-1 pt-1">
               {#each version.statusHistory as history}
-                <p class="rounded-md p-1 {history.status !== Status.Verified ? `bg-orange-950` : `bg-neutral-background-3`} text-sm">{history.status} by {history.userId} at {new Date(history.setAt).toLocaleString()}</p>
+                <p class="rounded-md p-1 {history.status !== Status.Verified ? `bg-orange-950` : `bg-neutral-background-3`} text-sm">{history.status} by {history.userId} at {new Date(history.setAt).toLocaleString()}<br>Reason: {history.reason}</p>
+                
               {/each}
             </div>
           </AccordionPanel>
